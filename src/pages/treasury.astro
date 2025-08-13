@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>叡智の宝物庫 - A1-First Tuning Kit</title>
+    
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        /* 宝物庫専用スタイル */
+        .treasure-card { cursor: pointer; transition: opacity 0.3s ease; }
+        .treasure-card.is-hidden { opacity: 0.1; pointer-events: none; }
+        #compass-view .compass-question { text-align: center; padding: 3rem 1rem; background-color: var(--color-content-bg); border-radius: 12px; }
+        #compass-view .compass-choices { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; }
+        #compass-view .choice-btn { background-color: transparent; border: 1px solid var(--color-border); color: var(--color-text-main); padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; }
+        #compass-view .choice-btn:hover { background-color: var(--color-accent-primary); color: var(--color-bg); border-color: var(--color-accent-primary); }
+        /* モーダル */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease; }
+        .modal-overlay.visible { opacity: 1; visibility: visible; }
+        .modal-container { background-color: #111827; border: 1px solid var(--color-accent-secondary); border-radius: 12px; width: 90%; max-width: 700px; max-height: 90vh; display: flex; flex-direction: column; transform: scale(0.95); transition: transform 0.3s ease; }
+        .modal-overlay.visible .modal-container { transform: scale(1); }
+        .modal-header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; }
+        .modal-title { color: var(--color-accent-secondary); font-size: 1.25rem; font-weight: 700; margin: 0; }
+        .modal-close { background: none; border: none; color: var(--color-text-sub); font-size: 1.5rem; cursor: pointer; }
+        .modal-content { padding: 1.5rem; overflow-y: auto; }
+    </style>
+</head>
+<body>
+
+<button class="hamburger-menu" aria-label="メニューを開く" aria-controls="sidebar" aria-expanded="false">
+    <span class="hamburger-menu-inner">
+        <span></span>
+        <span></span>
+        <span></span>
+    </span>
+</button>
+<div class="site-overlay"></div>
+    
+    <div class="site-container">
+        <aside class="sidebar">
+            <a href="dashboard.html" class="site-logo">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 B0 00-3 0m-9.75 0h9.75" /></svg>
+                <span>A1 Project</span>
+            </a>
+            <nav class="main-nav">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="dashboard.html">ダッシュボード</a></li>
+                    <li class="nav-item"><a href="program/chapter-00.html">自己進化プログラム</a></li>
+                    <li class="nav-item"><a href="console.html">調律師のコンソール</a></li>
+                    <li class="nav-item"><a href="shintaku_no_ma.html">神託の間</a></li>
+                    <li class="nav-item"><a href="treasury.html">叡智の宝物庫</a></li>
+                    <li class="nav-item"><a href="sanctuary.html">A1サンクチュアリ</a></li>
+                </ul>
+            </nav>
+            <div class="user-profile">
+                <a href="#" class="profile-link">
+                    <div class="avatar">庭</div>
+                    <span class="user-name">叡智の庭師</span>
+                </a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="content-wrapper">
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 class="page-title mb-2">叡智の宝物庫</h1>
+                        <p class="text-xl text-gray-400 placeholder-text">【ここに宝物庫の説明文が入ります。】</p>
+                    </div>
+                    <div class="view-toggle">
+                        <button id="library-toggle" class="toggle-btn active">図書館モード</button>
+                        <button id="compass-toggle" class="toggle-btn">羅針盤モード</button>
+                    </div>
+                </div>
+
+                <div id="library-view">
+                    <div class="library-controls">
+                        <input type="text" id="search-bar" class="search-bar" placeholder="キーワードで宝物を探す...">
+                        <p>あなたの求めているものを探すには、検索するか、羅針盤モードをご利用ください。</p>
+                    </div>
+                    <div id="library-grid" class="card-grid">
+                        </div>
+                </div>
+                
+                <div id="compass-view" style="display: none;">
+                    <div class="compass-question">
+                        <h2 class="placeholder-text">賢明なる庭師よ。
+                            <br>今、あなたの庭で、最も手を貸してほしいと願う課題は、
+                            <br>次のうちどれだろうか？
+                        </h2>
+                        <div class="compass-choices">
+                            <button class="choice-btn" data-category="idea">投稿ネタが思いつかず、筆が止まっている</button>
+                            <button class="choice-btn" data-category="copywriting">自分の商品の魅力が、うまく伝わらない</button>
+                            <button class="choice-btn" data-category="efficiency">日々の作業に追われ、時間が足りない</button>
+                            <button class="choice-btn" data-category="engagement">顧客との関係構築に、自信がない</button>
+                        </div>
+                    </div>
+                    <div id="compass-results" class="mt-12"></div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 id="modal-title" class="modal-title"></h2>
+                <button id="modal-close" class="modal-close">&times;</button>
+            </div>
+            <div id="modal-content" class="modal-content"></div>
+        </div>
+    </div>
+    
+    <script src="assets/js/main.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- データプレースホルダー ---
+        const allTreasures = [
+            { id: 1, category: 'idea', title: 'AIブレインストーミング・シート', description: 'AIと対話することで、SNS投稿のアイデアを無限に生成する魔法のシート。' }, { id: 2, category: 'idea', title: 'ペルソナ深掘りプロンプト', description: 'ターゲット顧客の深層心理を暴き出し、心に突き刺さるコンテンツの種を見つける。' }, { id: 3, category: 'copywriting', title: 'キャッチコピー錬金術', description: '人の足を止め、心を掴むキャッチコピーを瞬時に生成する秘伝のレシピ。' }, { id: 4, category: 'copywriting', title: 'ストーリーテリングの設計図', description: '読者を物語に引き込み、商品を「欲しい」と思わせる感情の動線を設計する。' }, { id: 5, category: 'efficiency', title: 'ルーティンワーク自動化スクリプト', description: '日々の退屈な作業をAIに任せ、あなたの貴重な時間を創造的な活動に集中させる。' }, { id: 6, category: 'engagement', title: 'お客様の声・管理＆活用データベース', description: '顧客からの感謝の声を資産に変え、未来の顧客への最強の武器として活用する。' }, { id: 7, category: 'idea', title: 'トレンド予測AIアシスタント', description: '市場の次の流行を予測し、時代を先取りするコンテンツ企画を立案する。' }, { id: 8, category: 'efficiency', title: 'メール返信定型文ジェネレーター', description: '煩雑なメール対応を半自動化し、顧客対応の質と速度を向上させる。' }, { id: 9, category: 'copywriting', title: '反論不能のオファー作成術', description: '顧客の「断る理由」を完全に封じ込める、強力なオファー文章を構築する。' }, { id: 10, category: 'engagement', title: 'コミュニティ活性化アイデア集', description: 'オンラインコミュニティの熱量を高め、顧客を熱狂的なファンに変える秘訣。' }, { id: 11, category: 'idea', title: 'キラーコンテンツ企画書テンプレート', description: 'あなたの知識を、高単価で売れる「キラーコンテンツ」に変えるための企画書。' }, { id: 12, category: 'efficiency', title: 'SNS投稿スケジュール自動提案AI', description: 'あなたの活動パターンを分析し、最も効果的な投稿スケジュールをAIが提案する。' },
+        ];
+
+        // --- DOM要素 ---
+        const compassToggle = document.getElementById('compass-toggle');
+        const libraryToggle = document.getElementById('library-toggle');
+        const compassView = document.getElementById('compass-view');
+        const libraryView = document.getElementById('library-view');
+        const libraryGrid = document.getElementById('library-grid');
+        const searchBar = document.getElementById('search-bar');
+        const choiceBtns = document.querySelectorAll('.choice-btn');
+        const compassResults = document.getElementById('compass-results');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalTitle = document.getElementById('modal-title');
+        const modalContent = document.getElementById('modal-content');
+        const modalClose = document.getElementById('modal-close');
+
+        // --- カード生成関数 ---
+        function createCard(treasure) {
+            const card = document.createElement('div');
+            card.className = 'card treasure-card';
+            card.dataset.title = treasure.title.toLowerCase();
+            card.dataset.description = treasure.description.toLowerCase();
+            card.innerHTML = `<div class="card-link"><svg class="card-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg><h3 class="card-title">${treasure.title}</h3><p class="card-description">${treasure.description}</p><span class="card-cta mt-auto">宝を開ける &rarr;</span></div>`;
+            card.addEventListener('click', () => openModal(treasure));
+            return card;
+        }
+
+        // --- モーダル制御 ---
+        function openModal(treasure) {
+            modalTitle.textContent = treasure.title;
+            modalContent.innerHTML = `<p>${treasure.description}</p><br><p>【ここに、この宝物の具体的な使い方や、プロンプト、ダウンロードリンクなどが入ります。】</p><a href="#" class="btn btn-primary mt-4">ダウンロード</a>`;
+            modalOverlay.classList.add('visible');
+        }
+        function closeModal() {
+            modalOverlay.classList.remove('visible');
+        }
+
+        // --- ビュー切り替え ---
+        function switchView(viewName) {
+            if (viewName === 'compass') {
+                compassView.style.display = 'block';
+                libraryView.style.display = 'none';
+                compassToggle.classList.add('active');
+                libraryToggle.classList.remove('active');
+            } else {
+                libraryView.style.display = 'block';
+                compassView.style.display = 'none';
+                libraryToggle.classList.add('active');
+                compassToggle.classList.remove('active');
+            }
+        }
+        compassToggle.addEventListener('click', () => switchView('compass'));
+        libraryToggle.addEventListener('click', () => switchView('library'));
+
+        // --- 羅針盤のロジック ---
+        choiceBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const category = btn.dataset.category;
+                const results = allTreasures.filter(t => t.category === category);
+                compassResults.innerHTML = '<h2 class="text-2xl font-bold mb-4">あなたへの神託</h2><div class="card-grid"></div>';
+                const grid = compassResults.querySelector('.card-grid');
+                results.forEach(treasure => {
+                    grid.appendChild(createCard(treasure));
+                });
+            });
+        });
+        
+        // --- 図書館の検索機能 ---
+        searchBar.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const allCards = libraryGrid.querySelectorAll('.treasure-card');
+            allCards.forEach(card => {
+                const title = card.dataset.title;
+                const description = card.dataset.description;
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.classList.remove('is-hidden');
+                } else {
+                    card.classList.add('is-hidden');
+                }
+            });
+        });
+
+        // --- 初期化 ---
+        allTreasures.forEach(treasure => {
+            libraryGrid.appendChild(createCard(treasure));
+        });
+        switchView('library');
+        modalClose.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) closeModal();
+        });
+    });
+    </script>
+</body>
+</html>

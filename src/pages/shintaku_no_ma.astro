@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// カテゴリーIDをあなたの環境に合わせて修正すること
+const SHINTAKU_CATEGORY_ID = 77; // 例：あなたの「神託」カテゴリーのID
+
+// 頭脳（WordPress）から全ての「神託」データを召喚する
+const response = await fetch(`https://ai-verve.net/snspack/wp-json/wp/v2/posts?categories=${SHINTAKU_CATEGORY_ID}&per_page=100&_fields=id,title,acf`);
+const shintakuPosts = await response.json();
+---
+<BaseLayout title="神託の間">
+    <div class="content-wrapper">
+        <h1>神託の間</h1>
+        <p class="lead">帝国の叡智は、時を経て開示される。汝の成長と共に、新たな扉が開かれるだろう。</p>
+
+        <div class="card-grid" id="oracle-grid">
+            {shintakuPosts.map(post => (
+                <div class="card oracle-card locked" data-release-month={post.acf.release_month}>
+                    <div class="card-header">
+                        <span class="month-badge">第{post.acf.release_month}月</span>
+                        <h3 class="card-title">{post.title.rendered}</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-description">{post.acf.summary || '概要は、扉が開かれたときに明らかになる…'}</p>
+                        <span class="card-cta mt-auto">神託を拝受する &rarr;</span>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // 神官（カスタムAPI）に、今の訪問者の情報を問い合わせる
+                const response = await fetch('/snspack/wp-json/a1-project/v1/user/me', {
+                    credentials: 'include' // ログイン情報を一緒に送るための魔法
+                });
+
+                if (!response.ok) {
+                    // 未ログインなら、全ての扉は閉じたまま
+                    console.log('訪問者は未ログインか、何らかのエラーが発生。');
+                    return; 
+                }
+
+                const userData = await response.json();
+                const registrationDate = new Date(userData.registered_date);
+                const now = new Date();
+
+                // 訪問者の会員歴（月数）を計算する
+                const membershipMonths = (now.getFullYear() - registrationDate.getFullYear()) * 12 + (now.getMonth() - registrationDate.getMonth());
+
+                // 全ての神託カードをチェックし、扉を開くかどうか判断する
+                const oracleCards = document.querySelectorAll('.oracle-card');
+                oracleCards.forEach(card => {
+                    const releaseMonth = parseInt(card.dataset.releaseMonth, 10);
+                    if (membershipMonths >= (releaseMonth -1)) {
+                        card.classList.remove('locked');
+                    }
+                });
+
+            } catch (error) {
+                console.error('魔法の鏡の処理中にエラーが発生:', error);
+            }
+        });
+    </script>
+</BaseLayout>
