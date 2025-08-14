@@ -1,0 +1,23 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import icons from '../icons'; // ‰äX‚ÍA°‚Ìİ‚èˆ‚ğ’m‚Á‚Ä‚¢‚é
+
+interface Props extends HTMLAttributes<'svg'> {
+  name: keyof typeof icons;
+  class?: string;
+}
+
+const { name, class: className, ...attrs } = Astro.props;
+const path = icons[name];
+---
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  class:list={["icon", className]}
+  fill="none"
+  viewBox="0 0 24 24"
+  stroke-width="1.5"
+  stroke="currentColor"
+  {...attrs}
+>
+  <Fragment set:html={path} />
+</svg>
