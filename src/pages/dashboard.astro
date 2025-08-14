@@ -1,49 +1,8 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Cache-Control" content="no-store">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ダッシュボード - A1-First Tuning Kit</title>
-    
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
-<button class="hamburger-menu" aria-label="メニューを開く" aria-controls="sidebar" aria-expanded="false">
-    <span class="hamburger-menu-inner">
-        <span></span>
-        <span></span>
-        <span></span>
-    </span>
-</button>
-<div class="site-overlay"></div>
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
 
-    <div class="site-container">
-        <aside class="sidebar">
-            <a href="dashboard.html" class="site-logo">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" /></svg>
-                <span>A1 Project</span>
-            </a>
-            <nav class="main-nav">
-                <ul class="nav-list">
-                    <li class="nav-item"><a href="dashboard.html">ダッシュボード</a></li>
-                    <li class="nav-item"><a href="program/chapter-00.html">自己進化プログラム</a></li>
-                    <li class="nav-item"><a href="console.html">調律師のコンソール</a></li>
-                    <li class="nav-item"><a href="treasury.html">叡智の宝物庫</a></li>
-                    <li class="nav-item"><a href="shintaku_no_ma.html">神託の間</a></li>
-                    <li class="nav-item"><a href="sanctuary.html">A1サンクチュアリ</a></li>
-                </ul>
-            </nav>
-            <div class="user-profile">
-                <a href="#" class="profile-link">
-                    <div class="avatar">庭</div>
-                    <span class="user-name">叡智の庭師</span>
-                </a>
-            </div>
-        </aside>
-
-        <main class="main-content">
-            <div class="content-wrapper">
+<BaseLayout title="ダッシュボード">
                 <h1 class="page-title mb-2">ようこそ、叡智の庭へ</h1>
                 <p class="text-xl text-gray-400 mb-12 placeholder-text">【ここに顧客への歓迎メッセージが入ります。あなたの旅はここから始まります。】</p>
 
@@ -84,9 +43,4 @@
                         </a>
                     </div>
                 </div>
-            </div>
-        </main>
-    </div>
-    <script src="assets/js/main.js"></script>
-</body>
-</html>
+</BaseLayout>

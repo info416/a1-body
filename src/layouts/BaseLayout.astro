@@ -4,7 +4,7 @@ export interface Props {
     title: string;
 }
 const { title } = Astro.props;
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
 ---
 <!DOCTYPE html>
 <html lang="ja">
@@ -14,33 +14,48 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title} - A1 Project</title>
     <link rel="stylesheet" href="/style.css">
+    <slot name="head" />
 </head>
 <body>
     <button class="hamburger-menu" aria-label="メニューを開く" aria-controls="sidebar" aria-expanded="false">
-        <span class="hamburger-menu-inner"><span></span><span></span><span></span></span>
-    </button>
-    <div class="site-overlay"></div>
+    <span class="hamburger-menu-inner">
+        <span></span>
+        <span></span>
+        <span></span>
+    </span>
+</button>
+<div class="site-overlay"></div>
 
     <div class="site-container">
         <aside class="sidebar">
-            <a href="/dashboard" class="site-logo">
-                </a>
+            <a href="dashboard.html" class="site-logo">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" /></svg>
+                <span>A1 Project</span>
+            </a>
             <nav class="main-nav">
-                <ul>
+                <ul class="nav-list">
                     <li class="nav-item"><a href="/dashboard">ダッシュボード</a></li>
+                    <li class="nav-item"><a href="/program/chapter-00">自己進化プログラム</a></li>
+                    <li class="nav-item"><a href="/console">調律師のコンソール</a></li>
                     <li class="nav-item"><a href="/shintaku_no_ma">神託の間</a></li>
                     <li class="nav-item"><a href="/treasury">叡智の宝物庫</a></li>
-                    <li class="nav-item"><a href="/sanctuary">聖域への扉</a></li>
+                    <li class="nav-item"><a href="/sanctuary">A1サンクチュアリ</a></li>
                 </ul>
             </nav>
             <div class="user-profile">
-                 </div>
+                <a href="#" class="profile-link">
+                    <div class="avatar">庭</div>
+                    <span class="user-name">叡智の庭師</span>
+                </a>
+            </div>
         </aside>
 
         <main class="main-content">
+            <div class="content-wrapper">
             <slot />
+            </div>
         </main>
     </div>
-<script src="../scripts/main.js"></script>
+<script src="/scripts/main.js"></script>
 </body>
 </html>
