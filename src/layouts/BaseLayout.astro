@@ -1,5 +1,8 @@
 ---
 // このレイアウトが受け取るプロパティを定義
+import '../styles/global.css'; // この一行を追加
+import type { Props as BaseProps } from 'astro:content';
+
 export interface Props {
     title: string;
 }
