@@ -1,20 +1,20 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
-<BaseLayout title="ƒƒOƒCƒ“">
+<BaseLayout title="ãƒ­ã‚°ã‚¤ãƒ³">
     <div class="login-container" style="max-width: 400px; margin: 5rem auto;">
-        <h1 class="text-3xl font-bold text-center">ƒƒOƒCƒ“</h1>
+        <h1 class="text-3xl font-bold text-center">ãƒ­ã‚°ã‚¤ãƒ³</h1>
         <form id="login-form" class="mt-8 space-y-6">
             <div>
-                <label for="email" class="form-label">ƒ[ƒ‹ƒAƒhƒŒƒX</label>
+                <label for="email" class="form-label">ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹</label>
                 <input id="email" name="email" type="email" autocomplete="email" required class="form-input">
             </div>
             <div>
-                <label for="password" class="form-label">ƒpƒXƒ[ƒh</label>
+                <label for="password" class="form-label">ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰</label>
                 <input id="password" name="password" type="password" autocomplete="current-password" required class="form-input">
             </div>
             <div>
-                <button type="submit" class="btn btn-primary w-full">ƒƒOƒCƒ“‚·‚é</button>
+                <button type="submit" class="btn btn-primary w-full">ãƒ­ã‚°ã‚¤ãƒ³ã™ã‚‹</button>
             </div>
             <p id="error-message" class="text-red-400 text-center" style="display: none;"></p>
         </form>
@@ -43,13 +43,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 const data = await response.json();
 
                 if (!response.ok) {
-                    throw new Error(data.message || 'ƒƒOƒCƒ“‚É¸”s‚µ‚Ü‚µ‚½B');
+                    throw new Error(data.message || 'ãƒ­ã‚°ã‚¤ãƒ³ã«å¤±æ•—ã—ã¾ã—ãŸã€‚');
                 }
 
-                // ’Ês‹–‰ÂØiƒg[ƒNƒ“j‚ğˆÀ‘S‚È•ÛŠÇŒÉilocalStoragej‚Ö
+                // é€šè¡Œè¨±å¯è¨¼ï¼ˆãƒˆãƒ¼ã‚¯ãƒ³ï¼‰ã‚’å®‰å…¨ãªä¿ç®¡åº«ï¼ˆlocalStorageï¼‰ã¸
                 localStorage.setItem('jwt_token', data.token);
 
-                // ƒƒOƒCƒ“¬Œ÷ŒãAƒ_ƒbƒVƒ…ƒ{[ƒh‚Ö“]‘—
+                // ãƒ­ã‚°ã‚¤ãƒ³æˆåŠŸå¾Œã€ãƒ€ãƒƒã‚·ãƒ¥ãƒœãƒ¼ãƒ‰ã¸è»¢é€
                 window.location.href = '/dashboard';
 
             } catch (error) {
