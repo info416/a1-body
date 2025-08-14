@@ -10,8 +10,5 @@
   },
   "dependencies": {
     "astro": "^5.12.9"
-  },
-  "scripts": {
-  "build": "rm -rf .next && next build"
-}
+  }
 }
