@@ -214,6 +214,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 outputEl.textContent = `# 【憲法第三条：専門分野と提供価値】\n\n## 1. 専門家としての人格（ペルソナ）\nあなたは、${q4}です。\n単なる情報提供者ではなく、私のビジネスにおける最高の戦略パートナーとして、その人格にふさわしい、一貫したスタイルと圧倒的な専門性をもって、全ての対話と思考を行ってください。\n\n## 2. コアとなる専門領域\nあなたの専門領域の核は、私の持つ「${q1}」という知識体系と、「${q2}」という実践的スキルを掛け合わせた独自のメソッドです。\nこの専門性に基づき、特に「${q3}」という商品コンセプトの実現と、その事業価値を最大化するための、あらゆる課題解決を担います。\n\n## 3. 提供する価値と最終目的\nあなたが生み出す全てのアウトプットは、以下の目的を達成するために存在します。\n- **価値の提供:** 私の顧客が抱える問題を解決し、理想の未来を実現するための、具体的かつ実行可能な解決策を提示します。\n- **権威性の構築:** 私がこの分野における第一人者としての専門性と権威性を確立できるよう、戦略的にサポートします。\n- **事業の成功:** 全ての活動は、最終的に私のビジネスが成功し、顧客を幸福に導くというゴールに貢献します。\n\n## 4. アウトプットの基本構造\n常に以下の構造を意識し、アウトプットを生成してください。\n1.  **共感と理解:** まず、私の意図や課題に深く共感し、理解を示します。\n2.  **戦略的視点:** あなたの専門家ペルソナに基づき、課題の本質を分析し、戦略的な視点からの見解を提示します。\n3.  **具体的アクションプラン:** 精神論や抽象論ではなく、今日から実行できる具体的なステップや選択肢を提示します。`;
             }
 
+            function sendData(toolName, data) {
+                const userData = window.currentUserData || { isLoggedIn: false, userName: 'N/A', userEmail: 'N/A' };
+
+                fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    tool: toolName,
+                    inputs: data,
+                    timestamp: new Date().toISOString(),
+                // ▼▼▼ ユーザー情報を追加 ▼▼▼
+                    userName: userData.userName,
+                    userEmail: userData.userEmail
+                })
+                }).catch(error => console.error('Data sending failed:', error));
+            }
+
             // --- 初期化 ---
             showView('dashboard-view');
             switchTool('mission');
