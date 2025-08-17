@@ -49,16 +49,26 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                     throw new Error(data.data.message || 'ログインに失敗しました。');
                 }
 
-                // ★★★【最終翻訳】★★★
-                // プラグインの実際の設計図に合わせて、正しい名前で情報を抽出する
                 const token = data.data.jwt;
-                const userName = data.data.username; // 'user_display_name' から 'username' へ変更
-                const userEmail = data.data.email;    // 'user_email' から 'email' へ変更
-
-                if (!token || !userName || !userEmail) {
-                    throw new Error('認証情報は不完全です。プラグイン設定を確認してください。');
+                if (!token) {
+                    throw new Error('認証トークンの取得に失敗しました。');
                 }
 
+                // ★★★【神託の解読】★★★
+                // 受け取ったトークン（書物）を、自らの手で解読する
+                const payloadBase64 = token.split('.')[1];
+                const decodedPayload = atob(payloadBase64);
+                const payload = JSON.parse(decodedPayload);
+                
+                // 書物から、必要な情報を全て抽出する
+                const userName = payload.username;
+                const userEmail = payload.email;
+
+                if (!userName || !userEmail) {
+                    throw new Error('認証情報は完全ですが、内部データが欠落しています。');
+                }
+
+                // 全ての情報を、ブラウザの記録保管庫に刻印する
                 localStorage.setItem('jwt_token', token);
                 localStorage.setItem('a1_userName', userName);
                 localStorage.setItem('a1_userEmail', userEmail);
