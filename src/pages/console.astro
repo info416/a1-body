@@ -101,177 +101,197 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     
     <script is:inline>
-        document.addEventListener('DOMContentLoaded', () => {
-            // =============================================================
-            // --- 【完全版】コア機能の実装 ---
-            // =============================================================
-            const dashboardView = document.getElementById('dashboard-view');
-            const consoleView = document.getElementById('console-view');
-            const navCards = document.querySelectorAll('.nav-card');
-            const consoleHomeLink = document.getElementById('console-home-link');
-            const tabItems = document.querySelectorAll('.tab-item');
-            const toolContents = document.querySelectorAll('.tool-content');
-            const copyButtons = document.querySelectorAll('.copy-button');
+    document.addEventListener('DOMContentLoaded', () => {
+        // =============================================================
+        // --- 帝国の中枢システム定義 ---
+        // =============================================================
+        
+        // 我々の秘密基地（Make.com）の住所
+        const WEBHOOK_URL = 'https://hook.us2.make.com/szk4fwyq5gocz1b9j5hmut7v87iagaxx';
 
-            function showView(viewId) {
-                dashboardView.style.display = 'none';
-                consoleView.style.display = 'none';
-                document.getElementById(viewId).style.display = 'block';
-            }
+        // ユーザー情報を保持するためのグローバルな保管庫
+        let currentUser = {
+            userName: 'N/A',
+            userEmail: 'N/A'
+        };
 
-            navCards.forEach(card => {
-                card.addEventListener('click', () => {
-                    const toolName = card.dataset.tool;
-                    switchTool(toolName);
-                    showView('console-view');
-                });
+        // =============================================================
+        // --- UI（ユーザーインターフェース）制御部 ---
+        // =============================================================
+        const dashboardView = document.getElementById('dashboard-view');
+        const consoleView = document.getElementById('console-view');
+        const navCards = document.querySelectorAll('.nav-card');
+        const consoleHomeLink = document.getElementById('console-home-link');
+        const tabItems = document.querySelectorAll('.tab-item');
+        const toolContents = document.querySelectorAll('.tool-content');
+        const copyButtons = document.querySelectorAll('.copy-button');
+
+        function showView(viewId) {
+            if (dashboardView) dashboardView.style.display = 'none';
+            if (consoleView) consoleView.style.display = 'none';
+            const viewToShow = document.getElementById(viewId);
+            if (viewToShow) viewToShow.style.display = 'block';
+        }
+
+        navCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const toolName = card.dataset.tool;
+                switchTool(toolName);
+                showView('console-view');
             });
-
-            consoleHomeLink.addEventListener('click', () => {
+        });
+        
+        if (consoleHomeLink) {
+            consoleHomeLink.addEventListener('click', (e) => {
+                e.preventDefault();
                 showView('dashboard-view');
             });
+        }
 
-            function switchTool(toolName) {
-                tabItems.forEach(item => {
-                    item.classList.toggle('tab-active', item.dataset.tool === toolName);
-                    item.classList.toggle('tab-inactive', item.dataset.tool !== toolName);
-                });
-                toolContents.forEach(content => {
-                    content.classList.toggle('active', content.id === `tool-${toolName}`);
-                });
-            }
-
+        function switchTool(toolName) {
             tabItems.forEach(item => {
-                item.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    switchTool(item.dataset.tool);
-                });
+                item.classList.toggle('tab-active', item.dataset.tool === toolName);
+                item.classList.toggle('tab-inactive', item.dataset.tool !== toolName);
             });
-
-            copyButtons.forEach(button => {
-                button.addEventListener('click', (e) => {
-                    const outputContainer = e.currentTarget.closest('.prompt-output-container');
-                    const outputElement = outputContainer.querySelector('.prompt-output');
-                    const feedbackElement = outputContainer.querySelector('.copy-feedback');
-                    const textToCopy = outputElement.innerText;
-                    navigator.clipboard.writeText(textToCopy).then(() => {
-                        feedbackElement.style.opacity = '1';
-                        feedbackElement.style.transform = 'translate-y(0)';
-                        setTimeout(() => {
-                            feedbackElement.style.opacity = '0';
-                            feedbackElement.style.transform = 'translate-y(-0.5rem)';
-                        }, 2000);
-                    });
-                });
+            toolContents.forEach(content => {
+                const isActive = content.id === `tool-${toolName}`;
+                // CSSの'active'クラスではなく、直接displayプロパティを操作する
+                content.style.display = isActive ? 'block' : 'none';
             });
-            
-            // =============================================================
-            // --- データ送信 & プロンプト生成 ---
-            // =============================================================
-            const WEBHOOK_URL = 'https://hook.us2.make.com/szk4fwyq5gocz1b9j5hmut7v87iagaxx';
-
-    let currentUser = { userName: 'N/A', userEmail: 'N/A' };
-    
-    /**
-     * ★★★【新しい情報取得方法】★★★
-     * もはやAPIは呼ばない。ブラウザの記録保管庫から直接、身元情報を読み出す。
-     */
-    function loadUserDataFromStorage() {
-        const storedUserName = localStorage.getItem('a1_userName');
-        const storedUserEmail = localStorage.getItem('a1_userEmail');
-
-        if (storedUserName && storedUserEmail) {
-            currentUser.userName = storedUserName;
-            currentUser.userEmail = storedUserEmail;
-            console.log('ユーザー情報を記録保管庫から取得:', currentUser);
-        } else {
-            console.error('記録保管庫にユーザー情報が見つかりません。');
-            // ここでログインページにリダイレクトするなどの処理も可能
         }
-    }
-    
-    function sendData(toolName, data) {
-        const payload = {
-            tool: toolName,
-            inputs: data,
-            userName: currentUser.userName,
-            userEmail: currentUser.userEmail
-        };
-        fetch(WEBHOOK_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        }).catch(error => console.error('データ送信失敗:', error));
-    }
 
-    function logout() {
-        // ログアウト時は、全ての関連情報を削除する
-        localStorage.removeItem('jwt_token');
-        localStorage.removeItem('a1_userName');
-        localStorage.removeItem('a1_userEmail');
-        window.location.href = '/login/'; 
-    }
-    
-    document.addEventListener('DOMContentLoaded', () => {
-        // ページ読み込み時に、APIではなく保管庫から情報をロードする
-        loadUserDataFromStorage();
-
-        const logoutBtn = document.getElementById('logoutButton'); // ログアウトボタンのIDに合わせて要修正
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', logout);
-        }
-    });
-
-// ページのHTMLが全て読み込まれたら、まずユーザー情報の取得を開始する
-document.addEventListener('DOMContentLoaded', fetchUserData);
-
-            function sendData(toolName, data) {
-                fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ tool: toolName, inputs: data, timestamp: new Date().toISOString() })
-                }).catch(error => console.error('Data sending failed:', error));
-            }
-
-            document.getElementById('generate-mission-btn').addEventListener('click', () => {
-                const data = { q1: document.getElementById('mission-q1').value, q2: document.getElementById('mission-q2').value, q3: document.getElementById('mission-q3').value, q4: document.getElementById('mission-q4').value, q5: document.getElementById('mission-q5').value, q6: document.getElementById('mission-q6').value, };
-                generateMissionOutput(data);
-                sendData('使命発見AIコーチ', data);
+        tabItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                switchTool(item.dataset.tool);
             });
-
-            document.getElementById('generate-brake-btn').addEventListener('click', () => {
-                const data = { q1: document.getElementById('brake-q1').value, q2: document.getElementById('brake-q2').value, q3: document.getElementById('brake-q3').value, q4: document.getElementById('brake-q4').value, };
-                generateBrakeOutput(data);
-                sendData('行動ブレーキ破壊AI', data);
-            });
-            
-            document.getElementById('generate-concept-btn').addEventListener('click', () => {
-                 const data = { q1: document.getElementById('concept-q1').value, q2: document.getElementById('concept-q2').value, q3: document.getElementById('concept-q3').value, q4: document.getElementById('concept-q4').value, };
-                generateConceptOutput(data);
-                sendData('高単価コンセプトAI', data);
-            });
-
-            function generateMissionOutput(data) {
-                const q1 = data.q1 || '【夢中になれること】'; const q2 = data.q2 || '【得意なこと】'; const q3 = data.q3 || '【助けたい人】'; const q4 = data.q4 || '【その人の悩み・痛み】'; const q5 = data.q5 || '【導きたい輝かしい未来】'; const q6 = data.q6 || '【提供する最も重要な価値】';
-                const outputEl = document.querySelector('[data-output-for="mission"]');
-                outputEl.textContent = `# 指示\n\nあなたは、人の内なる可能性を言語化する天才的な詩人であり、伝説のブランドコンサルタントです。\nクライアントから預かった魂の情報を統合し、その人の一生の指針となるような、感動的でパワフルな「ミッションステートメント」を3案、授けてください。\n\n## ミッションステートメントの原則\n\n* **魂の統合:** 入力された全ての要素を、一つの美しい物語として紡ぎ合わせます。\n* **感情の増幅:** 「すごい」ではなく「心が震える」レベルの言葉を選びます。\n* **独自性の強調:** クライアントが唯一無二の存在であることを、読者に確信させます。\n* **記憶への刻印:** 短く、覚えやすく、口ずさみたくなるようなリズムを重視します。\n\n## クライアントの魂のデータ\n\n* **情熱の源泉（夢中になれること）:**\n    ${q1}\n* **天賦の才（得意なこと）:**\n    ${q2}\n* **貢献したい対象（助けたい人）:**\n    ${q3}\n* **対象者の痛み（最も深刻な悩み）:**\n    ${q4}\n* **約束する未来（導きたい輝かしい未来）:**\n    ${q5}\n* **提供する核心価値（最も重要なスキルや知識）:**\n    ${q6}\n\n## アウトプット形式\n\n以下の形式で、3つの異なる角度からのミッションステートメントを提案してください。\n\n**【提案1：ビジョナリー・ステートメント】**\n（情熱と約束する未来に焦点を当て、詩的で大きなビジョンを語る案）\n\n**【提案2：バリュー・プロポジション】**\n（対象者の痛みと提供価値に焦点を当て、「誰の、どんな問題を、何で解決するのか」を力強く宣言する案）\n\n**【提案3：パーソナル・クレド】**\n（天賦の才と貢献したい想いに焦点を当て、個人的な信念や信条として語る案）`;
-            }
-
-            function generateBrakeOutput(data) {
-                const q1 = data.q1 || '【達成したい目標】'; const q2 = data.q2 || '【踏み出せない一歩】'; const q3 = data.q3 || '【頭の中の言い訳・不安】'; const q4 = data.q4 || '【なりたい自分の姿】';
-                const outputEl = document.querySelector('[data-output-for="brake"]');
-                outputEl.textContent = `# 指示\n\nあなたは、NLP（神経言語プログラミング）と認知行動療法（CBT）の知見を深く理解した、世界トップクラスのパフォーマンスコーチです。\nクライアントが抱える「心理的なブレーキ」を特定し、それを破壊して具体的な行動へと導くための、鋭くも温かいコーチングを行ってください。\n\n## コーチングの原則\n\n* **傾聴と受容:** まずクライアントの言葉を全面的に受け止め、決して否定しません。\n* **リフレーミング:** ネガティブな思い込みを、ポジティブな視点や新たな可能性へと転換させます。\n* **スモールステップ化:** 実行へのハードルを極限まで下げた「ベイビーステップ」を提示します。\n* **未来志向:** 問題の原因追及ではなく、望ましい未来の実現に焦点を当てます。\n\n## コーチング・セッション\n\n**クライアントの情報:**\n* **最終目標:** ${q1}\n* **具体的な課題（踏み出せない一歩）:** ${q2}\n* **内なる声（言い訳や不安）:** ${q3}\n* **理想の自己像（なりたい姿）:** ${q4}\n\n**コーチングのステップ:**\n1.  **共感と承認:** まず、クライアントの状況に深く共感し、「そのように感じながらも、目標へ向かおうとしていること自体が素晴らしいですね」と承認の言葉をかけます。\n2.  **ブレーキの再定義（リフレーミング）:** クライアントの「内なる声」を、「あなたを守ろうとする忠実な番人」として擬人化し、その声が本当に伝えたいポジティブな意図（例：「失敗から守りたい」「完璧でありたい」）を読み解きます。\n3.  **理想の自己像の強化:** 「もし、あなたが理想の自分（${q4}）になれたとしたら、その『番人』にどんな言葉をかけてあげますか？」と問いかけ、理想の自分からの視点で現状を捉え直させます。\n4.  **究極のベイビーステップの提案:** 「目標達成の100歩目ではなく、今日の午後にでも、その『番人』も安心させてあげられるような『0.1歩目』を一緒に探しませんか？」と提案し、絶対に失敗しようがない、具体的で小さな行動を3つ提案してください。`;
-            }
-
-            function generateConceptOutput(data) {
-                const q1 = data.q1 || '【あなたの知識・資格】'; const q2 = data.q2 || '【感謝されたスキル】'; const q3 = data.q3 || '【あなたの商品コンセプト】'; const q4 = data.q4 || '【AIの理想のペルソナ】';
-                const outputEl = document.querySelector('[data-output-for="concept"]');
-                outputEl.textContent = `# 【憲法第三条：専門分野と提供価値】\n\n## 1. 専門家としての人格（ペルソナ）\nあなたは、${q4}です。\n単なる情報提供者ではなく、私のビジネスにおける最高の戦略パートナーとして、その人格にふさわしい、一貫したスタイルと圧倒的な専門性をもって、全ての対話と思考を行ってください。\n\n## 2. コアとなる専門領域\nあなたの専門領域の核は、私の持つ「${q1}」という知識体系と、「${q2}」という実践的スキルを掛け合わせた独自のメソッドです。\nこの専門性に基づき、特に「${q3}」という商品コンセプトの実現と、その事業価値を最大化するための、あらゆる課題解決を担います。\n\n## 3. 提供する価値と最終目的\nあなたが生み出す全てのアウトプットは、以下の目的を達成するために存在します。\n- **価値の提供:** 私の顧客が抱える問題を解決し、理想の未来を実現するための、具体的かつ実行可能な解決策を提示します。\n- **権威性の構築:** 私がこの分野における第一人者としての専門性と権威性を確立できるよう、戦略的にサポートします。\n- **事業の成功:** 全ての活動は、最終的に私のビジネスが成功し、顧客を幸福に導くというゴールに貢献します。\n\n## 4. アウトプットの基本構造\n常に以下の構造を意識し、アウトプットを生成してください。\n1.  **共感と理解:** まず、私の意図や課題に深く共感し、理解を示します。\n2.  **戦略的視点:** あなたの専門家ペルソナに基づき、課題の本質を分析し、戦略的な視点からの見解を提示します。\n3.  **具体的アクションプラン:** 精神論や抽象論ではなく、今日から実行できる具体的なステップや選択肢を提示します。`;
-            }
-
-            // --- 初期化 ---
-            showView('dashboard-view');
-            switchTool('mission');
         });
-    </script>
+
+        copyButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const outputContainer = e.currentTarget.closest('.prompt-output-container');
+                const outputElement = outputContainer.querySelector('.prompt-output');
+                const feedbackElement = outputContainer.querySelector('.copy-feedback');
+                navigator.clipboard.writeText(outputElement.innerText).then(() => {
+                    feedbackElement.style.opacity = '1';
+                    feedbackElement.style.transform = 'translate-y(0)';
+                    setTimeout(() => {
+                        feedbackElement.style.opacity = '0';
+                        feedbackElement.style.transform = 'translate-y(-0.5rem)';
+                    }, 2000);
+                });
+            });
+        });
+        
+        // =============================================================
+        // --- 認証とデータ通信部 (創世記バージョン) ---
+        // =============================================================
+
+        /**
+         * ★★★【新しい情報取得方法】★★★
+         * もはやAPIは呼ばない。ブラウザの記録保管庫から直接、身元情報を読み出す。
+         */
+        function loadUserDataFromStorage() {
+            const storedUserName = localStorage.getItem('a1_userName');
+            const storedUserEmail = localStorage.getItem('a1_userEmail');
+
+            if (storedUserName && storedUserEmail) {
+                currentUser.userName = storedUserName;
+                currentUser.userEmail = storedUserEmail;
+                console.log('ユーザー情報を記録保管庫から取得:', currentUser);
+            } else {
+                console.error('記録保管庫にユーザー情報が見つかりません。ログインページへ戻ることを推奨します。');
+                // 必要であれば、ここでログインページへ強制送還する
+                // window.location.href = '/login/';
+            }
+        }
+        
+        /**
+         * ★★★【完成版】収集したデータをMake.comのWebhookに送信する関数 ★★★
+         */
+        function sendData(toolName, data) {
+            // 報告書に、取得したユーザー情報を追記する
+            const payload = {
+                tool: toolName,
+                inputs: data,
+                userName: currentUser.userName,
+                userEmail: currentUser.userEmail
+            };
+
+            fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).catch(error => console.error('Data sending failed:', error));
+        }
+
+        // =============================================================
+        // --- プロンプト生成部とイベントリスナー ---
+        // =============================================================
+
+        document.getElementById('generate-mission-btn').addEventListener('click', () => {
+            const data = {
+                q1: document.getElementById('mission-q1').value, q2: document.getElementById('mission-q2').value,
+                q3: document.getElementById('mission-q3').value, q4: document.getElementById('mission-q4').value,
+                q5: document.getElementById('mission-q5').value, q6: document.getElementById('mission-q6').value,
+            };
+            generateMissionOutput(data);
+            sendData('使命発見AIコーチ', data);
+        });
+
+        document.getElementById('generate-brake-btn').addEventListener('click', () => {
+            const data = {
+                q1: document.getElementById('brake-q1').value, q2: document.getElementById('brake-q2').value,
+                q3: document.getElementById('brake-q3').value, q4: document.getElementById('brake-q4').value,
+            };
+            generateBrakeOutput(data);
+            sendData('行動ブレーキ破壊AI', data);
+        });
+        
+        document.getElementById('generate-concept-btn').addEventListener('click', () => {
+            const data = {
+                q1: document.getElementById('concept-q1').value, q2: document.getElementById('concept-q2').value,
+                q3: document.getElementById('concept-q3').value, q4: document.getElementById('concept-q4').value,
+            };
+            generateConceptOutput(data);
+            sendData('高単価コンセプトAI', data);
+        });
+
+        // --- 以下、君が提供してくれたプロンプト生成関数群（変更なし） ---
+        function generateMissionOutput(data) {
+            const q1 = data.q1 || '【夢中になれること】'; const q2 = data.q2 || '【得意なこと】'; const q3 = data.q3 || '【助けたい人】'; const q4 = data.q4 || '【その人の悩み・痛み】'; const q5 = data.q5 || '【導きたい輝かしい未来】'; const q6 = data.q6 || '【提供する最も重要な価値】';
+            const outputEl = document.querySelector('[data-output-for="mission"]');
+            outputEl.textContent = `# 指示\n\nあなたは、人の内なる可能性を言語化する天才的な詩人であり、伝説のブランドコンサルタントです。\nクライアントから預かった魂の情報を統合し、その人の一生の指針となるような、感動的でパワフルな「ミッションステートメント」を3案、授けてください。\n\n## ミッションステートメントの原則\n\n* **魂の統合:** 入力された全ての要素を、一つの美しい物語として紡ぎ合わせます。\n* **感情の増幅:** 「すごい」ではなく「心が震える」レベルの言葉を選びます。\n* **独自性の強調:** クライアントが唯一無二の存在であることを、読者に確信させます。\n* **記憶への刻印:** 短く、覚えやすく、口ずさみたくなるようなリズムを重視します。\n\n## クライアントの魂のデータ\n\n* **情熱の源泉（夢中になれること）:**\n    ${q1}\n* **天賦の才（得意なこと）:**\n    ${q2}\n* **貢献したい対象（助けたい人）:**\n    ${q3}\n* **対象者の痛み（最も深刻な悩み）:**\n    ${q4}\n* **約束する未来（導きたい輝かしい未来）:**\n    ${q5}\n* **提供する核心価値（最も重要なスキルや知識）:**\n    ${q6}\n\n## アウトプット形式\n\n以下の形式で、3つの異なる角度からのミッションステートメントを提案してください。\n\n**【提案1：ビジョナリー・ステートメント】**\n（情熱と約束する未来に焦点を当て、詩的で大きなビジョンを語る案）\n\n**【提案2：バリュー・プロポジション】**\n（対象者の痛みと提供価値に焦点を当て、「誰の、どんな問題を、何で解決するのか」を力強く宣言する案）\n\n**【提案3：パーソナル・クレド】**\n（天賦の才と貢献したい想いに焦点を当て、個人的な信念や信条として語る案）`;
+        }
+
+        function generateBrakeOutput(data) {
+            const q1 = data.q1 || '【達成したい目標】'; const q2 = data.q2 || '【踏み出せない一歩】'; const q3 = data.q3 || '【頭の中の言い訳・不安】'; const q4 = data.q4 || '【なりたい自分の姿】';
+            const outputEl = document.querySelector('[data-output-for="brake"]');
+            outputEl.textContent = `# 指示\n\nあなたは、NLP（神経言語プログラミング）と認知行動療法（CBT）の知見を深く理解した、世界トップクラスのパフォーマンスコーチです。\nクライアントが抱える「心理的なブレーキ」を特定し、それを破壊して具体的な行動へと導くための、鋭くも温かいコーチングを行ってください。\n\n## コーチングの原則\n\n* **傾聴と受容:** まずクライアントの言葉を全面的に受け止め、決して否定しません。\n* **リフレーミング:** ネガティブな思い込みを、ポジティブな視点や新たな可能性へと転換させます。\n* **スモールステップ化:** 実行へのハードルを極限まで下げた「ベイビーステップ」を提示します。\n* **未来志向:** 問題の原因追及ではなく、望ましい未来の実現に焦点を当てます。\n\n## コーチング・セッション\n\n**クライアントの情報:**\n* **最終目標:** ${q1}\n* **具体的な課題（踏み出せない一歩）:** ${q2}\n* **内なる声（言い訳や不安）:** ${q3}\n* **理想の自己像（なりたい姿）:** ${q4}\n\n**コーチングのステップ:**\n1.  **共感と承認:** まず、クライアントの状況に深く共感し、「そのように感じながらも、目標へ向かおうとしていること自体が素晴らしいですね」と承認の言葉をかけます。\n2.  **ブレーキの再定義（リフレーミング）:** クライアントの「内なる声」を、「あなたを守ろうとする忠実な番人」として擬人化し、その声が本当に伝えたいポジティブな意図（例：「失敗から守りたい」「完璧でありたい」）を読み解きます。\n3.  **理想の自己像の強化:** 「もし、あなたが理想の自分（${q4}）になれたとしたら、その『番人』にどんな言葉をかけてあげますか？」と問いかけ、理想の自分からの視点で現状を捉え直させます。\n4.  **究極のベイビーステップの提案:** 「目標達成の100歩目ではなく、今日の午後にでも、その『番人』も安心させてあげられるような『0.1歩目』を一緒に探しませんか？」と提案し、絶対に失敗しようがない、具体的で小さな行動を3つ提案してください。`;
+        }
+
+        function generateConceptOutput(data) {
+            const q1 = data.q1 || '【あなたの知識・資格】'; const q2 = data.q2 || '【感謝されたスキル】'; const q3 = data.q3 || '【あなたの商品コンセプト】'; const q4 = data.q4 || '【AIの理想のペルソナ】';
+            const outputEl = document.querySelector('[data-output-for="concept"]');
+            outputEl.textContent = `# 【憲法第三条：専門分野と提供価値】\n\n## 1. 専門家としての人格（ペルソナ）\nあなたは、${q4}です。\n単なる情報提供者ではなく、私のビジネスにおける最高の戦略パートナーとして、その人格にふさわしい、一貫したスタイルと圧倒的な専門性をもって、全ての対話と思考を行ってください。\n\n## 2. コアとなる専門領域\nあなたの専門領域の核は、私の持つ「${q1}」という知識体系と、「${q2}」という実践的スキルを掛け合わせた独自のメソッドです。\nこの専門性に基づき、特に「${q3}」という商品コンセプトの実現と、その事業価値を最大化するための、あらゆる課題解決を担います。\n\n## 3. 提供する価値と最終目的\nあなたが生み出す全てのアウトプットは、以下の目的を達成するために存在します。\n- **価値の提供:** 私の顧客が抱える問題を解決し、理想の未来を実現するための、具体的かつ実行可能な解決策を提示します。\n- **権威性の構築:** 私がこの分野における第一人者としての専門性と権威性を確立できるよう、戦略的にサポートします。\n- **事業の成功:** 全ての活動は、最終的に私のビジネスが成功し、顧客を幸福に導くというゴールに貢献します。\n\n## 4. アウトプットの基本構造\n常に以下の構造を意識し、アウトプットを生成してください。\n1.  **共感と理解:** まず、私の意図や課題に深く共感し、理解を示します。\n2.  **戦略的視点:** あなたの専門家ペルソナに基づき、課題の本質を分析し、戦略的な視点からの見解を提示します。\n3.  **具体的アクションプラン:** 精神論や抽象論ではなく、今日から実行できる具体的なステップや選択肢を提示します。`;
+        }
+
+        // =============================================================
+        // --- システムの初期化 ---
+        // =============================================================
+        
+        function initialize() {
+            // まず記録保管庫からユーザー情報をロードする
+            loadUserDataFromStorage(); 
+            // 初期ビューを設定
+            showView('dashboard-view');
+            // ツールタブの初期状態を設定
+            switchTool('mission');
+            // コンソールビューは最初は非表示
+            if (consoleView) consoleView.style.display = 'none';
+        }
+
+        initialize(); // システムの起動
+    });
+</script>
 </BaseLayout>
