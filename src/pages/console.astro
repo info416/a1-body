@@ -169,33 +169,66 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             // --- データ送信 & プロンプト生成 ---
             // =============================================================
             const WEBHOOK_URL = 'https://hook.us2.make.com/szk4fwyq5gocz1b9j5hmut7v87iagaxx';
+const USER_API_URL = '/snspack/wp-json/a1-project/v1/user';         // ★君のAPIエンドポイント
 
-            // ユーザー情報を保持するためのグローバルな保管庫
+// ユーザー情報を保持するためのグローバルな保管庫
 let currentUser = {
     userName: 'N/A',
     userEmail: 'N/A'
 };
 
-// ---【新設】ページの読み込み時にWordPressへユーザー情報を問い合わせる関数 ---
+/**
+ * 認証トークンをブラウザの記録保管庫から取得する。
+ * @returns {string|null} 発見された認証トークン、またはnull
+ */
+function getAuthToken() {
+    // 捜索プロトコルの結果に基づき、Local Storageから'jwt_token'を取得する
+    return localStorage.getItem('jwt_token');
+}
+
+/**
+ * WordPressに認証情報付きでユーザーデータを問い合わせる非同期関数。
+ */
 async function fetchUserData() {
+    const token = getAuthToken();
+    if (!token) {
+        console.log("認証トークンが見つかりません。ユーザーはログインしていない可能性が高いです。");
+        return; // トークンがなければ、これ以上の処理は行わない
+    }
+
     try {
-        // WordPressに設置した「情報窓口」のURL
-        const response = await fetch('/snspack/wp-json/a1-project/v1/user');
-        if (!response.ok) {
-            throw new Error('API response was not ok.');
+        const response = await fetch(USER_API_URL, {
+            method: 'GET',
+            headers: {
+                // Astro皇帝から与えられた身分証明書（トークン）を提示する
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        if (response.status === 403) {
+             console.error('アクセスが拒否されました。提供されたトークンが無効か期限切れの可能性があります。');
+             return;
         }
+        if (!response.ok) {
+            throw new Error(`APIからの応答が異常です: ${response.statusText}`);
+        }
+
         const data = await response.json();
-        currentUser = data; // 取得したデータで保管庫を更新
-        console.log('User data fetched:', currentUser);
+        currentUser = data; // グローバル保管庫を最新のユーザー情報で更新
+        console.log('ユーザー情報の取得に成功:', currentUser);
+
     } catch (error) {
-        console.error('Failed to fetch user data:', error);
-        // エラーが発生しても、デフォルト値のN/Aが使われる
+        console.error('ユーザーデータの取得に失敗しました:', error);
     }
 }
 
-// ---【改修】送信機能 ---
+/**
+ * 収集したデータをMakeのWebhookに送信する関数。
+ * @param {string} toolName - 使用されたツールの名前
+ * @param {object} data - ツールから収集された入力データ
+ */
 function sendData(toolName, data) {
-    // 問い合わせておいた最新のユーザー情報をペイロードに含める
+    // 最新のユーザー情報を含む完全なデータペイロードを構築
     const payload = {
         tool: toolName,
         inputs: data,
@@ -209,17 +242,16 @@ function sendData(toolName, data) {
         body: JSON.stringify(payload)
     })
     .then(response => {
-        if (!response.ok) {
-            console.error('Webhook response was not ok.', response.statusText);
+        if (response.ok) {
+            console.log('データはWebhookへ正常に送信されました。');
         } else {
-            console.log('Data sent successfully to webhook.');
+            console.error('Webhookからの応答が異常です。', response.statusText);
         }
     })
-    .catch(error => console.error('Data sending failed:', error));
+    .catch(error => console.error('データ送信に失敗しました:', error));
 }
 
-// ---【実行】---
-// このページのHTMLが全て読み込まれたら、まずユーザー情報の取得を開始する
+// ページのHTMLが全て読み込まれたら、まずユーザー情報の取得を開始する
 document.addEventListener('DOMContentLoaded', fetchUserData);
 
             function sendData(toolName, data) {
