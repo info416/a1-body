@@ -169,38 +169,58 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             // --- データ送信 & プロンプト生成 ---
             // =============================================================
             const WEBHOOK_URL = 'https://hook.us2.make.com/szk4fwyq5gocz1b9j5hmut7v87iagaxx';
-            const USER_API_URL = 'https://snspack/wp-json/a1-project/v6/user'; // ★★★ バージョンをv2に変更 ★★★
 
-// ユーザー情報を保持するためのグローバルな保管庫
-let currentUser = {
-    userName: 'N/A',
-    userEmail: 'N/A'
-};
-function getAuthToken() {
-    return localStorage.getItem('jwt_token');
-}
+    let currentUser = { userName: 'N/A', userEmail: 'N/A' };
+    
+    /**
+     * ★★★【新しい情報取得方法】★★★
+     * もはやAPIは呼ばない。ブラウザの記録保管庫から直接、身元情報を読み出す。
+     */
+    function loadUserDataFromStorage() {
+        const storedUserName = localStorage.getItem('a1_userName');
+        const storedUserEmail = localStorage.getItem('a1_userEmail');
 
-async function fetchUserData() {
-    const token = getAuthToken();
-    if (!token) {
-        console.log("認証トークンが見つかりません。");
-        return;
+        if (storedUserName && storedUserEmail) {
+            currentUser.userName = storedUserName;
+            currentUser.userEmail = storedUserEmail;
+            console.log('ユーザー情報を記録保管庫から取得:', currentUser);
+        } else {
+            console.error('記録保管庫にユーザー情報が見つかりません。');
+            // ここでログインページにリダイレクトするなどの処理も可能
+        }
     }
-    try {
-        const response = await fetch(USER_API_URL, {
-            method: 'GET',
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!response.ok) throw new Error(`API応答異常: ${response.status}`);
-        const data = await response.json();
-        currentUser = data;
-        console.log('ユーザー情報取得成功:', currentUser);
-    } catch (error) {
-        console.error('ユーザーデータ取得失敗:', error);
-        // エラー時、ログインページへリダイレクトするなどの処理も有効
-        // window.location.href = '/login/';
+    
+    function sendData(toolName, data) {
+        const payload = {
+            tool: toolName,
+            inputs: data,
+            userName: currentUser.userName,
+            userEmail: currentUser.userEmail
+        };
+        fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        }).catch(error => console.error('データ送信失敗:', error));
     }
-}
+
+    function logout() {
+        // ログアウト時は、全ての関連情報を削除する
+        localStorage.removeItem('jwt_token');
+        localStorage.removeItem('a1_userName');
+        localStorage.removeItem('a1_userEmail');
+        window.location.href = '/login/'; 
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        // ページ読み込み時に、APIではなく保管庫から情報をロードする
+        loadUserDataFromStorage();
+
+        const logoutBtn = document.getElementById('logoutButton'); // ログアウトボタンのIDに合わせて要修正
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', logout);
+        }
+    });
 
 // ページのHTMLが全て読み込まれたら、まずユーザー情報の取得を開始する
 document.addEventListener('DOMContentLoaded', fetchUserData);

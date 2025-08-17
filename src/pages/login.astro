@@ -26,27 +26,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     if (form) {
         form.addEventListener('submit', async (e) => {
-            // 伝書鳩（デフォルトのフォーム送信）を、まず無効化する
             e.preventDefault();
-            
-            if (errorMessage) {
-                errorMessage.style.display = 'none';
-            }
+            if (errorMessage) errorMessage.style.display = 'none';
 
-            // ★★★【浄化】異世界の呪文を、純粋なJavaScriptの命令に修正 ★★★
             const emailInput = document.getElementById('email');
             const passwordInput = document.getElementById('password');
-
-            if (!emailInput || !passwordInput) {
-                console.error('Login form input elements not found.');
-                return;
-            }
+            if (!emailInput || !passwordInput) return;
 
             const emailValue = emailInput.value;
             const passwordValue = passwordInput.value;
 
             try {
-                // ここから先は、我々の設計通り、完璧な転送装置の起動シーケンスだ
                 const response = await fetch('https://ai-verve.net/snspack/wp-json/simple-jwt-login/v1/auth', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -59,15 +49,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                     throw new Error(data.data.message || 'ログインに失敗しました。');
                 }
 
+                // ★★★【創世記の記録】★★★
+                // 応答から、通行証・氏名・メールアドレスの全てを抽出する
                 const token = data.data.jwt;
-                if (!token) {
-                    throw new Error('認証トークンの取得に失敗しました。');
+                const userName = data.data.user_display_name;
+                const userEmail = data.data.user_email;
+
+                if (!token || !userName || !userEmail) {
+                    throw new Error('認証情報は不完全です。管理者に連絡してください。');
                 }
 
+                // 全ての情報を、ブラウザの記録保管庫に刻印する
                 localStorage.setItem('jwt_token', token);
+                localStorage.setItem('a1_userName', userName);
+                localStorage.setItem('a1_userEmail', userEmail);
                 
-                // 目的地へと転送を開始
-                window.location.href = '/dashboard/';
+                window.location.href = '/console/';
 
             } catch (error) {
                 if (errorMessage) {
