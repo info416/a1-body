@@ -16,6 +16,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <div style="margin-top:1em;">
                 <button type="submit" class="btn btn-primary w-full">ログインする</button>
             </div>
+            <div class="text-center mt-4">
+                <a href="/password-reset" class="text-sm text-gray-400 hover:text-blue-400 transition-colors duration-200">
+                パスワードをお忘れですか？
+                </a>
+            </div>
             <p id="error-message" class="text-red-400 text-center" style="display: none;"></p>
         </form>
     </div>
@@ -24,19 +29,43 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     const form = document.getElementById('login-form');
     const errorMessage = document.getElementById('error-message');
 
+    /**
+     * 認証エラーメッセージを日本語に翻訳する関数
+     * @param {string} message - プラグインから返された英語のメッセージ
+     * @returns {string} - 日本語に翻訳されたメッセージ
+     */
+    function translateAuthError(message) {
+        // "Wrong user credentials" を含むメッセージを検知
+        if (message && message.toLowerCase().includes('wrong user credentials')) {
+            return 'メールアドレスまたはパスワードが正しくありません。';
+        }
+        // その他のエラーは、より一般的なメッセージにまとめるか、そのまま表示する
+        return message || 'ログイン中に不明なエラーが発生しました。';
+    }
+
     if (form) {
         form.addEventListener('submit', async (e) => {
+            // デフォルトのフォーム送信を停止
             e.preventDefault();
-            if (errorMessage) errorMessage.style.display = 'none';
+            
+            // エラーメッセージを一旦非表示にする
+            if (errorMessage) {
+                errorMessage.style.display = 'none';
+            }
 
             const emailInput = document.getElementById('email');
             const passwordInput = document.getElementById('password');
-            if (!emailInput || !passwordInput) return;
+
+            if (!emailInput || !passwordInput) {
+                console.error('ログインフォームの入力要素が見つかりません。');
+                return;
+            }
 
             const emailValue = emailInput.value;
             const passwordValue = passwordInput.value;
 
             try {
+                // WordPressの認証エンドポイントにリクエストを送信
                 const response = await fetch('https://ai-verve.net/snspack/wp-json/simple-jwt-login/v1/auth', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -45,8 +74,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
                 const data = await response.json();
 
+                // レスポンスがNG、またはレスポンス内のsuccessがfalseの場合
                 if (!response.ok || !data.success) {
-                    throw new Error(data.data.message || 'ログインに失敗しました。');
+                    // 英語のエラーメッセージを翻訳してスローする
+                    throw new Error(translateAuthError(data.data.message));
                 }
 
                 const token = data.data.jwt;
@@ -54,13 +85,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                     throw new Error('認証トークンの取得に失敗しました。');
                 }
 
-                // ★★★【神託の解読】★★★
-                // 受け取ったトークン（書物）を、自らの手で解読する
+                // --- トークンからペイロードを直接デコード ---
                 const payloadBase64 = token.split('.')[1];
                 const decodedPayload = atob(payloadBase64);
                 const payload = JSON.parse(decodedPayload);
                 
-                // 書物から、必要な情報を全て抽出する
+                // ペイロードからユーザー情報を抽出
                 const userName = payload.username;
                 const userEmail = payload.email;
 
@@ -68,14 +98,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                     throw new Error('認証情報は完全ですが、内部データが欠落しています。');
                 }
 
-                // 全ての情報を、ブラウザの記録保管庫に刻印する
+                // 全ての情報をブラウザのlocalStorageに保存
                 localStorage.setItem('jwt_token', token);
                 localStorage.setItem('a1_userName', userName);
                 localStorage.setItem('a1_userEmail', userEmail);
                 
+                // ログイン成功後、ダッシュボード（またはコンソール）へリダイレクト
                 window.location.href = '/dashboard';
 
             } catch (error) {
+                // エラーが発生した場合、日本語化されたメッセージを表示
                 if (errorMessage) {
                     errorMessage.textContent = error.message;
                     errorMessage.style.display = 'block';
