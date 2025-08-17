@@ -56,37 +56,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-
-
-/**
- * ★★★【新設】ログアウト処理を実行する関数 ★★★
- */
-function logout() {
-    console.log('ログアウト処理を開始します...');
-    
-    // 1. 身分証明書（トークン）を記録保管庫から破棄する
-    localStorage.removeItem('jwt_token');
-    
-    // 2. メモリ上のユーザー情報をリセットする
-    currentUser = { userName: 'N/A', userEmail: 'N/A' };
-    
-    console.log('認証トークンを破棄しました。');
-    
-    // 3. ログインページへ強制的に移動させる
-    //    ※ '/login' の部分は、君のサイトのログインページのURLに合わせて要修正
-    window.location.href = '/login'; 
-}
-
-// ---【実行処理】---
-
-// ページのHTMLが全て読み込まれた後の処理
-document.addEventListener('DOMContentLoaded', () => {
-    // ユーザー情報の取得を開始
-    fetchUserData();
-
-    // ★★★【新設】ログアウトボタンにクリックイベントを設定 ★★★
-    const logoutBtn = document.getElementById('logoutButton');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', logout);
-    }
-});
