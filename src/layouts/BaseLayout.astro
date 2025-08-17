@@ -21,9 +21,13 @@ const { title } = Astro.props;
 <body>
     <script is:inline>
         // --- Gatekeeper Protocol ---
-        const publicPaths = ['/login']; // 門番がチェックしない例外ページ
+        const publicPaths = [
+            '/login',
+            '/password-reset',        // ★【追加】パスワードリセット申請ページ
+        ]; // 門番がチェックしない例外ページ
         const token = localStorage.getItem('jwt_token');
-        const currentPath = window.location.pathname;
+        // .replace(/\/$/, "") は、URLの末尾にスラッシュがあってもなくても認識させるための、美しいおまじない
+        const currentPath = window.location.pathname.replace(/\/$/, "");
 
         // 今いるページが例外リストに含まれておらず、かつ、トークンを持っていない場合
         if (!publicPaths.includes(currentPath) && !token) {
