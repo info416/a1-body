@@ -49,17 +49,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                     throw new Error(data.data.message || 'ログインに失敗しました。');
                 }
 
-                // ★★★【創世記の記録】★★★
-                // 応答から、通行証・氏名・メールアドレスの全てを抽出する
+                // ★★★【最終翻訳】★★★
+                // プラグインの実際の設計図に合わせて、正しい名前で情報を抽出する
                 const token = data.data.jwt;
-                const userName = data.data.user_display_name;
-                const userEmail = data.data.user_email;
+                const userName = data.data.username; // 'user_display_name' から 'username' へ変更
+                const userEmail = data.data.email;    // 'user_email' から 'email' へ変更
 
                 if (!token || !userName || !userEmail) {
-                    throw new Error('認証情報は不完全です。管理者に連絡してください。');
+                    throw new Error('認証情報は不完全です。プラグイン設定を確認してください。');
                 }
 
-                // 全ての情報を、ブラウザの記録保管庫に刻印する
                 localStorage.setItem('jwt_token', token);
                 localStorage.setItem('a1_userName', userName);
                 localStorage.setItem('a1_userEmail', userEmail);
