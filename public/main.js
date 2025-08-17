@@ -56,3 +56,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+/* ==========================================================================
+   Logout Protocol
+   ========================================================================== */
+document.addEventListener('DOMContentLoaded', () => {
+    const logoutButton = document.getElementById('logout-button');
+
+    if (logoutButton) {
+        logoutButton.addEventListener('click', (e) => {
+            e.preventDefault(); // リンクのデフォルト動作を停止
+
+            // 国民の通行許可証（トークン）を破棄する
+            localStorage.removeItem('jwt_token');
+
+            // 帝国の玄関（ログインページ）へ強制送還する
+            window.location.href = '/login';
+        });
+    }
+});
