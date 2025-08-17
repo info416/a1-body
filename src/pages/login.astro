@@ -20,42 +20,62 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </form>
     </div>
 
-    <script>
-        const form = document.getElementById('login-form');
-        const errorMessage = document.getElementById('error-message');
+<script is:inline>
+    const form = document.getElementById('login-form');
+    const errorMessage = document.getElementById('error-message');
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            errorMessage.style.display = 'none';
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorMessage.style.display = 'none';
 
-            const username = (document.getElementById('email') as HTMLInputElement).value;
-            const password = (document.getElementById('password') as HTMLInputElement).value;
+        // TypeScriptの型注釈構文を削除し、純粋なJavaScript形式に修正
+        const usernameInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
 
-            try {
-                const response = await fetch('https://ai-verve.net/snspack/wp-json/jwt-auth/v1/token', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ username, password }),
-                });
+        if (!usernameInput || !passwordInput) {
+            console.error('Login form elements not found.');
+            return;
+        }
 
-                const data = await response.json();
+        const username = usernameInput.value;
+        const password = passwordInput.value;
 
-                if (!response.ok) {
-                    throw new Error(data.message || 'ログインに失敗しました。');
-                }
+        try {
+            // ★★★【修正点1】宛先を、新警備隊「Simple JWT Login」の詰所に変更 ★★★
+            const response = await fetch('https://ai-verve.net/snspack/wp-json/simple-jwt-login/v1/auth', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }), // bodyの形式はこれで正しい
+            });
 
-                // 通行許可証（トークン）を安全な保管庫（localStorage）へ
-                localStorage.setItem('jwt_token', data.token);
+            const data = await response.json();
 
-                // ログイン成功後、ダッシュボードへ転送
-                window.location.href = '/dashboard';
-
-            } catch (error) {
-                errorMessage.textContent = error.message;
-                errorMessage.style.display = 'block';
+            // ログイン失敗時のエラーハンドリングを強化
+            if (!response.ok || !data.success) {
+                // data.data.message に、プラグインからの具体的なエラー理由が含まれる
+                throw new Error(data.data.message || 'ログインに失敗しました。');
             }
-        });
-    </script>
+
+            // ★★★【修正点2】新しい受領形式に対応 ★★★
+            // 通行許可証（トークン）は、dataオブジェクトの中の、さらにdataオブジェクトの中にある'jwt'から取り出す
+            const token = data.data.jwt;
+            if (!token) {
+                throw new Error('認証トークンの取得に失敗しました。');
+            }
+
+            // 通行許可証（トークン）を安全な保管庫（localStorage）へ
+            localStorage.setItem('jwt_token', token);
+
+            // ログイン成功後、コンソールへ転送
+            // '/dashboard' の部分は、君のコンソールページのパスに合わせて要修正
+            window.location.href = '/console/'; 
+
+        } catch (error) {
+            errorMessage.textContent = error.message;
+            errorMessage.style.display = 'block';
+        }
+    });
+</script>
 </BaseLayout>
