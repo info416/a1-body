@@ -28,48 +28,39 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         e.preventDefault();
         errorMessage.style.display = 'none';
 
-        // TypeScriptの型注釈構文を削除し、純粋なJavaScript形式に修正
-        const usernameInput = document.getElementById('email');
-        const passwordInput = document.getElementById('password');
-
-        if (!usernameInput || !passwordInput) {
-            console.error('Login form elements not found.');
-            return;
-        }
-
-        const username = usernameInput.value;
-        const password = passwordInput.value;
+        // 'email' IDを持つ入力欄から、ユーザーのメールアドレスを取得
+        const emailValue = (document.getElementById('email') as HTMLInputElement).value;
+        const passwordValue = (document.getElementById('password') as HTMLInputElement).value;
 
         try {
-            // ★★★【修正点1】宛先を、新警備隊「Simple JWT Login」の詰所に変更 ★★★
             const response = await fetch('https://ai-verve.net/snspack/wp-json/simple-jwt-login/v1/auth', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, password }), // bodyの形式はこれで正しい
+                // ★★★【最後の修正】★★★
+                // 提出する申請書の形式を、プラグインの仕様に完全に合致させる
+                // 「email」という欄に、ユーザーが入力したメールアドレスを記載する
+                body: JSON.stringify({ 
+                    email: emailValue, 
+                    password: passwordValue 
+                }),
             });
 
             const data = await response.json();
 
-            // ログイン失敗時のエラーハンドリングを強化
             if (!response.ok || !data.success) {
-                // data.data.message に、プラグインからの具体的なエラー理由が含まれる
                 throw new Error(data.data.message || 'ログインに失敗しました。');
             }
 
-            // ★★★【修正点2】新しい受領形式に対応 ★★★
-            // 通行許可証（トークン）は、dataオブジェクトの中の、さらにdataオブジェクトの中にある'jwt'から取り出す
             const token = data.data.jwt;
             if (!token) {
                 throw new Error('認証トークンの取得に失敗しました。');
             }
 
-            // 通行許可証（トークン）を安全な保管庫（localStorage）へ
             localStorage.setItem('jwt_token', token);
-
-            // ログイン成功後、コンソールへ転送
-            // '/dashboard' の部分は、君のコンソールページのパスに合わせて要修正
+            
+            // '/console/' の部分は、君のコンソールページのパスに合わせること
             window.location.href = '/console/'; 
 
         } catch (error) {
