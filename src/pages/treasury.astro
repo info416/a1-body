@@ -13,9 +13,11 @@ if (response.ok) {
         // WordPressからのデータを、JavaScriptが使いやすい形式に変換する
         formattedTreasures = treasuresFromWP.map(post => ({
             id: post.id,
-            title: post.title.rendered,
-            description: post.acf.treasure_description || '説明がありません',
-            category: post.acf.treasure_category || 'idea'
+    title: post.title.rendered,
+    description: post.acf.treasure_description || '説明がありません',
+    category: post.acf.treasure_category || 'idea',
+    button_type: post.acf.button_type,    // この行を追加
+    button_value: post.acf.button_value // この行を追加
         }));
     }
 } catch (e) {
@@ -126,11 +128,46 @@ if (response.ok) {
         }
 
         // --- モーダル制御 ---
-        function openModal(treasure) {
-            modalTitle.textContent = treasure.title;
-            modalContent.innerHTML = `<p>${treasure.description}</p><br><p>【ここに、この宝物の具体的な使い方や、プロンプト、ダウンロードリンクなどが入ります。】</p><a href="#" class="btn btn-primary mt-4">ダウンロード</a>`;
-            modalOverlay.classList.add('visible');
-        }
+        // --- モーダル制御 ---
+function openModal(treasure) {
+    modalTitle.textContent = treasure.title;
+
+    // モーダルの基本コンテンツを生成
+    let contentHTML = `<p>${treasure.description}</p>`;
+
+    // ボタンの種類に応じて、表示するボタンのHTMLを生成
+    let buttonHTML = '';
+    switch (treasure.button_type) {
+        case 'copy':
+            buttonHTML = `<button id="modal-action-button" class="btn btn-primary mt-4">プロンプトをコピー</button>`;
+            break;
+        case 'pdf':
+            buttonHTML = `<a href="${treasure.button_value}" target="_blank" rel="noopener noreferrer" class="btn btn-primary mt-4">PDFで開く</a>`;
+            break;
+        case 'download':
+        default:
+            buttonHTML = `<a href="${treasure.button_value}" download class="btn btn-primary mt-4">ダウンロード</a>`;
+            break;
+    }
+
+    modalContent.innerHTML = contentHTML + buttonHTML;
+
+    // もし「コピー」ボタンなら、クリックした時の動作を定義する
+    if (treasure.button_type === 'copy') {
+        const copyButton = document.getElementById('modal-action-button');
+        copyButton.addEventListener('click', () => {
+            if (!treasure.button_value) return;
+            navigator.clipboard.writeText(treasure.button_value).then(() => {
+                copyButton.textContent = 'コピーしました！';
+                setTimeout(() => {
+                    copyButton.textContent = 'プロンプトをコピー';
+                }, 2000);
+            });
+        });
+    }
+
+    modalOverlay.classList.add('visible');
+}
         function closeModal() {
             modalOverlay.classList.remove('visible');
         }
