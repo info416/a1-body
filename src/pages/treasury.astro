@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 // カテゴリーIDをあなたの環境に合わせて修正すること
-const SHINTAKU_CATEGORY_ID = 20; // 例：あなたの「神託」カテゴリーのID
+const TREASURE_CATEGORY_ID = 20; // 例：あなたの「宝物」カテゴリーのID
 
 // 頭脳（WordPress）から全ての「宝物」データを召喚する
 const response = await fetch(`https://ai-verve.net/snspack/wp-json/wp/v2/posts?categories=${TREASURE_CATEGORY_ID}&per_page=100&_fields=id,title,acf`);
