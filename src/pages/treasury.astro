@@ -156,7 +156,7 @@ if (response.ok) {
         choiceBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const category = btn.dataset.category;
-                const results = allTreasures.filter(t => t.category === category);
+                const results = allTreasures.filter(t => t.category && t.category.includes(category));
                 compassResults.innerHTML = '<h2 class="text-2xl font-bold mb-4">あなたへの神託</h2><div class="card-grid"></div>';
                 const grid = compassResults.querySelector('.card-grid');
                 results.forEach(treasure => {
