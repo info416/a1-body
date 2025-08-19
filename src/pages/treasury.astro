@@ -181,11 +181,6 @@ if (response.ok) {
         });
 
         // --- 初期化 ---
-        if (allTreasures.length > 0) {
-                allTreasures.forEach(treasure => {
-                    libraryGrid.appendChild(createCard(treasure));
-                });
-            }
         allTreasures.forEach(treasure => {
             libraryGrid.appendChild(createCard(treasure));
         });
