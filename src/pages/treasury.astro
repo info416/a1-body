@@ -4,9 +4,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 // カテゴリーIDをあなたの環境に合わせて修正すること
 const SHINTAKU_CATEGORY_ID = 20; // 例：あなたの「神託」カテゴリーのID
 
-// 頭脳（WordPress）から全ての「神託」データを召喚する
-const response = await fetch(`https://ai-verve.net/snspack/wp-json/wp/v2/posts?categories=${SHINTAKU_CATEGORY_ID}&per_page=100&_fields=id,title,acf`);
-const shintakuPosts = await response.json();
+// 頭脳（WordPress）から全ての「宝物」データを召喚する
+const response = await fetch(`https://ai-verve.net/snspack/wp-json/wp/v2/posts?categories=${TREASURE_CATEGORY_ID}&per_page=100&_fields=id,title,acf`);
+const treasuresFromWP = await response.json();
+
+// WordPressからのデータを、JavaScriptが使いやすい形式に変換する
+const formattedTreasures = treasuresFromWP.map(post => ({
+    id: post.id,
+    title: post.title.rendered,
+    description: post.acf.treasure_description,
+    category: post.acf.treasure_category
+}));
 ---
 
 <BaseLayout title="宝物庫">
@@ -78,12 +86,13 @@ const shintakuPosts = await response.json();
         </div>
     </div>
     
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // --- データプレースホルダー ---
-        const allTreasures = [
-            { id: 1, category: 'idea', title: 'AIブレインストーミング・シート', description: 'AIと対話することで、SNS投稿のアイデアを無限に生成する魔法のシート。' }, { id: 2, category: 'idea', title: 'ペルソナ深掘りプロンプト', description: 'ターゲット顧客の深層心理を暴き出し、心に突き刺さるコンテンツの種を見つける。' }, { id: 3, category: 'copywriting', title: 'キャッチコピー錬金術', description: '人の足を止め、心を掴むキャッチコピーを瞬時に生成する秘伝のレシピ。' }, { id: 4, category: 'copywriting', title: 'ストーリーテリングの設計図', description: '読者を物語に引き込み、商品を「欲しい」と思わせる感情の動線を設計する。' }, { id: 5, category: 'efficiency', title: 'ルーティンワーク自動化スクリプト', description: '日々の退屈な作業をAIに任せ、あなたの貴重な時間を創造的な活動に集中させる。' }, { id: 6, category: 'engagement', title: 'お客様の声・管理＆活用データベース', description: '顧客からの感謝の声を資産に変え、未来の顧客への最強の武器として活用する。' }, { id: 7, category: 'idea', title: 'トレンド予測AIアシスタント', description: '市場の次の流行を予測し、時代を先取りするコンテンツ企画を立案する。' }, { id: 8, category: 'efficiency', title: 'メール返信定型文ジェネレーター', description: '煩雑なメール対応を半自動化し、顧客対応の質と速度を向上させる。' }, { id: 9, category: 'copywriting', title: '反論不能のオファー作成術', description: '顧客の「断る理由」を完全に封じ込める、強力なオファー文章を構築する。' }, { id: 10, category: 'engagement', title: 'コミュニティ活性化アイデア集', description: 'オンラインコミュニティの熱量を高め、顧客を熱狂的なファンに変える秘訣。' }, { id: 11, category: 'idea', title: 'キラーコンテンツ企画書テンプレート', description: 'あなたの知識を、高単価で売れる「キラーコンテンツ」に変えるための企画書。' }, { id: 12, category: 'efficiency', title: 'SNS投稿スケジュール自動提案AI', description: 'あなたの活動パターンを分析し、最も効果的な投稿スケジュールをAIが提案する。' },
-        ];
+    <div id="treasure-data" data-treasures={JSON.stringify(formattedTreasures)} style="display: none;"></div>
+
+    <script is:inline>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- データ保管庫から、全ての宝物の魂を読み込む ---
+            const dataElement = document.getElementById('treasure-data');
+            const allTreasures = JSON.parse(dataElement.dataset.treasures || '[]');
 
         // --- DOM要素 ---
         const compassToggle = document.getElementById('compass-toggle');
