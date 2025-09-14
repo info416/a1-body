@@ -41,6 +41,7 @@ if (response.ok) {
         border-top: 1px solid var(--color-border);
         border-bottom: 1px solid var(--color-border);
         padding: 2rem 0;
+        margin-bottom: 2em;
     }
     .archive-link {
         background-color: var(--color-content-bg);
@@ -75,20 +76,23 @@ if (response.ok) {
                         <h1 class="page-title mb-2">叡智の宝物庫</h1>
                         <p class="text-xl text-gray-400 placeholder-text">【ここに宝物庫の説明文が入ります。】</p>
                     </div>
-                    <div class="view-toggle">
-                        <button id="library-toggle" class="toggle-btn active">図書館モード</button>
-                        <button id="compass-toggle" class="toggle-btn">羅針盤モード</button>
-                    </div>
-                </div>
 
-                <div class="archives-nav mb-12">
+                    <div class="archives-nav mb-12">
                     <h2 class="text-2xl font-bold text-center mb-6">専門書庫から探す</h2>
                     <div class="flex justify-center flex-wrap gap-4">
                         <a href="/treasury/prompts" class="archive-link">プロンプトの武器庫</a>
                         <a href="/treasury/frameworks" class="archive-link">思考フレームワークの書庫</a>
                         <a href="/treasury/miniproduct" class="archive-link">ミニプロダクト設計図集</a>
                     </div>
+                    </div>
+
+                    <div class="view-toggle">
+                        <button id="library-toggle" class="toggle-btn active">図書館モード</button>
+                        <button id="compass-toggle" class="toggle-btn">羅針盤モード</button>
+                    </div>
                 </div>
+
+                
 
                 <div id="library-view">
                     <div class="library-controls">
