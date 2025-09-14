@@ -76,11 +76,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+
+
 /* ==========================================================================
    Submenu Toggle Protocol (Intelligent Version)
    ========================================================================== */
 document.addEventListener('DOMContentLoaded', () => {
-    const submenuToggles = document.querySelectorAll('.submenu-toggle');
+    const currentPath = window.location.pathname;
+    const treasuryLink = document.querySelector('.nav-item a[href="/treasury"]');
+
+    // もし、現在地が /treasury で始まるなら、親である「宝物庫」の項目に光を灯す
+    if (treasuryLink && currentPath.startsWith('/treasury')) {
+        treasuryLink.closest('.nav-item').classList.add('is-active');
+    }
+});
 
     submenuToggles.forEach(toggle => {
         toggle.addEventListener('click', (e) => {
