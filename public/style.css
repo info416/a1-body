@@ -933,3 +933,9 @@ a.card-link {
     background-color: transparent;
     color: #9ca3af;
 }
+
+.main-nav .nav-item.active li.submenu-item a:hover {
+    background-color: var(--color-content-bg);
+    color: var(--color-text-heading);
+    text-decoration: none;
+}
