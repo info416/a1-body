@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// この神殿に入るために必要な「資格のID」
+const REQUIRED_LEVEL_ID = 3; // 例：WordPressで作成した「自動化レシピLV2」のID
+---
+<BaseLayout title="自動化レシピの間２">
+    <div class="content-wrapper">
+        <div id="protected-content" style="display: none;">
+            <h1 class="page-title">自動化レシピの間２</h1>
+            <p>（ここに、レシピ２の、叡智に満ちたコンテンツを記述する）</p>
+            <br>
+            <a href="/recipes/recipe-03" class="btn btn-primary">次の間へ進む</a>
+        </div>
+
+        <div id="gate-message">
+            <h2 class="text-2xl font-bold text-center">アクセスが許可されていません</h2>
+            <p class="text-center mt-2 text-gray-400">この聖域は、特定の貢献を果たした者のみが入室を許されます。</p>
+        </div>
+    </div>
+
+    <script define:vars={{ REQUIRED_LEVEL_ID }}>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const gateMessage = document.getElementById('gate-message');
+            const content = document.getElementById('protected-content');
+
+            try {
+                // 神官に、今の訪問者の資格を問い合わせる
+                const response = await fetch('/snspack/wp-json/a1-project/v1/user/me');
+                if (!response.ok) throw new Error('Not logged in');
+
+                const userData = await response.json();
+
+                // 資格が、この神殿の要求と一致するかを判定
+                if (userData.membership_level_id == REQUIRED_LEVEL_ID) {
+                    // 資格あり。門を開き、聖域の真の姿を現す
+                    gateMessage.style.display = 'none';
+                    content.style.display = 'block';
+                }
+            } catch (error) {
+                // ログインしていないか、何らかのエラー
+                // この場合、門は閉じたままである
+                console.error('Authentication check failed:', error);
+            }
+        });
+    </script>
+</BaseLayout>
