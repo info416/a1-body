@@ -929,7 +929,7 @@ a.card-link {
     color: var(--color-text-main);
 }
 
-.main-nav .submenu .nav-item.active a {
+.main-nav .nav-item.active li.submenu-item a {
     background-color: transparent;
     color: #9ca3af;
 }
