@@ -1,12 +1,8 @@
 ---
-import EmakimonoLayout from '../../layouts/EmakimonoLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
-<EmakimonoLayout title="第一章 - 自己進化プログラム">
-    <Fragment slot="head">
-    <script src="https://cdn.tailwindcss.com"></script>
-    </Fragment>
-    
+<BaseLayout title="第一章 - 自己進化プログラム">
                 <div class="program-content">
                     <h1>第一章：魂の調律</h1>
                     <p class="text-xl text-gray-400 mb-8 placeholder-text">【WP: テキスト_第一章_導入】あなたのビジネスの「魂」を言語化し、AIにインストールする儀式を執り行う。</p>
@@ -21,9 +17,11 @@ import EmakimonoLayout from '../../layouts/EmakimonoLayout.astro';
                     </nav>
 
     
-    <div class="emaki-part prose">
-        <h2>Aパート：物語</h2>
-        <p>
+                   
+                    <div class="default-view">
+                        <div class="part-a mb-12">
+                            <h2 class="text-2xl font-bold mb-4">パートA：物語コンテンツ</h2>
+                            <p>
             ここに、第一章の**物語パート**のテキストが入ります。
             この文章は、あなたの手で、叡智に満ちた物語へと書き換えてください。
             <strong>太字</strong>や段落分けも、このように自由に行うことができます。
@@ -31,29 +29,6 @@ import EmakimonoLayout from '../../layouts/EmakimonoLayout.astro';
         <p>
             第二の段落です。十分な余白と、静かに浮かび上がる演出が、読者の深い集中を促します。
         </p>
-    </div>
-
-    <div class="emaki-part prose">
-        <h2>Bパート：人間的スキル</h2>
-        <p>
-            ここに、第一章の**人間的スキルパート**のテキストが入ります。
-            具体的なノウハウや、心構えを、ここに記述してください。
-        </p>
-    </div>
-
-    <div class="emaki-part prose">
-        <h2>Cパート：実践</h2>
-        <p>
-            ここに、第一章の**実践パート**のテキストが入ります。
-            読者が今日から実行できる、具体的なアクションプランを提示しましょう。
-        </p>
-    </div>
-
-                   
-                    <!--<div class="default-view">
-                        <div class="part-a mb-12">
-                            <h2 class="text-2xl font-bold mb-4">パートA：物語コンテンツ</h2>
-                            <div class="placeholder-media" data-type="video">【WP: 動画_第一章_物語】</div>
                         </div>
                         
                         <div class="part-b">
@@ -160,4 +135,4 @@ import EmakimonoLayout from '../../layouts/EmakimonoLayout.astro';
             });
         }
     </script>
-</EmakimonoLayout>
+</BaseLayout>
