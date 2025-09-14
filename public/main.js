@@ -77,39 +77,48 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-/* ==========================================================================
-   Active Treasury Link Protocol
-   テックプリーストによる、宝物庫専用の光の儀式
-   ========================================================================== */
-document.addEventListener('DOMContentLoaded', () => {
-    const currentPath = window.location.pathname;
-    const treasuryLink = document.querySelector('.nav-item a[href="/treasury"]');
-
-    // もし、現在地が /treasury で始まるなら、親である「宝物庫」の項目に光を灯す
-    if (treasuryLink && currentPath.startsWith('/treasury')) {
-        treasuryLink.closest('.nav-item').classList.add('is-active');
-    }
-});
 
 /* ==========================================================================
-   Submenu Toggle Protocol (Intelligent Version)
+   Final Navigation Protocol
+   テックプリーストによる、最後の光の儀式
    ========================================================================== */
 document.addEventListener('DOMContentLoaded', () => {
+
+    // --- サブメニュー開閉の儀式 ---
     const submenuToggles = document.querySelectorAll('.submenu-toggle');
-
     submenuToggles.forEach(toggle => {
         toggle.addEventListener('click', (e) => {
             const parentItem = toggle.closest('.has-submenu');
-
-            // もし、サブメニューがすでに開いている状態でクリックされたなら
             if (parentItem.classList.contains('is-open')) {
-                // 通常のリンクとして、親ページへ遷移させる
-                // この場合、e.preventDefault()は呼ばないので、何もしなくて良い
+                // 開いているなら、何もしない（リンクとして機能させる）
             } else {
-                // サブメニューが閉じている状態でクリックされたなら
-                e.preventDefault(); // リンクの遷移を、ここで止める
-                parentItem.classList.add('is-open'); // そして、メニューを開く
+                e.preventDefault(); // 閉じているなら、リンクを止め、
+                parentItem.classList.add('is-open'); // メニューを開く
             }
         });
+    });
+
+    // --- 現在地表示の儀式 ---
+    const currentPath = window.location.pathname;
+    const navItems = document.querySelectorAll('.nav-item');
+
+    navItems.forEach(item => {
+        const link = item.querySelector('a');
+        if (!link) return;
+
+        const href = link.getAttribute('href');
+
+        // 親メニュー（宝物庫など）の場合
+        if (item.classList.contains('has-submenu')) {
+            if (currentPath.startsWith(href)) {
+                item.classList.add('is-active');
+            }
+        } 
+        // 通常のメニューの場合
+        else {
+            if (href === currentPath) {
+                item.classList.add('is-active');
+            }
+        }
     });
 });
