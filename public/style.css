@@ -939,3 +939,7 @@ a.card-link {
     color: var(--color-text-heading);
     text-decoration: none;
 }
+
+.password-gate button {
+    margin-top: 1rem;
+}
