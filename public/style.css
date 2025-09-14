@@ -877,3 +877,30 @@ a.card-link {
     display: none;
 }
 
+/* ==========================================================================
+   Submenu Navigation (Always Open)
+   テックプリーストによる階層化の儀式・静的版
+   ========================================================================== */
+
+/* サブメニューの字下げ */
+.submenu {
+    list-style: none;
+    padding-left: 20px; /* 親項目からのインデント */
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.submenu-item a {
+    display: block;
+    padding: 10px 15px;
+    color: var(--color-text-sub);
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+    font-size: 0.9em; /* サブ項目を少し小さくして階層を表現 */
+}
+
+.submenu-item a:hover {
+    background-color: var(--color-content-bg);
+    color: var(--color-text-main);
+}
