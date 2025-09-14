@@ -928,3 +928,8 @@ a.card-link {
     background-color: var(--color-content-bg);
     color: var(--color-text-main);
 }
+
+.main-nav .submenu .nav-item.active a {
+    background-color: transparent;
+    color: #9ca3af;
+}
