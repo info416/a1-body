@@ -77,22 +77,23 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ==========================================================================
-   Submenu Toggle Protocol
+   Submenu Toggle Protocol (Intelligent Version)
    ========================================================================== */
 document.addEventListener('DOMContentLoaded', () => {
     const submenuToggles = document.querySelectorAll('.submenu-toggle');
 
     submenuToggles.forEach(toggle => {
         toggle.addEventListener('click', (e) => {
-            e.preventDefault(); // リンクの遷移を一旦止める
-
             const parentItem = toggle.closest('.has-submenu');
-            parentItem.classList.toggle('is-open');
 
-            // もし、サブメニューが開いている状態で、再度親メニューをクリックしたら、
-            // 親メニューのページへ遷移させる
-            if (!parentItem.classList.contains('is-open')) {
-                 // window.location.href = toggle.getAttribute('href');
+            // もし、サブメニューがすでに開いている状態でクリックされたなら
+            if (parentItem.classList.contains('is-open')) {
+                // 通常のリンクとして、親ページへ遷移させる
+                // この場合、e.preventDefault()は呼ばないので、何もしなくて良い
+            } else {
+                // サブメニューが閉じている状態でクリックされたなら
+                e.preventDefault(); // リンクの遷移を、ここで止める
+                parentItem.classList.add('is-open'); // そして、メニューを開く
             }
         });
     });
