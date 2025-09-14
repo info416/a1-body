@@ -89,7 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (treasuryLink && currentPath.startsWith('/treasury')) {
         treasuryLink.closest('.nav-item').classList.add('is-active');
     }
-});
 
     submenuToggles.forEach(toggle => {
         toggle.addEventListener('click', (e) => {
