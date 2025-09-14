@@ -878,16 +878,41 @@ a.card-link {
 }
 
 /* ==========================================================================
-   Submenu Navigation (Always Open)
-   テックプリーストによる階層化の儀式・静的版
+   Submenu Navigation
+   テックプリーストによる階層化の儀式
    ========================================================================== */
+.nav-item.has-submenu > a {
+    position: relative;
+    padding-right: 25px; /* 三角マークのためのスペース */
+}
 
-/* サブメニューの字下げ */
+/* 三角マークの創造 */
+.nav-item.has-submenu > a::after {
+    content: '▼';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%) scale(0.6);
+    transition: transform 0.3s ease;
+}
+
+/* 開いた時の三角マークの回転 */
+.nav-item.is-open > a::after {
+    transform: translateY(-50%) scale(0.6) rotate(180deg);
+}
+
+/* サブメニューは、初期状態では隠されている */
 .submenu {
     list-style: none;
-    padding-left: 20px; /* 親項目からのインデント */
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+    padding-left: 20px; /* 字下げ */
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+}
+
+/* 開いた時のサブメニューの出現 */
+.nav-item.is-open .submenu {
+    max-height: 500px; /* 十分な高さを確保 */
 }
 
 .submenu-item a {
@@ -897,7 +922,6 @@ a.card-link {
     text-decoration: none;
     border-radius: 4px;
     transition: background-color 0.2s ease;
-    font-size: 0.9em; /* サブ項目を少し小さくして階層を表現 */
 }
 
 .submenu-item a:hover {

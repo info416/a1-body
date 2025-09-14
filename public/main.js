@@ -75,3 +75,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+/* ==========================================================================
+   Submenu Toggle Protocol
+   ========================================================================== */
+document.addEventListener('DOMContentLoaded', () => {
+    const submenuToggles = document.querySelectorAll('.submenu-toggle');
+
+    submenuToggles.forEach(toggle => {
+        toggle.addEventListener('click', (e) => {
+            e.preventDefault(); // リンクの遷移を一旦止める
+
+            const parentItem = toggle.closest('.has-submenu');
+            parentItem.classList.toggle('is-open');
+
+            // もし、サブメニューが開いている状態で、再度親メニューをクリックしたら、
+            // 親メニューのページへ遷移させる
+            if (!parentItem.classList.contains('is-open')) {
+                 // window.location.href = toggle.getAttribute('href');
+            }
+        });
+    });
+});
