@@ -36,6 +36,28 @@ if (response.ok) {
         #compass-view .compass-choices { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; }
         #compass-view .choice-btn { background-color: transparent; border: 1px solid var(--color-border); color: var(--color-text-main); padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; }
         #compass-view .choice-btn:hover { background-color: var(--color-accent-primary); color: var(--color-bg); border-color: var(--color-accent-primary); }
+        /* --- 専門書庫ナビゲーション --- */
+    .archives-nav {
+        border-top: 1px solid var(--color-border);
+        border-bottom: 1px solid var(--color-border);
+        padding: 2rem 0;
+    }
+    .archive-link {
+        background-color: var(--color-content-bg);
+        border: 1px solid var(--color-border);
+        padding: 0.75rem 1.5rem;
+        border-radius: 9999px; /* 錠剤のような形 */
+        text-decoration: none;
+        color: var(--color-text-sub);
+        transition: all 0.2s ease;
+        font-weight: 600;
+    }
+    .archive-link:hover {
+        background-color: var(--color-accent-secondary);
+        border-color: var(--color-accent-secondary);
+        color: var(--color-bg);
+        transform: translateY(-2px);
+    }
         /* モーダル */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease; }
         .modal-overlay.visible { opacity: 1; visibility: visible; }
@@ -56,6 +78,15 @@ if (response.ok) {
                     <div class="view-toggle">
                         <button id="library-toggle" class="toggle-btn active">図書館モード</button>
                         <button id="compass-toggle" class="toggle-btn">羅針盤モード</button>
+                    </div>
+                </div>
+
+                <div class="archives-nav mb-12">
+                    <h2 class="text-2xl font-bold text-center mb-6">専門書庫から探す</h2>
+                    <div class="flex justify-center flex-wrap gap-4">
+                        <a href="/treasury/prompts" class="archive-link">プロンプトの武器庫</a>
+                        <a href="/treasury/frameworks" class="archive-link">思考フレームワークの書庫</a>
+                        <a href="/treasury/miniproduct" class="archive-link">ミニプロダクト設計図集</a>
                     </div>
                 </div>
 

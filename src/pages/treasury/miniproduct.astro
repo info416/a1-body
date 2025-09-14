@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// 【要修正】この書庫に対応する、WordPressで作成した「カテゴリーID」をここに設定せよ
+const CATEGORY_ID = 33; // 例：「プロンプトの武器庫」カテゴリーのID
+
+// 頭脳（WordPress）から、この書庫の蔵書（投稿）だけを召喚する
+const response = await fetch(`https://ai-verve.net/snspack/wp-json/wp/v2/posts?categories=${CATEGORY_ID}&per_page=100&_fields=id,title,acf`);
+const posts = await response.json();
+---
+<BaseLayout title="ミニプロダクト設計図集 - 叡智の宝物庫">
+    <div class="content-wrapper">
+        <h1 class="page-title mb-2">ミニプロダクト設計図集</h1>
+        <p class="text-xl text-gray-400 mb-12">（ここに、この書庫の、顧客を導くための説明文を記述します）</p>
+
+        {posts.length === 0 && (
+            <p>現在、この書庫に収められた宝物はまだありません。新たな叡智が届くのをお待ちください。</p>
+        )}
+
+        <div class="card-grid">
+            {posts.map(post => (
+                <div class="card">
+                    {/* 詳細ページへのリンクは、将来的に /treasury/posts/${post.id} のように設定する */}
+                    <a href="#" class="card-link"> 
+                        <h2 class="card-title">{post.title.rendered}</h2>
+                        {post.acf.treasure_description && (
+                            <p class="card-description">{post.acf.treasure_description}</p>
+                        )}
+                        <span class="card-cta">続きを読む &rarr;</span>
+                    </a>
+                </div>
+            ))}
+        </div>
+    </div>
+</BaseLayout>
