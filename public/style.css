@@ -940,6 +940,6 @@ a.card-link {
     text-decoration: none;
 }
 
-.password-gate button {
+#password-gate button {
     margin-top: 1rem;
 }
