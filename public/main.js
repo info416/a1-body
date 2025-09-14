@@ -77,9 +77,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-
 /* ==========================================================================
-   Submenu Toggle Protocol (Intelligent Version)
+   Active Treasury Link Protocol
+   テックプリーストによる、宝物庫専用の光の儀式
    ========================================================================== */
 document.addEventListener('DOMContentLoaded', () => {
     const currentPath = window.location.pathname;
@@ -89,6 +89,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (treasuryLink && currentPath.startsWith('/treasury')) {
         treasuryLink.closest('.nav-item').classList.add('is-active');
     }
+});
+
+/* ==========================================================================
+   Submenu Toggle Protocol (Intelligent Version)
+   ========================================================================== */
+document.addEventListener('DOMContentLoaded', () => {
+    const submenuToggles = document.querySelectorAll('.submenu-toggle');
 
     submenuToggles.forEach(toggle => {
         toggle.addEventListener('click', (e) => {
