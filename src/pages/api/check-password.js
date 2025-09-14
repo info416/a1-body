@@ -16,6 +16,8 @@ export async function POST({ request }) {
     return new Response(JSON.stringify({ message: 'Success' }), { status: 200 });
   } else {
     // 認証失敗
-    return new Response(JSON.stringify({ message: 'Invalid password' }), { status: 401 });
+  const expectedPassword = import.meta.env[`RECIPE_PASSWORD_${page}`];
+  const message = `DEBUG: 門番が期待した合言葉は「${expectedPassword}」でした。`;
+  return new Response(JSON.stringify({ message: message }), { status: 401 });
   }
 }
