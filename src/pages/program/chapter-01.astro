@@ -92,7 +92,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     
     <script is:inline>
 // =============================================================
-// --- 【原点回帰】Tech Priest's Final Tuning ---
+// --- 【最終確定版】A1-Project Core Script ---
+// テックプリーストによる最終調律
 // =============================================================
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -106,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 魂の器（DOM要素）の召喚 ---
     const accordionToggles = document.querySelectorAll('.accordion-toggle');
     const readMoreButtons = document.querySelectorAll('.read-more-btn');
-    const readingModalOverlay = document.getElementById('readingModalOverlay');
+    const readingModalOverlay = document.getElementById('reading-modal-overlay');
     const readingModalClose = document.getElementById('reading-modal-close');
     const readingModalTitle = document.getElementById('reading-modal-title');
     const readingModalContent = document.getElementById('reading-modal-content');
@@ -120,13 +121,21 @@ document.addEventListener('DOMContentLoaded', () => {
         if (readingModalTitle) readingModalTitle.textContent = title;
         if (readingModalContent) readingModalContent.innerHTML = content;
         
-        readingModalOverlay.classList.add('visible');
+        // ▼▼▼ あなたが正した、唯一の真実 ▼▼▼
+        readingModalOverlay.style.opacity = '1';
+        readingModalOverlay.style.visibility = 'visible';
+        
+        const container = readingModalOverlay.querySelector('.reading-modal-container');
+        if (container) container.style.transform = 'translateY(0)';
     }
-    
+
     // --- 書斎（モーダル）を閉じる儀式 ---
     function closeReadingModal() {
         if (readingModalOverlay) {
-            readingModalOverlay.classList.remove('visible');
+            readingModalOverlay.style.opacity = '0';
+            readingModalOverlay.style.visibility = 'hidden';
+            const container = readingModalOverlay.querySelector('.reading-modal-container');
+            if(container) container.style.transform = 'translateY(20px)';
         }
     }
 
@@ -153,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // --- アコーディオンの儀式（これは、君の元のコードで正常に機能していた） ---
+    // --- アコーディオンの儀式 ---
     if (accordionToggles.length > 0) {
         accordionToggles.forEach(button => {
             button.addEventListener('click', () => {
