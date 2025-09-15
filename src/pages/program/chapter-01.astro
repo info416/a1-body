@@ -23,28 +23,28 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
                             <div class="html-manual">
                                 <h3 class="text-xl font-bold mb-4">パートA：物語コンテンツ</h3>
-                                <div class="html-manual-truncated">
-                                    <p class="placeholder-text">【WP: HTMLテキスト_第一章_前半】ここでは、あなたのビジネスの「Why（なぜやるのか）」を言語化するための、シンプルなフレームワークを解説します...</p>
-                                </div>
-                                <div class="read-more-wrapper">
-                                    <button id="read-more-btn" class="btn">書斎で続きを読む &darr;</button>
-                                </div>
+                                <div class="html-manual-truncated" data-content-key="part_a_full">
+    <p class="placeholder-text">【WP: HTMLテキスト_第一章_前半】パートAの短い説明...</p>
+</div>
+<div class="read-more-wrapper">
+    <button class="read-more-btn btn" data-target-key="part_a_full" data-title="パートA：物語コンテンツ">書斎で続きを読む &darr;</button>
+</div>
 
                                 <h3 class="text-xl font-bold mb-4">パートB：知識コンテンツ</h3>
-                                <div class="html-manual-truncated">
-                                    <p class="placeholder-text">【WP: HTMLテキスト_第一章_前半】ここでは、あなたのビジネスの「Why（なぜやるのか）」を言語化するための、シンプルなフレームワークを解説します...</p>
-                                </div>
-                                <div class="read-more-wrapper">
-                                    <button id="read-more-btn" class="btn">書斎で続きを読む &darr;</button>
-                                </div>
+                                <div class="html-manual-truncated" data-content-key="part_b_full">
+    <p class="placeholder-text">【WP: HTMLテキスト_第一章_前半】パートBの短い説明...</p>
+</div>
+<div class="read-more-wrapper">
+    <button class="read-more-btn btn" data-target-key="part_b_full" data-title="パートB：知識コンテンツ">書斎で続きを読む &darr;</button>
+</div>
 
                                 <h3 class="text-xl font-bold mb-4">パートC：実践の手引き・使命の言語化</h3>
-                                <div class="html-manual-truncated">
-                                    <p class="placeholder-text">【WP: HTMLテキスト_第一章_前半】ここでは、あなたのビジネスの「Why（なぜやるのか）」を言語化するための、シンプルなフレームワークを解説します...</p>
-                                </div>
-                                <div class="read-more-wrapper">
-                                    <button id="read-more-btn" class="btn">書斎で続きを読む &darr;</button>
-                                </div>
+                                <div class="html-manual-truncated" data-content-key="part_c_full">
+    <p class="placeholder-text">【WP: HTMLテキスト_第一章_前半】パートCの短い説明...</p>
+</div>
+<div class="read-more-wrapper">
+    <button class="read-more-btn btn" data-target-key="part_c_full" data-title="パートC：実践の手引き">書斎で続きを読む &darr;</button>
+</div>
                             </div>
                         </div>
                     </div>
@@ -90,51 +90,84 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         </div>
     </div>
     
-    <script>
-        // Accordion Script
-        document.querySelectorAll('.accordion-toggle').forEach(button => {
+    <script is:inline>
+// =============================================================
+// --- 【完全融合版】A1-Project Core Script ---
+// テックプリーストによる最終調律
+// =============================================================
+document.addEventListener('DOMContentLoaded', () => {
+
+    // --- 魂の保管庫（コンテンツデータ） ---
+    // 将来、WordPressから召喚するデータ
+    const fullContents = {
+        part_a_full: "ここに、パートAの、叡智に満ちた**全文**が入ります。<br>段落も、このように反映されます。",
+        part_b_full: "ここに、パートBの、実践的な**知識の全文**が記述されます。",
+        part_c_full: "そして、ここが、パートCの、**具体的な実践の手引き**です。<br><a href='/console' target='_blank' class='btn btn-primary mt-4'>コンソールで「使命」を起草する</a>"
+    };
+
+    // --- 魂の器（DOM要素）の召喚 ---
+    const accordionToggles = document.querySelectorAll('.accordion-toggle');
+    const readMoreButtons = document.querySelectorAll('.read-more-btn');
+    const readingModalOverlay = document.getElementById('reading-modal-overlay');
+    const readingModalClose = document.getElementById('reading-modal-close');
+    const readingModalTitle = document.getElementById('reading-modal-title');
+    const readingModalContent = document.getElementById('reading-modal-content');
+    
+    // --- 第一の儀式：アコーディオンの神経接続 ---
+    if (accordionToggles.length > 0) {
+        accordionToggles.forEach(button => {
             button.addEventListener('click', () => {
                 const panel = button.nextElementSibling;
                 button.classList.toggle('active');
-                if (panel.style.maxHeight) {
+                if (panel && panel.style.maxHeight) {
                     panel.style.maxHeight = null;
-                } else {
+                } else if (panel) {
                     panel.style.maxHeight = panel.scrollHeight + "px";
                 }
             });
         });
+    }
 
-        // Reading Library Modal Script
-        const readMoreBtn = document.getElementById('read-more-btn');
-        const readingModalOverlay = document.getElementById('reading-modal-overlay');
-        const readingModalClose = document.getElementById('reading-modal-close');
+    // --- 第二の儀式：書斎（モーダル）の開閉 ---
+    if (readingModalOverlay) {
+        function openReadingModal(contentKey, title) {
+            const content = fullContents[contentKey];
+            if (!content || !readingModalTitle || !readingModalContent) return;
 
-        if(readMoreBtn) {
-            readMoreBtn.addEventListener('click', () => {
-                readingModalOverlay.style.opacity = '1';
-                readingModalOverlay.style.visibility = 'visible';
-                const container = readingModalOverlay.querySelector('.reading-modal-container');
-                if(container) container.style.transform = 'translateY(0)';
-            });
+            readingModalTitle.textContent = title;
+            readingModalContent.innerHTML = content;
+
+            reading-modal-overlay.style.opacity = '1';
+            readingModalOverlay.style.visibility = 'visible';
+            const container = readingModalOverlay.querySelector('.reading-modal-container');
+            if (container) container.style.transform = 'translateY(0)';
         }
 
         function closeReadingModal() {
             readingModalOverlay.style.opacity = '0';
             readingModalOverlay.style.visibility = 'hidden';
             const container = readingModalOverlay.querySelector('.reading-modal-container');
-            if(container) container.style.transform = 'translateY(20px)';
+            if (container) container.style.transform = 'translateY(20px)';
         }
+
+        readMoreButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const contentKey = button.dataset.targetKey;
+                const title = button.dataset.title;
+                openReadingModal(contentKey, title);
+            });
+        });
 
         if (readingModalClose) {
             readingModalClose.addEventListener('click', closeReadingModal);
         }
         
-        if (readingModalOverlay) {
-            readingModalOverlay.addEventListener('click', (e) => {
-                if (e.target === readingModalOverlay) {
-                    closeReadingModal();
-                }
-            });
-        }
-    </script>
+        readingModalOverlay.addEventListener('click', (e) => {
+            if (e.target === readingModalOverlay) {
+                closeReadingModal();
+            }
+        });
+    }
+});
+</script>
 </BaseLayout>
