@@ -139,11 +139,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         line-height: 1.8;
     }
     .reading-modal-content a {
-        color: #60A5FA; /* リンク色 */
-        text-decoration: underline;
+        color: #000000; /* リンク色 */
+        text-decoration: none;
+        margin-top: 1em;
     }
     .reading-modal-content a:hover {
-        color: #93C5FD;
+        color: #ffffff;
     }
     </style>
     <script is:inline>
@@ -157,7 +158,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         const fullContents = {
             part_a_full: "ここに、パートAの、叡智に満ちた**全文**が入ります。<br>段落も、このように反映されます。",
             part_b_full: "ここに、パートBの、実践的な**知識の全文**が記述されます。",
-            part_c_full: "そして、ここが、パートCの、**具体的な実践の手引き**です。<br><a href='/console' target='_blank' class='btn btn-primary mt-4'>コンソールで「使命」を起草する</a>"
+            part_c_full: "そして、ここが、パートCの、**具体的な実践の手引き**です。<br><a href='/console' target='_blank' class='btn btn-primary mt-4'>コンソールで「使命」を起草する</a>　<a href='/console' target='_blank' class='btn btn-primary mt-4'>音声で聞く</a>"
         };
 
         // --- 魂の器（DOM要素）の召喚 ---
