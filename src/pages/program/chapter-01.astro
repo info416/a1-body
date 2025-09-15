@@ -65,12 +65,90 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                 padding-top: 2rem;
                 border-top: 1px solid var(--color-border);
             }
+
+    .emaki-container {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 4rem 1rem;
+    }
+
+    /* ▼▼▼ ここからが、光彩エフェクトの法典 ▼▼▼ */
+
+    .emaki-part {
+        position: relative; /* 光の分身を宿すための、神聖な器となる */
+        z-index: 1; /* テキストが、光の前に来るように */
+        
+        /* 初期状態：魂は、ぼやけた闇の中に隠されている */
+        opacity: 0;
+        filter: blur(5px);
+        transform: translateY(20px);
+
+        /* 魂が顕現する際の、なめらかな変化を定義 */
+        transition: opacity 0.5s ease-out 0.3s, filter 0.5s ease-out 0.3s, transform 0.5s ease-out 0.3s;
+    }
+
+    /* 神の目（IntersectionObserver）によって、このクラスが付与される */
+    .emaki-part.is-visible {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+    }
+
+    /* 光の分身（::before）の定義 */
+    .emaki-part::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 300px;
+        height: 300px;
+        /* 光の玉の正体は、放射状のグラデーション */
+        background: radial-gradient(circle, var(--color-accent-primary) 0%, transparent 70%);
+        
+        /* 初期状態：光は、存在しないに等しい */
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+        z-index: -1; /* テキストの背後に配置 */
+    }
+
+    /* 魂が顕現する時、光の分身に、以下の「運命」を与える */
+    .emaki-part.is-visible::before {
+        animation: kousai-effect 1.2s ease-in-out forwards;
+    }
+
+    /* 時間の流れを司る、光彩の呪文 */
+    @keyframes kousai-effect {
+        0% { /* 0秒地点 */
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.5);
+        }
+        25% { /* 0.3秒地点：光が最大に */
+            opacity: 0.5;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        66% { /* 0.8秒地点：テキストが完全に表示されるまで、光は留まる */
+            opacity: 0.5;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        100% { /* 1.2秒地点：光だけが、静かに消え去る */
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(1.2);
+        }
+    }
+    
+    /* ▲▲▲ ここまでが、光彩エフェクトの法典 ▲▲▲ */
+
+    /* --- テキストやタブのスタイル（変更なし） --- */
+    .prose { font-size: 1.125rem; /* ... */ }
+    .emaki-tabs { /* ... */ }
+    /* ... 他のスタイル ... */
         </style>
     </Fragment>
 
     <div class="content-wrapper">
         <nav class="chapter-nav">
             <a href="/program/chapter-00">序章</a>
+            <a href="chapter-zero">第零章</a>
             <a href="/program/chapter-01" class="active">一章</a>
             <a href="/program/chapter-02">二章</a>
             <a href="/program/chapter-03">三章</a>
@@ -88,7 +166,29 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <div class="emaki-content">
             <div id="part-A" class="emaki-pane is-active prose">
                 <h2>Aパート：物語</h2>
-                <p>ここに、第一章の**物語パート**のテキストが入ります。</p>
+                <p>かつて、一人の旅人（…そう、あなたのことです）が、『混沌の森』に迷い込んでいました。<br><br>
+森には無数の道があり、どの道にも『成功はこちら』『最新の正解』と書かれた看板が立っています。<br>
+しかし、進めども進めども、景色は変わらず、ただ疲労と焦りだけが募っていくのでした。<br><br>
+
+旅人の背負う袋には、たくさんの高価な道具（…そう、あなたが学んできた知識です）が入っていましたが、どれをどう使えばこの森を抜けられるのか、皆目見当もつきません。<br>
+途方に暮れ、座り込んでしまった旅人の前に、一人の老人が現れます。<br>
+<br>
+老人は言いました。<br>
+『森を抜けたいかね？ならば、道を教えてくれる看板を探すのをやめなさい。あなたが進むべき道は、まだこの森のどこにも存在しないのだから』<br>
+<br>
+旅人は尋ねます。<br>
+『では、どうすれば…？』<br>
+<br>
+老人は、一つの古びた『羅針盤』を渡しました。<br>
+<br>
+『これは、ただ北を指すだけの羅針盤ではない。お主の心の奥底にある、たった一つの「北極星」…すなわち、お主が本当に世界に届けたいと願う「価値」の方向を指し示す、賢者の羅針盤じゃ』<br>
+<br>
+そして、こう付け加えます。<br>
+『この羅針盤を動かすエネルギー源は、お主が背負っているその道具たちと、お主自身の問いかけじゃ。「私は、誰を、どこへ連れていきたいのか？」と。その問いこそが、AIという名の羅針盤を起動させる、最初の呪文となる』<br>
+<br>
+さあ、第一章では、あなただけの『北極星』を見つけ、この混沌の森を抜けるための、最初の地図を描き始めましょう。<br>
+あなたの物語の、本当の始まりです。
+</p>
             </div>
 
             <div id="part-B" class="emaki-pane prose">
