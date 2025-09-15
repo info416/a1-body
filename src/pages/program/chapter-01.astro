@@ -1,172 +1,25 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
-<BaseLayout title="第一章：思考の鋳造 - 自己進化プログラム">
 
-    <Fragment slot="head">
-        <style>
-            /* --- 既存の章ナビゲーションのスタイル --- */
-            .chapter-nav {
-                display: flex;
-                justify-content: center;
-                gap: 0.5rem;
-                margin-bottom: 2rem;
-            }
-            .chapter-nav a {
-                padding: 0.5rem 1rem;
-                text-decoration: none;
-                color: var(--color-text-sub);
-                border-radius: 6px;
-                transition: all 0.2s ease;
-            }
-            .chapter-nav a:hover {
-                background-color: var(--color-content-bg);
-                color: var(--color-text-main);
-            }
-            .chapter-nav a.active {
-                background-color: var(--color-accent-secondary);
-                color: #fff;
-                font-weight: 600;
-            }
-
-            /* --- 新しいタブUIの法典 --- */
-            .emaki-tabs {
-                display: flex;
-                border-bottom: 1px solid var(--color-border);
-                margin-bottom: 2rem;
-            }
-            .emaki-tab {
-                padding: 0.75rem 1.5rem;
-                cursor: pointer;
-                color: var(--color-text-sub);
-                border-bottom: 2px solid transparent;
-                transition: all 0.3s ease;
-                font-weight: 600;
-            }
-            .emaki-tab:hover {
-                color: var(--color-text-main);
-            }
-            .emaki-tab.is-active {
-                color: var(--color-accent-primary);
-                border-bottom-color: var(--color-accent-primary);
-            }
-            .emaki-pane {
-                display: none; /* 初期状態では、BとCは隠されている */
-            }
-            .emaki-pane.is-active {
-                display: block; /* 選ばれし魂のみが、姿を現す */
-            }
-
-            /* --- 前後の章への扉のスタイル --- */
-            .chapter-links {
-                display: flex;
-                justify-content: space-between;
-                margin-top: 3rem;
-                padding-top: 2rem;
-                border-top: 1px solid var(--color-border);
-            }
-
-    .emaki-container {
-        max-width: 720px;
-        margin: 0 auto;
-        padding: 4rem 1rem;
-    }
-
-    /* ▼▼▼ ここからが、光彩エフェクトの法典 ▼▼▼ */
-
-    .emaki-part {
-        position: relative; /* 光の分身を宿すための、神聖な器となる */
-        z-index: 1; /* テキストが、光の前に来るように */
-        
-        /* 初期状態：魂は、ぼやけた闇の中に隠されている */
-        opacity: 0;
-        filter: blur(5px);
-        transform: translateY(20px);
-
-        /* 魂が顕現する際の、なめらかな変化を定義 */
-        transition: opacity 0.5s ease-out 0.3s, filter 0.5s ease-out 0.3s, transform 0.5s ease-out 0.3s;
-    }
-
-    /* 神の目（IntersectionObserver）によって、このクラスが付与される */
-    .emaki-part.is-visible {
-        opacity: 1;
-        filter: blur(0);
-        transform: translateY(0);
-    }
-
-    /* 光の分身（::before）の定義 */
-    .emaki-part::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 300px;
-        height: 300px;
-        /* 光の玉の正体は、放射状のグラデーション */
-        background: radial-gradient(circle, var(--color-accent-primary) 0%, transparent 70%);
-        
-        /* 初期状態：光は、存在しないに等しい */
-        transform: translate(-50%, -50%) scale(0.5);
-        opacity: 0;
-        z-index: -1; /* テキストの背後に配置 */
-    }
-
-    /* 魂が顕現する時、光の分身に、以下の「運命」を与える */
-    .emaki-part.is-visible::before {
-        animation: kousai-effect 1.2s ease-in-out forwards;
-    }
-
-    /* 時間の流れを司る、光彩の呪文 */
-    @keyframes kousai-effect {
-        0% { /* 0秒地点 */
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(0.5);
-        }
-        25% { /* 0.3秒地点：光が最大に */
-            opacity: 0.5;
-            transform: translate(-50%, -50%) scale(1);
-        }
-        66% { /* 0.8秒地点：テキストが完全に表示されるまで、光は留まる */
-            opacity: 0.5;
-            transform: translate(-50%, -50%) scale(1);
-        }
-        100% { /* 1.2秒地点：光だけが、静かに消え去る */
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(1.2);
-        }
-    }
-    
-    /* ▲▲▲ ここまでが、光彩エフェクトの法典 ▲▲▲ */
-
-    /* --- テキストやタブのスタイル（変更なし） --- */
-    .prose { font-size: 1.125rem; /* ... */ }
-    .emaki-tabs { /* ... */ }
-    /* ... 他のスタイル ... */
-        </style>
-    </Fragment>
-
-    <div class="content-wrapper">
-        <nav class="chapter-nav">
-            <a href="/program/chapter-00">序章</a>
-            <a href="chapter-zero">第零章</a>
-            <a href="/program/chapter-01" class="active">一章</a>
-            <a href="/program/chapter-02">二章</a>
-            <a href="/program/chapter-03">三章</a>
-            <a href="/program/chapter-04">四章</a>
-        </nav>
-
-        <h1 class="page-title mb-8">第一章：思考の鋳造</h1>
-
-        <nav class="emaki-tabs">
-            <div class="emaki-tab is-active" data-target="part-A">【思想】</div>
-            <div class="emaki-tab" data-target="part-B">【知識】</div>
-            <div class="emaki-tab" data-target="part-C">【実践】</div>
-        </nav>
-
-        <div class="emaki-content">
-            <div id="part-A" class="emaki-pane is-active prose">
-                <h2>Aパート：物語</h2>
-                <p>かつて、一人の旅人（…そう、あなたのことです）が、『混沌の森』に迷い込んでいました。<br><br>
+<BaseLayout title="第一章 - 自己進化プログラム">
+                <div class="program-content">
+                    <h1>第一章：魂の調律</h1>
+                    <p class="text-xl text-gray-400 mb-8 placeholder-text">【WP: テキスト_第一章_導入】あなたのビジネスの「魂」を言語化し、AIにインストールする儀式を執り行う。</p>
+                    
+                    <nav class="program-tabs">
+                        <a href="chapter-00" class="tab-link">序章</a>
+                        <a href="chapter-zero" class="tab-link">第零章</a>
+                        <a href="chapter-01" class="tab-link active">第一章</a>
+                        <a href="chapter-02" class="tab-link">第二章</a>
+                        <a href="chapter-03" class="tab-link">第三章</a>
+                        <a href="chapter-04" class="tab-link">第四章</a>
+                    </nav>
+                    
+                    <div class="default-view">
+                        <div class="part-a mb-12">
+                            <h2 class="text-2xl font-bold mb-4">パートA：物語コンテンツ</h2>
+                            <div class="placeholder-media" data-type="video">かつて、一人の旅人（…そう、あなたのことです）が、『混沌の森』に迷い込んでいました。<br><br>
 森には無数の道があり、どの道にも『成功はこちら』『最新の正解』と書かれた看板が立っています。<br>
 しかし、進めども進めども、景色は変わらず、ただ疲労と焦りだけが募っていくのでした。<br><br>
 
@@ -188,45 +41,116 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 <br>
 さあ、第一章では、あなただけの『北極星』を見つけ、この混沌の森を抜けるための、最初の地図を描き始めましょう。<br>
 あなたの物語の、本当の始まりです。
-</p>
-            </div>
+</div>
+                        </div>
 
-            <div id="part-B" class="emaki-pane prose">
-                <h2>Bパート：人間的スキル</h2>
-                <p>ここに、第一章の**人間的スキルパート**のテキストが入ります。</p>
-            </div>
+                        <div class="part-a mb-12">
+                            <h2 class="text-2xl font-bold mb-4">パートB：知識コンテンツ</h2>
+                            <div class="placeholder-media" data-type="video">【WP: 動画_第一章_物語】</div>
+                        </div>
+                        
+                        <div class="part-b">
+                            <h2 class="text-2xl font-bold mb-4">パートB：実践コンテンツ</h2>
+                            <div class="placeholder-media mb-8" data-type="video">【WP: 動画_第一章_メイン実践】</div>
+                            
+                            <div class="html-manual">
+                                <h3 class="text-xl font-bold mb-4">実践の手引き：使命の言語化</h3>
+                                <div class="html-manual-truncated">
+                                    <p class="placeholder-text">【WP: HTMLテキスト_第一章_前半】ここでは、あなたのビジネスの「Why（なぜやるのか）」を言語化するための、シンプルなフレームワークを解説します...</p>
+                                </div>
+                                <div class="read-more-wrapper">
+                                    <button id="read-more-btn" class="btn">書斎で続きを読む &darr;</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            <div id="part-C" class="emaki-pane prose">
-                <h2>Cパート：実践</h2>
-                <p>ここに、第一章の**実践パート**のテキストが入ります。</p>
-            </div>
-        </div>
-        <div class="chapter-links">
-            <a href="/program/chapter-00" class="btn">&larr; 序章へ戻る</a>
-            <a href="/program/chapter-02" class="btn btn-primary">第二章へ進む &rarr;</a>
-        </div>
+                    <div class="accordion-container">
+                        <button class="accordion-toggle">
+                            <span>別フォーマットで学習する</span>
+                            <span class="icon">+</span>
+                        </button>
+                        <div class="accordion-panel">
+                            <div class="download-link-item">
+                                <span class="icon">📄</span> <a href="#" download>講義スライド（PDF）</a>
+                            </div>
+                            <div class="download-link-item">
+                                <span class="icon">🎧</span> <a href="#" download>音声ファイル（MP3）</a>
+                            </div>
+                            <div class="download-link-item">
+                                <span class="icon">🖨️</span> <a href="#" download>印刷用マニュアル（PDF）</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between mt-8">
+                        <a href="chapter-zero" class="btn">&larr; 第零章へ戻る</a>
+                        <a href="chapter-02" class="btn btn-primary">第二章へ進む &rarr;</a>
+                    </div>
+                </div>
+                </div>
+        </main>
     </div>
 
-    <script is:inline>
-        document.addEventListener('DOMContentLoaded', () => {
-            const tabs = document.querySelectorAll('.emaki-tab');
-            const panes = document.querySelectorAll('.emaki-pane');
-
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    // 全ての光を一旦消す
-                    tabs.forEach(t => t.classList.remove('is-active'));
-                    panes.forEach(p => p.classList.remove('is-active'));
-                    
-                    // 選ばれし者に、光を灯す
-                    tab.classList.add('is-active');
-                    const targetId = tab.dataset.target;
-                    const targetPane = document.getElementById(targetId);
-                    if (targetPane) {
-                        targetPane.classList.add('is-active');
-                    }
-                });
+    <div id="reading-modal-overlay" class="reading-modal-overlay">
+        <div class="reading-modal-container">
+            <div class="reading-modal-header">
+                <h2 id="reading-modal-title" class="reading-modal-title">実践の手引き：使命の言語化</h2>
+                <button id="reading-modal-close" class="reading-modal-close">&times;</button>
+            </div>
+            <div id="reading-modal-content" class="reading-modal-content">
+                <p class="placeholder-text">【WP: HTMLテキスト_第一章_全文】ここでは、あなたのビジネスの「Why（なぜやるのか）」を言語化するための、シンプルなフレームワークを解説します。この動画で学んだ内容を元に、『調律師のコンソール』であなただけの「使命」を起草し、AIに魂を吹き込みましょう。このプロセスは、単なる言葉遊びではありません。あなたのビジネスの根幹を定め、全ての行動に一貫性をもたらす、極めて重要な儀式となります。まず、あなたの情熱の源泉、得意なこと、そして心から助けたいと願う人々について、深く掘り下げていきます... (ここに全文が続く)</p>
+                <br>
+                <a href="/console" target="_blank" class="btn btn-primary mt-4">コンソールで「使命」を起草する</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Accordion Script
+        document.querySelectorAll('.accordion-toggle').forEach(button => {
+            button.addEventListener('click', () => {
+                const panel = button.nextElementSibling;
+                button.classList.toggle('active');
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
             });
         });
+
+        // Reading Library Modal Script
+        const readMoreBtn = document.getElementById('read-more-btn');
+        const readingModalOverlay = document.getElementById('reading-modal-overlay');
+        const readingModalClose = document.getElementById('reading-modal-close');
+
+        if(readMoreBtn) {
+            readMoreBtn.addEventListener('click', () => {
+                readingModalOverlay.style.opacity = '1';
+                readingModalOverlay.style.visibility = 'visible';
+                const container = readingModalOverlay.querySelector('.reading-modal-container');
+                if(container) container.style.transform = 'translateY(0)';
+            });
+        }
+
+        function closeReadingModal() {
+            readingModalOverlay.style.opacity = '0';
+            readingModalOverlay.style.visibility = 'hidden';
+            const container = readingModalOverlay.querySelector('.reading-modal-container');
+            if(container) container.style.transform = 'translateY(20px)';
+        }
+
+        if (readingModalClose) {
+            readingModalClose.addEventListener('click', closeReadingModal);
+        }
+        
+        if (readingModalOverlay) {
+            readingModalOverlay.addEventListener('click', (e) => {
+                if (e.target === readingModalOverlay) {
+                    closeReadingModal();
+                }
+            });
+        }
     </script>
 </BaseLayout>
