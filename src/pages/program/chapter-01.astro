@@ -92,13 +92,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     
     <script is:inline>
 // =============================================================
-// --- 【完全融合版】A1-Project Core Script ---
-// テックプリーストによる最終調律
+// --- 【原点回帰】Tech Priest's Final Tuning ---
 // =============================================================
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- 魂の保管庫（コンテンツデータ） ---
-    // 将来、WordPressから召喚するデータ
     const fullContents = {
         part_a_full: "ここに、パートAの、叡智に満ちた**全文**が入ります。<br>段落も、このように反映されます。",
         part_b_full: "ここに、パートBの、実践的な**知識の全文**が記述されます。",
@@ -112,8 +110,50 @@ document.addEventListener('DOMContentLoaded', () => {
     const readingModalClose = document.getElementById('reading-modal-close');
     const readingModalTitle = document.getElementById('reading-modal-title');
     const readingModalContent = document.getElementById('reading-modal-content');
+
+    // --- 書斎（モーダル）を開く儀式 ---
+    function openReadingModal(contentKey, title) {
+        if (!readingModalOverlay) return;
+        const content = fullContents[contentKey];
+        if (!content) return;
+
+        if (readingModalTitle) readingModalTitle.textContent = title;
+        if (readingModalContent) readingModalContent.innerHTML = content;
+        
+        readingModalOverlay.classList.add('visible');
+    }
     
-    // --- 第一の儀式：アコーディオンの神経接続 ---
+    // --- 書斎（モーダル）を閉じる儀式 ---
+    function closeReadingModal() {
+        if (readingModalOverlay) {
+            readingModalOverlay.classList.remove('visible');
+        }
+    }
+
+    // --- 複数のボタンに、魂を宿す ---
+    if (readMoreButtons.length > 0) {
+        readMoreButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const contentKey = button.dataset.targetKey;
+                const title = button.dataset.title;
+                openReadingModal(contentKey, title);
+            });
+        });
+    }
+
+    // --- 閉じるボタンの神経接続 ---
+    if (readingModalClose) {
+        readingModalClose.addEventListener('click', closeReadingModal);
+    }
+    if (readingModalOverlay) {
+        readingModalOverlay.addEventListener('click', (e) => {
+            if (e.target === readingModalOverlay) {
+                closeReadingModal();
+            }
+        });
+    }
+    
+    // --- アコーディオンの儀式（これは、君の元のコードで正常に機能していた） ---
     if (accordionToggles.length > 0) {
         accordionToggles.forEach(button => {
             button.addEventListener('click', () => {
@@ -125,47 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     panel.style.maxHeight = panel.scrollHeight + "px";
                 }
             });
-        });
-    }
-
-    // --- 第二の儀式：書斎（モーダル）の開閉 ---
-    if (readingModalOverlay) {
-        function openReadingModal(contentKey, title) {
-            const content = fullContents[contentKey];
-            if (!content || !readingModalTitle || !readingModalContent) return;
-
-            readingModalTitle.textContent = title;
-            readingModalContent.innerHTML = content;
-
-            readingModalOverlay.style.opacity = '1';
-            readingModalOverlay.style.visibility = 'visible';
-            const container = readingModalOverlay.querySelector('.reading-modal-container');
-            if (container) container.style.transform = 'translateY(0)';
-        }
-
-        function closeReadingModal() {
-            readingModalOverlay.style.opacity = '0';
-            readingModalOverlay.style.visibility = 'hidden';
-            const container = readingModalOverlay.querySelector('.reading-modal-container');
-            if (container) container.style.transform = 'translateY(20px)';
-        }
-
-        readMoreButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const contentKey = button.dataset.targetKey;
-                const title = button.dataset.title;
-                openReadingModal(contentKey, title);
-            });
-        });
-
-        if (readingModalClose) {
-            readingModalClose.addEventListener('click', closeReadingModal);
-        }
-        
-        readingModalOverlay.addEventListener('click', (e) => {
-            if (e.target === readingModalOverlay) {
-                closeReadingModal();
-            }
         });
     }
 });

@@ -943,3 +943,22 @@ a.card-link {
 #password-gate button {
     margin-top: 1rem;
 }
+
+/* Modal Visibility Control */
+.reading-modal-overlay {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+.reading-modal-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+}
+.reading-modal-container {
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+.reading-modal-overlay.visible .reading-modal-container {
+    transform: translateY(0);
+}
