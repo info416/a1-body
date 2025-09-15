@@ -1,68 +1,170 @@
 ---
-import BaseLayout from './BaseLayout.astro';
+import BaseLayout from '../BaseLayout.astro';
 export interface Props {
     title: string;
 }
 const { title } = Astro.props;
 ---
 <BaseLayout title={title}>
+    {/* ▼▼▼ この<style>タグが、全ての美観と演出を司る ▼▼▼ */}
     <style>
         .emaki-container {
-            max-width: 720px; /* 思考に集中できる、最適な幅 */
+            max-width: 720px;
             margin: 0 auto;
             padding: 4rem 1rem;
         }
+
+        /* --- タブUIの法典 --- */
+        .emaki-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--color-border);
+            margin-bottom: 3rem;
+        }
+        .emaki-tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            color: var(--color-text-sub);
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .emaki-tab:hover {
+            color: var(--color-text-main);
+        }
+        .emaki-tab.is-active {
+            color: var(--color-accent-primary);
+            border-bottom-color: var(--color-accent-primary);
+            font-weight: 600;
+        }
+        .emaki-pane {
+            display: none; /* 初期状態では、全ての魂は隠されている */
+        }
+        .emaki-pane.is-active {
+            display: block; /* 選ばれし魂のみが、姿を現す */
+        }
+
+        /* --- 光彩エフェクトの法典 --- */
         .emaki-part {
-            opacity: 0; /* 初期状態では、魂は隠されている */
+            position: relative;
+            opacity: 0;
+            filter: blur(5px);
             transform: translateY(20px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            transition: opacity 0.5s ease-out 0.3s, filter 0.5s ease-out 0.3s, transform 0.5s ease-out 0.3s;
         }
         .emaki-part.is-visible {
-            opacity: 1; /* 視界に入った時、魂は静かに姿を現す */
+            opacity: 1;
+            filter: blur(0);
             transform: translateY(0);
         }
-        .emaki-part + .emaki-part {
-            margin-top: 5rem; /* パート間の「間」が、静謐を生む */
+        .emaki-part::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--color-accent-primary) 0%, transparent 70%);
+            transform: translate(-50%, -50%) scale(0.5);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
         }
-        /* WYSIWYGエディタ風の美しいテキストスタイル */
-        .prose {
-            font-size: 1.125rem;
-            line-height: 1.75;
-            color: var(--color-text-sub);
+        .emaki-part.is-visible::before {
+            opacity: 0.3; /* 光の玉が出現 */
+            transform: translate(-50%, -50%) scale(1);
+            /* テキストが表示された後、光だけが消えるためのアニメーション */
+            animation: fadeOutLight 0.4s ease-out 0.8s forwards;
         }
-        .prose h2 {
-            font-size: 1.875rem;
-            font-weight: 700;
-            color: var(--color-text-main);
-            margin-top: 2.5em;
-            margin-bottom: 1em;
+        @keyframes fadeOutLight {
+            to {
+                opacity: 0;
+            }
         }
-        .prose p {
-            margin-bottom: 1.25em;
-        }
-        .prose strong {
-            color: var(--color-text-main);
-        }
+
+        /* テキストスタイル */
+        .prose { font-size: 1.125rem; line-height: 1.75; color: var(--color-text-sub); }
+        .prose h2 { font-size: 1.875rem; font-weight: 700; color: var(--color-text-main); margin-top: 2.5em; margin-bottom: 1em; }
+        .prose p { margin-bottom: 1.25em; }
+        .prose strong { color: var(--color-text-main); }
+
+    /* --- 章の道標の法典 --- */
+    .chapter-nav {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 3rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--color-border);
+    }
+    .chapter-nav a {
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        color: var(--color-text-sub);
+        border-radius: 6px;
+        transition: all 0.2s ease;
+    }
+    .chapter-nav a:hover {
+        background-color: var(--color-content-bg);
+        color: var(--color-text-main);
+    }
+    .chapter-nav a.active {
+        background-color: var(--color-accent-secondary);
+        color: #fff;
+        font-weight: 600;
+    }
+
+    /* --- 次への扉の法典 --- */
+    .next-chapter-link {
+        margin-top: 4rem;
+        text-align: center;
+    }
     </style>
+    
     <div class="emaki-container">
-        <h1 class="page-title mb-12 text-center">{title}</h1>
-        <slot />
+        <h1 class="page-title mb-8 text-center">{title}</h1>
+
+        <nav class="emaki-tabs">
+            <div class="emaki-tab is-active" data-target="part-A">【思想】</div>
+            <div class="emaki-tab" data-target="part-B">【知識】</div>
+            <div class="emaki-tab" data-target="part-C">【実践】</div>
+        </nav>
+
+        <div class="emaki-content">
+            <slot />
+        </div>
     </div>
+
     <script is:inline>
-        // 魂を監視する「神の目」
+        // --- 魂を監視する「神の目」（光彩エフェクト）---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target); // 一度現れた魂は、隠れない
+                    observer.unobserve(entry.target);
                 }
             });
-        }, {
-            rootMargin: '0px 0px -100px 0px' // 画面の下100pxまで来たら、姿を現し始める
-        });
+        }, { rootMargin: '0px 0px -100px 0px' });
 
-        // 全ての魂のパートを、神の目の監視下に置く
         const allParts = document.querySelectorAll('.emaki-part');
         allParts.forEach(part => observer.observe(part));
+
+        // --- 叡智の階層を司る、タブの神経系統 ---
+        const tabs = document.querySelectorAll('.emaki-tab');
+        const panes = document.querySelectorAll('.emaki-pane');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // 全ての光を一旦消す
+                tabs.forEach(t => t.classList.remove('is-active'));
+                panes.forEach(p => p.classList.remove('is-active'));
+                
+                // 選ばれし者に、光を灯す
+                tab.classList.add('is-active');
+                const targetId = tab.dataset.target;
+                const targetPane = document.getElementById(targetId);
+                if (targetPane) {
+                    targetPane.classList.add('is-active');
+                }
+            });
+        });
     </script>
 </BaseLayout>
