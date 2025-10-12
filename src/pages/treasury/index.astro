@@ -147,186 +147,172 @@ if (response.ok) {
     <div id="treasure-data" data-treasures={JSON.stringify(formattedTreasures)} style="display: none;"></div>
 
     <script is:inline>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- データ保管庫から、全ての宝物の魂を読み込む ---
-            const dataElement = document.getElementById('treasure-data');
-            const allTreasures = JSON.parse(dataElement.dataset.treasures || '[]');
-
-        // --- DOM要素 ---
-        const compassToggle = document.getElementById('compass-toggle');
-        const libraryToggle = document.getElementById('library-toggle');
-        const compassView = document.getElementById('compass-view');
-        const libraryView = document.getElementById('library-view');
-        const libraryGrid = document.getElementById('library-grid');
-        const searchBar = document.getElementById('search-bar');
-        const choiceBtns = document.querySelectorAll('.choice-btn');
-        const compassResults = document.getElementById('compass-results');
-        const modalOverlay = document.getElementById('modal-overlay');
-        const modalTitle = document.getElementById('modal-title');
-        const modalContent = document.getElementById('modal-content');
-        const modalClose = document.getElementById('modal-close');
-
-        // --- カード生成関数 ---
-        function createCard(treasure) {
-            const card = document.createElement('div');
-            card.className = 'card treasure-card';
-            card.dataset.title = treasure.title.toLowerCase();
-            card.dataset.description = treasure.description.toLowerCase();
-            card.innerHTML = `<div class="card-link"><svg class="card-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg><h3 class="card-title">${treasure.title}</h3><p class="card-description">${treasure.description}</p><span class="card-cta mt-auto">宝を開ける &rarr;</span></div>`;
-            card.addEventListener('click', () => openModal(treasure));
-            return card;
-        }
-
-        // --- モーダル制御 ---
-function openModal(treasure) {
-    modalTitle.textContent = treasure.title;
-
-    // モーダルの基本コンテンツを生成
-    let contentHTML = `<p>${treasure.description}</p>`;
-
-    // もし「プロンプト」の魂が存在するなら、それを追加
-    if (treasure.treasure_prompt) {
-        contentHTML += `
-            <div class="prompt-output-container mt-6">
-                <div class="prompt-output-header">
-                    <h3 class="font-semibold text-gray-300">プロンプト</h3>
-                </div>
-                <pre class="prompt-output">${treasure.treasure_prompt}</pre>
-            </div>
-        `;
-    }
-
-    contentHTML += ``;
-
-    
+document.addEventListener('DOMContentLoaded', () => {
     // =============================================================
-// --- 【最終確定版】モーダルボタン生成・制御スクリプト ---
-// テックプリーストによる最終調律
-// =============================================================
+    // --- 魂の器（DOM要素）の召喚 ---
+    // =============================================================
+    const dataElement = document.getElementById('treasure-data');
+    const compassToggle = document.getElementById('compass-toggle');
+    const libraryToggle = document.getElementById('library-toggle');
+    const compassView = document.getElementById('compass-view');
+    const libraryView = document.getElementById('library-view');
+    const libraryGrid = document.getElementById('library-grid');
+    const searchBar = document.getElementById('search-bar');
+    const choiceBtns = document.querySelectorAll('.choice-btn');
+    const compassResults = document.getElementById('compass-results');
+    const modalOverlay = document.getElementById('modal-overlay');
+    const modalTitle = document.getElementById('modal-title');
+    const modalContent = document.getElementById('modal-content');
+    const modalClose = document.getElementById('modal-close');
 
-// --- ボタンのHTMLを格納する、空の器を用意 ---
-let buttonHTML = '';
+    // --- データ保管庫から、全ての宝物の魂を読み込む ---
+    // この行は、あなたの元のコードに基づいています。もし 'treasure-data' がなければ、空の配列を使います。
+    const allTreasures = dataElement ? JSON.parse(dataElement.dataset.treasures || '[]') : [];
 
-// --- ボタン１の存在を確認し、その魂（HTML）を生成する ---
-if (treasure.button_1_type && treasure.button_1_type !== '(空)') {
-    switch (treasure.button_1_type) {
-        case 'copy':
-            // コピーするべきテキスト（treasure.treasure_prompt）を、ボタン自体に記憶させる
-            buttonHTML += `<button class="modal-copy-btn btn btn-primary mt-4" data-copy-text="${treasure.treasure_prompt}">プロンプトをコピー</button>`;
-            break;
-        case 'pdf':
-            buttonHTML += `<a href="${treasure.button_1_value}" target="_blank" rel="noopener noreferrer" class="btn btn-primary mt-4">PDFで開く</a>`;
-            break;
-        case 'download':
-        default:
-            buttonHTML += `<a href="${treasure.button_1_value}" download class="btn btn-primary mt-4">ダウンロード</a>`;
-            break;
-    }
-}
+    // =============================================================
+    // --- モーダル（書斎）制御の儀式 ---
+    // =============================================================
+    function openModal(treasure) {
+        if (!modalOverlay || !treasure) return;
 
-// --- ボタン２の存在を確認し、その魂（HTML）を生成する ---
-if (treasure.button_2_type && treasure.button_2_type !== '(空)') {
-    // ボタンの間に、美しい「間」を設ける
-    if (buttonHTML !== '') {
-        buttonHTML += ' ';
-    }
-    switch (treasure.button_2_type) {
-        case 'copy':
-            buttonHTML += `<button class="modal-copy-btn btn btn-primary mt-4" data-copy-text="${treasure.treasure_prompt}">プロンプトをコピー</button>`;
-            break;
-        case 'pdf':
-            buttonHTML += `<a href="${treasure.button_2_value}" target="_blank" rel="noopener noreferrer" class="btn btn-primary mt-4">PDFで開く</a>`;
-            break;
-        case 'download':
-        default:
-            buttonHTML += `<a href="${treasure.button_2_value}" download class="btn btn-primary mt-4">ダウンロード</a>`;
-            break;
-    }
-}
+        modalTitle.textContent = treasure.title;
 
-// --- 生成された全てのボタンを、美しい器に収めてから、モーダルに追加する ---
-modalContent.innerHTML = contentHTML + '<div class="modal-actions">' + buttonHTML + '</div>';
-
-
-// --- 全ての「コピーボタン」に、命を吹き込む儀式 ---
-// IDではなく、クラスで全てのコピーボタンを探し出し、それぞれに見張りを付ける
-const copyButtons = modalContent.querySelectorAll('.modal-copy-btn');
-if (copyButtons.length > 0) {
-    copyButtons.forEach(copyButton => {
-        copyButton.addEventListener('click', () => {
-            const textToCopy = copyButton.dataset.copyText; // ボタンが記憶しているテキストを読み取る
-            if (!textToCopy) return;
-
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                copyButton.textContent = 'コピーしました！';
-                setTimeout(() => {
-                    copyButton.textContent = 'プロンプトをコピー';
-                }, 2000);
-            });
-        });
-    });
-}
-
-    modalOverlay.classList.add('visible');
-}
-        function closeModal() {
-            modalOverlay.classList.remove('visible');
+        // モーダルの基本コンテンツ（説明文＋プロンプト）を生成
+        let contentHTML = `<p>${treasure.description}</p>`;
+        if (treasure.treasure_prompt) {
+            contentHTML += `
+                <div class="prompt-output-container mt-6">
+                    <div class="prompt-output-header"><h3 class="font-semibold text-gray-300">プロンプト</h3></div>
+                    <pre class="prompt-output">${treasure.treasure_prompt}</pre>
+                </div>`;
         }
+        
+        // ボタンのHTMLを格納する、空の器を用意
+        let buttonHTML = '';
 
-        // --- ビュー切り替え ---
-        function switchView(viewName) {
-            if (viewName === 'compass') {
-                compassView.style.display = 'block';
-                libraryView.style.display = 'none';
-                compassToggle.classList.add('active');
-                libraryToggle.classList.remove('active');
-            } else {
-                libraryView.style.display = 'block';
-                compassView.style.display = 'none';
-                libraryToggle.classList.add('active');
-                compassToggle.classList.remove('active');
+        // --- ボタン１の存在を確認し、その魂（HTML）を生成する ---
+        if (treasure.button_1_type && treasure.button_1_type !== '(空)') {
+            switch (treasure.button_1_type) {
+                case 'copy':
+                    buttonHTML += `<button class="modal-copy-btn btn btn-primary mt-4">プロンプトをコピー</button>`;
+                    break;
+                case 'pdf':
+                    buttonHTML += `<a href="${treasure.button_1_value}" target="_blank" rel="noopener noreferrer" class="btn btn-primary mt-4">PDFで開く</a>`;
+                    break;
             }
         }
-        compassToggle.addEventListener('click', () => switchView('compass'));
-        libraryToggle.addEventListener('click', () => switchView('library'));
 
-        // --- 羅針盤のロジック ---
-        choiceBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const category = btn.dataset.category;
-                const results = allTreasures.filter(t => t.category && t.category.includes(category));
-                compassResults.innerHTML = '<h2 class="text-2xl font-bold mb-4">あなたへの神託</h2><div class="card-grid"></div>';
-                const grid = compassResults.querySelector('.card-grid');
-                results.forEach(treasure => {
-                    grid.appendChild(createCard(treasure));
+        // --- ボタン２の存在を確認し、その魂（HTML）を生成する ---
+        if (treasure.button_2_type && treasure.button_2_type !== '(空)') {
+            if (buttonHTML !== '') { buttonHTML += ' '; } // ボタン間にスペース
+            switch (treasure.button_2_type) {
+                case 'copy':
+                    buttonHTML += `<button class="modal-copy-btn btn btn-primary mt-4">プロンプトをコピー</button>`;
+                    break;
+                case 'pdf':
+                    buttonHTML += `<a href="${treasure.button_2_value}" target="_blank" rel="noopener noreferrer" class="btn btn-primary mt-4">PDFで開く</a>`;
+                    break;
+            }
+        }
+
+        // 生成された全てのボタンを、美しい器に収めてから、モーダルに追加する
+        modalContent.innerHTML = contentHTML + '<div class="modal-actions">' + buttonHTML + '</div>';
+
+        // --- 全ての「コピーボタン」に、命を吹き込む儀式 ---
+        const copyButtons = modalContent.querySelectorAll('.modal-copy-btn');
+        copyButtons.forEach(copyButton => {
+            copyButton.addEventListener('click', () => {
+                if (!treasure.treasure_prompt) return; // コピーするべき魂がなければ、何もしない
+
+                navigator.clipboard.writeText(treasure.treasure_prompt).then(() => {
+                    copyButton.textContent = 'コピーしました！';
+                    setTimeout(() => {
+                        copyButton.textContent = 'プロンプトをコピー';
+                    }, 2000);
                 });
             });
         });
-        
-        // --- 図書館の検索機能 ---
-        searchBar.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            const allCards = libraryGrid.querySelectorAll('.treasure-card');
-            allCards.forEach(card => {
-                const title = card.dataset.title;
-                const description = card.dataset.description;
-                if (title.includes(searchTerm) || description.includes(searchTerm)) {
-                    card.classList.remove('is-hidden');
-                } else {
-                    card.classList.add('is-hidden');
-                }
+
+        modalOverlay.classList.add('visible');
+    }
+
+    function closeModal() {
+        if (modalOverlay) {
+            modalOverlay.classList.remove('visible');
+        }
+    }
+
+    // =============================================================
+    // --- カード生成の儀式 ---
+    // =============================================================
+    function createCard(treasure) {
+        const card = document.createElement('div');
+        card.className = 'card treasure-card';
+        card.dataset.title = treasure.title.toLowerCase();
+        card.dataset.description = treasure.description.toLowerCase();
+        card.innerHTML = `<div class="card-link"><svg class="card-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg><h3 class="card-title">${treasure.title}</h3><p class="card-description">${treasure.description}</p><span class="card-cta mt-auto">宝を開ける &rarr;</span></div>`;
+        card.addEventListener('click', () => openModal(treasure));
+        return card;
+    }
+
+    // =============================================================
+    // --- 全ての機能の神経接続と初期化 ---
+    // =============================================================
+
+    // --- ビュー切り替え ---
+    function switchView(viewName) {
+        if (viewName === 'compass') {
+            compassView.style.display = 'block';
+            libraryView.style.display = 'none';
+            compassToggle.classList.add('active');
+            libraryToggle.classList.remove('active');
+        } else {
+            libraryView.style.display = 'block';
+            compassView.style.display = 'none';
+            libraryToggle.classList.add('active');
+            compassToggle.classList.remove('active');
+        }
+    }
+    compassToggle.addEventListener('click', () => switchView('compass'));
+    libraryToggle.addEventListener('click', () => switchView('library'));
+
+    // --- 羅針盤のロジック ---
+    choiceBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const category = btn.dataset.category;
+            const results = allTreasures.filter(t => t.category && t.category.includes(category));
+            compassResults.innerHTML = '<h2 class="text-2xl font-bold mb-4">あなたへの神託</h2><div class="card-grid"></div>';
+            const grid = compassResults.querySelector('.card-grid');
+            results.forEach(treasure => {
+                grid.appendChild(createCard(treasure));
             });
         });
-
-        // --- 初期化 ---
-        allTreasures.forEach(treasure => {
-            libraryGrid.appendChild(createCard(treasure));
-        });
-        switchView('library');
-        modalClose.addEventListener('click', closeModal);
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) closeModal();
+    });
+    
+    // --- 図書館の検索機能 ---
+    searchBar.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const allCards = libraryGrid.querySelectorAll('.treasure-card');
+        allCards.forEach(card => {
+            const title = card.dataset.title;
+            const description = card.dataset.description;
+            if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                card.classList.remove('is-hidden');
+            } else {
+                card.classList.add('is-hidden');
+            }
         });
     });
-    </script>
+
+    // --- 初期化 ---
+    allTreasures.forEach(treasure => {
+        libraryGrid.appendChild(createCard(treasure));
+    });
+    switchView('library');
+    modalClose.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) closeModal();
+    });
+});
+</script>
 </BaseLayout>
