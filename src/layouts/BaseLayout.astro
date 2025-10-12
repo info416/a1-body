@@ -18,6 +18,75 @@ const currentPage = Astro.url.pathname;
     <link rel="stylesheet" href="/tailwindcss.css">
     <link rel="stylesheet" href="/style.css">
     <slot name="head" />
+    <style is:inline>
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+
+.modal-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+.modal-container {
+    background-color: var(--color-content-bg);
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 720px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.visible .modal-container {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.modal-close-btn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--color-text-sub);
+}
+.modal-actions {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+</style>
 </head>
 <body>
     <script is:inline>
@@ -83,7 +152,7 @@ const currentPage = Astro.url.pathname;
             </div>
         </main>
     </div>
-<script is:raw src="/main.js"></script>4
+<script is:raw src="/main.js"></script>
 <div id="modal-overlay" class="modal-overlay">
     <div class="modal-container">
         <div class="modal-header">

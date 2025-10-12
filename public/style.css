@@ -248,6 +248,10 @@ a.card-link {
     color: var(--color-text-sub);
     flex-grow: 1;
     margin-bottom: 1.5rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /* 表示する行数を、ここで指定する（この場合は2行） */
+    overflow: hidden;
 }
 .card-cta {
     display: inline-flex;
