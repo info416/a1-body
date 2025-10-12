@@ -16,8 +16,10 @@ if (response.ok) {
     title: post.title.rendered,
     description: post.acf.treasure_description || '説明がありません',
     category: post.acf.treasure_category || 'idea',
-    button_type: post.acf.button_type,    // この行を追加
-    button_value: post.acf.button_value, // この行を追加
+    button_1_type: post.acf.button_1_type,
+    button_1_value: post.acf.button_1_value,
+    button_2_type: post.acf.button_2_type,
+    button_2_value: post.acf.button_2_value,
     treasure_prompt: post.acf.treasure_prompt // この行を追加
         }));
     }
@@ -176,7 +178,6 @@ if (response.ok) {
         }
 
         // --- モーダル制御 ---
-        // --- モーダル制御 ---
 function openModal(treasure) {
     modalTitle.textContent = treasure.title;
 
@@ -198,37 +199,73 @@ function openModal(treasure) {
     contentHTML += `<br><p>【ここに、この宝物の具体的な使い方などが入ります。】</p>`;
 
     
-    // ボタンの種類に応じて、表示するボタンのHTMLを生成
-    let buttonHTML = '';
-    switch (treasure.button_type) {
+    // =============================================================
+// --- 【最終確定版】モーダルボタン生成・制御スクリプト ---
+// テックプリーストによる最終調律
+// =============================================================
+
+// --- ボタンのHTMLを格納する、空の器を用意 ---
+let buttonHTML = '';
+
+// --- ボタン１の存在を確認し、その魂（HTML）を生成する ---
+if (treasure.button_1_type && treasure.button_1_type !== '(空)') {
+    switch (treasure.button_1_type) {
         case 'copy':
-            buttonHTML = `<button id="modal-action-button" class="btn btn-primary mt-4">プロンプトをコピー</button>`;
+            // コピーするべきテキスト（treasure.treasure_prompt）を、ボタン自体に記憶させる
+            buttonHTML += `<button class="modal-copy-btn btn btn-primary mt-4" data-copy-text="${treasure.treasure_prompt}">プロンプトをコピー</button>`;
             break;
         case 'pdf':
-            buttonHTML = `<a href="${treasure.button_value}" target="_blank" rel="noopener noreferrer" class="btn btn-primary mt-4">PDFで開く</a>`;
+            buttonHTML += `<a href="${treasure.button_1_value}" target="_blank" rel="noopener noreferrer" class="btn btn-primary mt-4">PDFで開く</a>`;
             break;
         case 'download':
         default:
-            buttonHTML = `<a href="${treasure.button_value}" download class="btn btn-primary mt-4">ダウンロード</a>`;
+            buttonHTML += `<a href="${treasure.button_1_value}" download class="btn btn-primary mt-4">ダウンロード</a>`;
             break;
     }
+}
 
-    modalContent.innerHTML = contentHTML + buttonHTML;
+// --- ボタン２の存在を確認し、その魂（HTML）を生成する ---
+if (treasure.button_2_type && treasure.button_2_type !== '(空)') {
+    // ボタンの間に、美しい「間」を設ける
+    if (buttonHTML !== '') {
+        buttonHTML += ' ';
+    }
+    switch (treasure.button_2_type) {
+        case 'copy':
+            buttonHTML += `<button class="modal-copy-btn btn btn-primary mt-4" data-copy-text="${treasure.treasure_prompt}">プロンプトをコピー</button>`;
+            break;
+        case 'pdf':
+            buttonHTML += `<a href="${treasure.button_2_value}" target="_blank" rel="noopener noreferrer" class="btn btn-primary mt-4">PDFで開く</a>`;
+            break;
+        case 'download':
+        default:
+            buttonHTML += `<a href="${treasure.button_2_value}" download class="btn btn-primary mt-4">ダウンロード</a>`;
+            break;
+    }
+}
 
-    
-    // もし「コピー」ボタンなら、クリックした時の動作を定義する
-    if (treasure.button_type === 'copy') {
-        const copyButton = document.getElementById('modal-action-button');
+// --- 生成された全てのボタンを、美しい器に収めてから、モーダルに追加する ---
+modalContent.innerHTML = contentHTML + '<div class="modal-actions">' + buttonHTML + '</div>';
+
+
+// --- 全ての「コピーボタン」に、命を吹き込む儀式 ---
+// IDではなく、クラスで全てのコピーボタンを探し出し、それぞれに見張りを付ける
+const copyButtons = modalContent.querySelectorAll('.modal-copy-btn');
+if (copyButtons.length > 0) {
+    copyButtons.forEach(copyButton => {
         copyButton.addEventListener('click', () => {
-            if (!treasure.button_value) return;
-            navigator.clipboard.writeText(treasure.button_value).then(() => {
+            const textToCopy = copyButton.dataset.copyText; // ボタンが記憶しているテキストを読み取る
+            if (!textToCopy) return;
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
                 copyButton.textContent = 'コピーしました！';
                 setTimeout(() => {
                     copyButton.textContent = 'プロンプトをコピー';
                 }, 2000);
             });
         });
-    }
+    });
+}
 
     modalOverlay.classList.add('visible');
 }
