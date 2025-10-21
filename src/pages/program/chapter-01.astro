@@ -3,6 +3,26 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="第一章 - 自己進化プログラム">
+
+    <style is:inline>
+    .sacred-iframe-container {
+        position: relative;
+        width: 100%;
+        height: 70vh; /* 画面の高さの70%。ここは調整可能 */
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .sacred-iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+</style>
+
     <div class="program-content">
         <h1>第一章：魂の調律</h1>
         <p class="text-xl text-gray-400 mb-8 placeholder-text">【WP: テキスト_第一章_導入】あなたのビジネスの「魂」を言語化し、AIにインストールする儀式を執り行う。</p>
@@ -23,28 +43,31 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
                 <div class="html-manual">
                     <h3 class="text-xl font-bold mb-4">パートA：物語コンテンツ</h3>
-                    <div class="html-manual-truncated" data-content-key="part_a_full">
-                        <p class="placeholder-text">【WP: HTMLテキスト_第一章_前半】パートAの短い説明...</p>
-                    </div>
-                    <div class="read-more-wrapper">
-                        <button class="read-more-btn btn" data-target-key="part_a_full" data-title="パートA：物語コンテンツ">書斎で続きを読む &darr;</button>
-                    </div>
+                    <div class="sacred-iframe-container">
+    <iframe 
+        src="https://ai-verve.net/first/prog/01/a.html" 
+        class="sacred-iframe"
+        title="聖典：第一章Aパート">
+    </iframe>
+</div>
 
                     <h3 class="text-xl font-bold mb-4">パートB：知識コンテンツ</h3>
-                    <div class="html-manual-truncated" data-content-key="part_b_full">
-                        <p class="placeholder-text">【WP: HTMLテキスト_第一章_前半】パートBの短い説明...</p>
-                    </div>
-                    <div class="read-more-wrapper">
-                        <button class="read-more-btn btn" data-target-key="part_b_full" data-title="パートB：知識コンテンツ">書斎で続きを読む &darr;</button>
-                    </div>
+                    <div class="sacred-iframe-container">
+    <iframe 
+        src="https://ai-verve.net/first/prog/01/b.html" 
+        class="sacred-iframe"
+        title="聖典：第一章Aパート">
+    </iframe>
+</div>
 
                     <h3 class="text-xl font-bold mb-4">パートC：実践の手引き・使命の言語化</h3>
-                    <div class="html-manual-truncated" data-content-key="part_c_full">
-                        <p class="placeholder-text">【WP: HTMLテキスト_第一章_前半】パートCの短い説明...</p>
-                    </div>
-                    <div class="read-more-wrapper">
-                        <button class="read-more-btn btn" data-target-key="part_c_full" data-title="パートC：実践の手引き">書斎で続きを読む &darr;</button>
-                    </div>
+                    <div class="sacred-iframe-container">
+    <iframe 
+        src="https://ai-verve.net/first/prog/01/c.html" 
+        class="sacred-iframe"
+        title="聖典：第一章Aパート">
+    </iframe>
+</div>
                 </div>
             </div>
         </div>
