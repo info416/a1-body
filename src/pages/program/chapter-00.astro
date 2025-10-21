@@ -1,8 +1,27 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
-
 <BaseLayout title="序章 - 自己進化プログラム">
+
+    <style is:inline>
+    .sacred-iframe-container {
+        position: relative;
+        width: 100%;
+        height: 70vh; /* 画面の高さの70%。ここは調整可能 */
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .sacred-iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+</style>
+
                 <div class="program-content">
                     <h1>序章：『調律師マインド』の覚醒</h1>
                     <p class="text-xl text-gray-400 mb-8 placeholder-text">【WP: テキスト_序章_導入】新しい時代のパラダイムを提示する、唯一無二のセミナーへようこそ。</p>
@@ -23,6 +42,14 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                             <p class="placeholder-text">【WP: HTMLテキスト_序章】このセミナーでは、AIを単なる「便利な道具」から「思考を拡張する第二の脳」へと昇華させるための、新しい時代のパラダイムを提示します。これからの時代に本当に求められるのは、AIに命令するスキルではなく、AIを「調律」し、あなただけの思想を吹き込むスキルである、と宣言します。このマインドセットこそが、あなたがその他大勢から抜け出し、唯一無二の存在となるための鍵です。</p>
                         </div>
                     </div>
+
+                    <div class="sacred-iframe-container">
+    <iframe 
+        src="/program/chapter-01-A" 
+        class="sacred-iframe"
+        title="聖典：第一章Aパート">
+    </iframe>
+</div>
 
                     <div class="accordion-container">
                         <button class="accordion-toggle">
