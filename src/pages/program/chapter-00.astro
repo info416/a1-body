@@ -11,6 +11,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         border: 1px solid var(--color-border);
         border-radius: 8px;
         overflow: hidden;
+        margin-bottom: 3rem;
     }
     .sacred-iframe {
         position: absolute;
@@ -33,22 +34,18 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                         <a href="chapter-02" class="tab-link">第二章</a>
                         <a href="chapter-03" class="tab-link">第三章</a>
                         <a href="chapter-04" class="tab-link">第四章</a>
+                        <a href="cockpit" class="tab-link">次のステージへ</a>
                     </nav>
 
                     <div class="default-view">
                         <div class="placeholder-media mb-8" data-type="video">【WP: 動画_序章_メインセミナー】</div>
-                        <div class="html-manual">
-                            <h2 class="text-2xl font-bold mb-4">セミナーの要点</h2>
-                            <p class="placeholder-text">【WP: HTMLテキスト_序章】このセミナーでは、AIを単なる「便利な道具」から「思考を拡張する第二の脳」へと昇華させるための、新しい時代のパラダイムを提示します。これからの時代に本当に求められるのは、AIに命令するスキルではなく、AIを「調律」し、あなただけの思想を吹き込むスキルである、と宣言します。このマインドセットこそが、あなたがその他大勢から抜け出し、唯一無二の存在となるための鍵です。</p>
-                        </div>
-                    </div>
-
-                    <div class="sacred-iframe-container">
+                        <div class="sacred-iframe-container">
                         <iframe 
                         src="https://ai-verve.net/first/prog/jo/josyou.html" 
                         class="sacred-iframe"
                         title="聖典：第一章Aパート">
                         </iframe>
+                    </div>
                     </div>
 
                     <div class="accordion-container">
@@ -57,9 +54,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                             <span class="icon">+</span>
                         </button>
                         <div class="accordion-panel">
-                            <div class="download-link-item">
-                                <span class="icon">📄</span> <a href="#" download>講義スライド（PDF）</a>
-                            </div>
                             <div class="download-link-item">
                                 <span class="icon">🎧</span> <a href="#" download>音声ファイル（MP3）</a>
                             </div>
