@@ -226,7 +226,7 @@ const currentType = codexTypes.find(type => type.id === currentPageId); // ç¾åœ
         <nav class="codex-tabs-nav">
             {codexTypes.map(type => (
                 <a 
-                    href={type.path} 
+                    href={`/codex/${type.id}`}
                     class={`codex-tab-link ${type.id === currentPageId ? 'is-active' : ''}`} 
                     data-type={type.id}
                 >
