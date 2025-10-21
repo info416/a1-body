@@ -3,6 +3,26 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="第二章 - 自己進化プログラム">
+    
+    <style is:inline>
+    .sacred-iframe-container {
+        position: relative;
+        width: 100%;
+        height: 70vh; /* 画面の高さの70%。ここは調整可能 */
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 3rem;
+    }
+    .sacred-iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+</style>
                 <div class="program-content">
                     <h1>第二章：思考の調律</h1>
                     <p class="text-xl text-gray-400 mb-8 placeholder-text">【WP: テキスト_第二章_導入】行動を妨げる「心理的ブレーキ」を破壊し、目標達成のための思考様式をAIにインストールする。</p>
@@ -17,8 +37,35 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                     </nav>
 
                     <div class="default-view">
-                        <div class="part-a mb-12"><h2 class="text-2xl font-bold mb-4">パートA：物語コンテンツ</h2><div class="placeholder-media" data-type="video">【WP: 動画_第二章_物語】</div></div>
-                        <div class="part-b"><h2 class="text-2xl font-bold mb-4">パートB：実践コンテンツ</h2><div class="placeholder-media mb-8" data-type="video">【WP: 動画_第二章_メイン実践】</div><div class="html-manual"><h3 class="text-xl font-bold mb-4">実践の手引き：思考の言語化</h3><div class="html-manual-truncated"><p class="placeholder-text">【WP: HTMLテキスト_第二章_前半】なぜ、多くの人が「行動できない」のか。 その心理的メカニズムを解説し、複雑な問題を具体的な行動計画に落とし込むための、シンプルな問題解決フレームワークを伝授します。 この学びを元に、『調律師のコンソール』で「行動ブレーキ破壊AI」を起動し、あなたの思考パターンをAIへとインストールしましょう。</p></div><div class="read-more-wrapper"><button id="read-more-btn" class="btn">書斎で続きを読む &darr;</button></div></div></div>
+                        <div class="part-a mb-12">
+                            <h2 class="text-2xl font-bold mb-4">パートA：物語コンテンツ</h2>
+                            <div class="sacred-iframe-container">
+                        <iframe 
+                        src="https://ai-verve.net/first/prog/02/a.html" 
+                        class="sacred-iframe"
+                        title="聖典：第一章Aパート">
+                        </iframe>
+                    </div></div>
+
+                        <div class="part-b">
+                            <h2 class="text-2xl font-bold mb-4">パートB：実践コンテンツ</h2>
+                            <div class="sacred-iframe-container">
+                        <iframe 
+                        src="https://ai-verve.net/first/prog/02/b.html" 
+                        class="sacred-iframe"
+                        title="聖典：第一章Aパート">
+                        </iframe>
+                    </div>
+                            
+                            
+                        <div class="html-manual">
+                            <h3 class="text-xl font-bold mb-4">実践の手引き：思考の言語化</h3>
+                            <div class="sacred-iframe-container">
+                        <iframe 
+                        src="https://ai-verve.net/first/prog/02/c.html" 
+                        class="sacred-iframe"
+                        title="聖典：第一章Aパート">
+                        </iframe>
                     </div>
 
                     <div class="accordion-container">

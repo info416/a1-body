@@ -3,6 +3,26 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="第四章 - 自己進化プログラム">
+    
+    <style is:inline>
+    .sacred-iframe-container {
+        position: relative;
+        width: 100%;
+        height: 70vh; /* 画面の高さの70%。ここは調整可能 */
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 3rem;
+    }
+    .sacred-iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+</style>
                 <div class="program-content">
                     <h1>第四章：『最初の庭師』育成プログラム</h1>
                     <p class="text-xl text-gray-400 mb-8 placeholder-text">【WP: テキスト_第四章_導入】30日間であなたの庭に、最初の「花」を咲かせる。理論を実践に変え、最初の顧客を獲得する体験を、ここで行う。</p>
