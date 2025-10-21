@@ -86,6 +86,22 @@ const currentType = codexTypes.find(type => type.id === currentPageId); // 現�
                 color: var(--codex-secondary-color, #e0cff0);
                 margin-bottom: 0.5rem;
             }
+            .codex-main-title-container {
+                text-align: center;
+                margin-bottom: 2.5rem; /* タブとの間に適切な空間を */
+            }
+            .codex-main-title {
+                font-size: 2.5rem; /* ページ内で最も大きく、威厳を示す */
+                font-weight: 900;
+                color: var(--color-text-main); /* 白系のメインカラー */
+                margin-bottom: 0.5rem;
+                letter-spacing: 0.05em; /* 文字間を少し広げる */
+            }
+            .codex-main-subtitle {
+                font-size: 1rem;
+                color: var(--color-text-sub); /* サブカラーで控えめに */
+                margin: 0;
+            }
             .codex-subtitle { /* サブタイトル */
                 font-size: 1.1rem; color: var(--color-text-sub);
             }
@@ -136,6 +152,7 @@ const currentType = codexTypes.find(type => type.id === currentPageId); // 現�
             .prompt-block { /* プロンプト */
                 background-color: #222; border: 1px solid var(--color-border);
                 border-radius: 8px; padding: 1.5rem; margin: 2rem 0; overflow-x: auto;
+                position: relative;
             }
             .prompt-block pre {
                 margin: 0; padding: 0; background: none; border: none;
@@ -156,6 +173,40 @@ const currentType = codexTypes.find(type => type.id === currentPageId); // 現�
             .fade-in.is-visible { opacity: 1; transform: translateY(0); }
             /* ...遅延クラス... */
 
+            /* ▼▼▼ コピーボタン用のスタイル ▼▼▼ */
+            .prompt-block.with-copy-button {
+                 padding-right: 4rem; /* ボタンのスペースを確保 */
+            }
+            .copy-prompt-btn {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                background-color: var(--color-border);
+                color: var(--color-text-sub);
+                border: none;
+                border-radius: 6px;
+                padding: 0.5rem 0.75rem;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 0.4rem;
+                font-size: 0.85em;
+                opacity: 0.7;
+                transition: all 0.2s ease;
+            }
+            .copy-prompt-btn:hover {
+                opacity: 1;
+                background-color: var(--codex-primary-color, #9b59b6); /* タイプの色に変化 */
+                color: var(--color-bg);
+            }
+            .copy-prompt-btn svg {
+                 margin-top: -1px; /* アイコンの微調整 */
+            }
+            .copy-prompt-btn.copied span {
+                /* コピー成功時のテキスト */
+                /* 必要に応じてスタイルを追加 */
+            }
+
             @media print { /* 印刷スタイル */
                  .codex-tabs-nav { display: none; }
                  .codex-container { max-width: none; padding: 1in; margin: 0; }
@@ -166,6 +217,11 @@ const currentType = codexTypes.find(type => type.id === currentPageId); // 現�
     </Fragment>
 
     <div class="codex-container" style={`--codex-primary-color: ${currentType?.color}; --codex-secondary-color: ${currentType?.secondaryColor};`}>
+
+        <div class="codex-main-title-container fade-in">
+        <h1 class="codex-main-title">八魂の法典（The Codex of Eight Souls）</h1>
+        <p class="codex-main-subtitle">オラクル別AI調律</p>
+    </div>
 
         <nav class="codex-tabs-nav">
             {codexTypes.map(type => (
@@ -283,8 +339,8 @@ const currentType = codexTypes.find(type => type.id === currentPageId); // 現�
 
             <h4>① 『ファクト・トゥ・ストーリー変換プロンプト』（資産化の儀式）</h4>
             <p style="font-size: 0.9em; margin-bottom: 0.5rem;">（神器：『現実の定義者』を起動し、過去の「退屈な学び」を「魅惑の物語」に変える）</p>
-            <div class="prompt-block">
-<pre><code># 命令書
+            <div class="prompt-block with-copy-button"> 
+    <pre><code class="prompt-text"># 命令書
 あなたは、退屈な「事実」を、人々が熱狂する「物語」に変換する、天才的な「語り部」です。
 私は今から、私が過去に学んだが、そのままでは誰も魅了できない「知識の断片（事実）」を提示します。
 あなたの任務は、この「事実」を「素材」として使い、人々の心を鷲掴みにする「魅力的なストーリー」として再構築することです。
@@ -300,12 +356,18 @@ const currentType = codexTypes.find(type => type.id === currentPageId); // 現�
 2.  **【物語（After）】：** （例：「あなたは、まだ『他人の人生』という重い荷物を背負い続けますか？ その荷物を下ろした瞬間、あなたは『あなたの人生』という、本当の冒険を始めることができるのです…」）
 3.  **【魔法の呪文（キャッチコピー）】：** （例：「他人の期待の『奴隷』を、今日で終わりにしよう。」）
 </code></pre>
+<button class="copy-prompt-btn" title="プロンプトをコピー">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="18" height="18">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876V5.25a.75.75 0 011.5 0v.75a.75.75 0 01-1.5 0V5.25m-7.5 0H7.5a9.06 9.06 0 001.5-.124M9 7.875h1.5a.75.75 0 010 1.5H9a.75.75 0 010-1.5zm1.5 0V5.25m6.75 5.25v-1.5a.75.75 0 00-1.5 0v1.5a.75.75 0 001.5 0zm-1.5 0h-1.5a.75.75 0 000 1.5h1.5a.75.75 0 000-1.5z" />
+        </svg>
+        <span>コピー</span>
+    </button>
             </div>
 
             <h4>② 『ビジョン実行プロンプト』（呪縛解除の儀式）</h4>
             <p style="font-size: 0.9em; margin-bottom: 0.5rem;">（呪縛：『言葉だけの英雄』を破壊し、「物語」と「行動」を一致させる）</p>
-             <div class="prompt-block">
-<pre><code># 命令書
+             <div class="prompt-block with-copy-button"> 
+    <pre><code class="prompt-text"># 命令書
 あなたは、私の「理想」を「現実」に変えるための、冷徹な「軍師」です。
 私は今から、私が語りたい「輝かしい理想の未来（ビジョン）」を提示します。
 あなたの任務は、この「物語」を「虚構」で終わらせないために、私（と読者）が「今すぐ実行すべき、最初の一歩（具体的な行動）」を、論理的に提案することです。
@@ -321,12 +383,18 @@ const currentType = codexTypes.find(type => type.id === currentPageId); // 現�
 2.  **【現実への着地（軍師の提言）】：** （例：しかし、魔術師よ。その「理想」を現実にするため、私たちはまず「最初の一歩」を踏み出さねばなりません。）
 3.  **【最初の一歩（具体的な行動）】：** （例：この「檻」を壊すための最初の行動として、「あなたが毎日無意識に従っている『常識（ルール）』を一つだけ書き出し、それをAIに『破壊』させてみる」という儀式を提案します。）
 </code></pre>
+<button class="copy-prompt-btn" title="プロンプトをコピー">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="18" height="18">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876V5.25a.75.75 0 011.5 0v.75a.75.75 0 01-1.5 0V5.25m-7.5 0H7.5a9.06 9.06 0 001.5-.124M9 7.875h1.5a.75.75 0 010 1.5H9a.75.75 0 010-1.5zm1.5 0V5.25m6.75 5.25v-1.5a.75.75 0 00-1.5 0v1.5a.75.75 0 001.5 0zm-1.5 0h-1.5a.75.75 0 000 1.5h1.5a.75.75 0 000-1.5z" />
+        </svg>
+        <span>コピー</span>
+    </button>
             </div>
 
             <h4>③ 『誠実さ検証プロンプト』（呪縛解除の儀式）</h4>
             <p style="font-size: 0.9em; margin-bottom: 0.5rem;">（呪縛：『虚構への逃避』『賞賛への隷属』を防ぎ、魔法に「魂」を宿す）</p>
-             <div class="prompt-block">
-<pre><code># 命令書
+             <div class="prompt-block with-copy-button"> 
+    <pre><code class="prompt-text"># 命令書
 あなたは、私の「言葉」に「嘘」や「虚構」が混じっていないかを厳しくチェックする、「魂の検閲官」です。
 私は今から、私が創った「セールストーク（物語）」のドラフトを提示します。
 あなたの任務は、「懐疑的な顧客」の視点でこの物語を読み、『賞賛』を得るために「誇張」している部分や、「現実」から乖離している「虚構」を、容赦なく指摘することです。
@@ -342,6 +410,12 @@ const currentType = codexTypes.find(type => type.id === currentPageId); // 現�
 2.  **【顧客の反論（カウンター呪文）】：** （例：「『誰もが』？ そんなうまい話があるか。あなたは『詐欺師』か？」）
 3.  **【誠実な魔法（リライト案）】：** （例：「この商品は『成功を保証する魔法』ではありません。しかし、あなたの『英雄の物語』の『最強の武器』となることを、私は約束します」）
 </code></pre>
+<button class="copy-prompt-btn" title="プロンプトをコピー">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="18" height="18">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876V5.25a.75.75 0 011.5 0v.75a.75.75 0 01-1.5 0V5.25m-7.5 0H7.5a9.06 9.06 0 001.5-.124M9 7.875h1.5a.75.75 0 010 1.5H9a.75.75 0 010-1.5zm1.5 0V5.25m6.75 5.25v-1.5a.75.75 0 00-1.5 0v1.5a.75.75 0 001.5 0zm-1.5 0h-1.5a.75.75 0 000 1.5h1.5a.75.75 0 000-1.5z" />
+        </svg>
+        <span>コピー</span>
+    </button>
             </div>
         </section>
 
@@ -418,6 +492,45 @@ const currentType = codexTypes.find(type => type.id === currentPageId); // 現�
                 observer.observe(target);
             });
         });
+
+        document.addEventListener('DOMContentLoaded', () => {
+    // ... 既存のフェードインの observer ...
+
+    // ▼▼▼ プロンプトコピー機能の呪文（ここから） ▼▼▼
+    const copyButtons = document.querySelectorAll('.copy-prompt-btn');
+
+    copyButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // ボタンの親要素である .prompt-block を探し、その中の .prompt-text を見つける
+            const promptBlock = button.closest('.prompt-block');
+            const codeElement = promptBlock?.querySelector('.prompt-text');
+            
+            if (codeElement) {
+                const textToCopy = codeElement.textContent || '';
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    // 成功時のフィードバック
+                    const buttonText = button.querySelector('span');
+                    if(buttonText) buttonText.textContent = 'コピー完了!';
+                    button.classList.add('copied'); // スタイル変更用クラス
+
+                    // 数秒後に元に戻す
+                    setTimeout(() => {
+                        if(buttonText) buttonText.textContent = 'コピー';
+                        button.classList.remove('copied');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('コピーに失敗しました:', err);
+                    const buttonText = button.querySelector('span');
+                     if(buttonText) buttonText.textContent = '失敗';
+                     setTimeout(() => { if(buttonText) buttonText.textContent = 'コピー'; }, 2000);
+                });
+            } else {
+                console.error('コピー対象のプロンプトが見つかりません。');
+            }
+        });
+    });
+    // ▲▲▲ コピー機能の呪文（ここまで） ▲▲▲
+});
     </script>
 
 </BaseLayout>
