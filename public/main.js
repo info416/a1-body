@@ -100,14 +100,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-
-/* ==========================================================================
-   Copyright Year Auto Update
-   ========================================================================== */
-document.addEventListener('DOMContentLoaded', () => {
-    const yearSpan = document.getElementById('copyright-year');
-    if (yearSpan) {
-        yearSpan.textContent = new Date().getFullYear();
-    }
-    // ... 他のDOMContentLoaded内のコードがあれば、それはそのまま残す ...
-});
