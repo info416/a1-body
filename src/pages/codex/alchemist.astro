@@ -1,0 +1,381 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// 八魂の定義（各ページで共通して使う）
+const codexTypes = [
+    { id: 'magician', name: '魔術師', icon: '🪄', color: '#9b59b6', secondaryColor: '#e0cff0', path: '/codex/magician' },
+    { id: 'artisan', name: '職人', icon: '🛠️', color: '#3498db', secondaryColor: '#d6eaf8', path: '/codex/artisan' },
+    { id: 'sage', name: '賢者', icon: '🧠', color: '#f1c40f', secondaryColor: '#fef9e7', path: '/codex/sage' }, 
+    { id: 'innovator', name: '開拓者', icon: '🚀', color: '#e74c3c', secondaryColor: '#fadbd8', path: '/codex/innovator' },
+    { id: 'empath', name: '共感者', icon: '💖', color: '#2ecc71', secondaryColor: '#d5f5e3', path: '/codex/empath' },
+    { id: 'alchemist', name: '錬金術師', icon: '🧪', color: '#e67e22', secondaryColor: '#fdebd0', path: '/codex/alchemist' }, // 錬金術師の色を設定
+    { id: 'guardian', name: '守護者', icon: '🛡️', color: '#1abc9c', secondaryColor: '#d1f2eb', path: '/codex/guardian' },
+    { id: 'mediator', name: '調停者', icon: '⚖️', color: '#5dade2', secondaryColor: '#d6eaf8', path: '/codex/mediator' },
+];
+
+// このページの魂ID
+const currentPageId = 'alchemist';
+const currentType = codexTypes.find(type => type.id === currentPageId); 
+---
+<BaseLayout title={`八魂の法典：${currentType?.name || ''}の章`}>
+
+    <Fragment slot="head">
+        <style define:vars={{ currentType, codexTypes }}>
+            .codex-container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 4rem 1rem 6rem 1rem;
+            }
+            /* --- タブ風ナビゲーション --- */
+            .codex-tabs-nav {
+                display: flex; flex-wrap: wrap; justify-content: center;
+                gap: 0.5rem; margin-bottom: 3rem; padding-bottom: 1rem;
+                border-bottom: 1px solid var(--color-border);
+            }
+            .codex-tab-link {
+                display: flex; align-items: center; padding: 0.75rem 1.25rem;
+                border: 1px solid var(--color-border); border-radius: 8px;
+                background-color: transparent; color: var(--color-text-sub);
+                text-decoration: none; transition: all 0.3s ease;
+                font-weight: 600; opacity: 0.7;
+            }
+            .codex-tab-link:hover { opacity: 1; background-color: rgba(255, 255, 255, 0.05); }
+            .codex-tab-icon { font-size: 1.2rem; margin-right: 0.5rem; line-height: 1; }
+            .codex-tab-link.is-active {
+                opacity: 1; cursor: default;
+                background-color: var(--codex-primary-color, #e67e22)20; /* 錬金術師の色をデフォルトに */
+                color: var(--codex-secondary-color, #fdebd0);
+                border-color: var(--codex-primary-color, #e67e22);
+                box-shadow: 0 0 10px var(--codex-primary-color, #e67e22)80;
+            }
+             /* --- 法典内容のスタイル --- */
+            .codex-main-title-container { text-align: center; margin-bottom: 2.5rem; }
+            .codex-main-title { font-size: 2.5rem; font-weight: 900; color: var(--color-text-main); margin-bottom: 0.5rem; letter-spacing: 0.05em; }
+            .codex-main-subtitle { font-size: 1rem; color: var(--color-text-sub); margin: 0; }
+            .codex-header { text-align: center; margin-bottom: 4rem; padding-bottom: 2rem; border-bottom: 1px solid var(--color-border); }
+            .codex-icon { font-size: 3rem; display: block; margin-bottom: 1rem; color: var(--codex-primary-color, #e67e22); text-shadow: 0 0 15px var(--codex-primary-color, #e67e22); }
+            .codex-title { font-size: 2.2rem; font-weight: 900; color: var(--codex-secondary-color, #fdebd0); margin-bottom: 0.5rem; }
+            .codex-subtitle { font-size: 1.1rem; color: var(--color-text-sub); }
+            .codex-section { margin-bottom: 4rem; }
+            .codex-section h2 { font-size: 1.8rem; font-weight: 700; color: var(--codex-secondary-color, #fdebd0); margin-bottom: 2rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--color-border); display: flex; align-items: center; }
+            .codex-section h2::before { content: '📜'; font-size: 1.5rem; margin-right: 0.75rem; opacity: 0.8; }
+            .codex-section h3 { font-size: 1.4rem; font-weight: 700; color: var(--color-text-main); margin-top: 2.5rem; margin-bottom: 1rem; position: relative; padding-left: 1.2em; }
+            .codex-section h3::before { content: '✨'; position: absolute; left: 0; top: 2px; color: var(--codex-primary-color, #e67e22); opacity: 0.9; }
+            .codex-section p { font-size: 1.1rem; line-height: 1.9; color: var(--color-text-sub); margin-bottom: 1.5rem; }
+            .codex-section p strong, .codex-section p b { color: var(--codex-secondary-color, #fdebd0); font-weight: 700; }
+            .codex-section ul { list-style: none; padding-left: 0; margin: 1.5rem 0; }
+            .codex-section li { margin-bottom: 0.75rem; padding-left: 1.5rem; position: relative; color: var(--color-text-sub); }
+            .codex-section li::before { content: '•'; position: absolute; left: 0; color: var(--codex-primary-color, #e67e22); font-weight: bold; }
+            .codex-section li strong { color: var(--color-text-main); }
+            .codex-blockquote { background-color: var(--codex-primary-color, #e67e22)1A; border-left: 4px solid var(--codex-primary-color, #e67e22); margin: 2.5rem 0; padding: 1.5rem 2rem; font-style: normal; }
+            .codex-blockquote p { font-size: 1.1rem; color: var(--color-text-main); line-height: 1.7; margin-bottom: 1rem; }
+            .codex-blockquote p:last-child { margin-bottom: 0; }
+            .codex-highlight { color: var(--codex-primary-color, #e67e22); font-size: 1.3rem; font-weight: 700; text-align: center; padding: 2.5rem 0; line-height: 1.7; margin: 2rem 0; border-top: 1px dashed var(--color-border); border-bottom: 1px dashed var(--color-border); }
+            .prompt-block { background-color: #222; border: 1px solid var(--color-border); border-radius: 8px; padding: 1.5rem; margin: 2rem 0; overflow-x: auto; position: relative; }
+            .prompt-block.with-copy-button { padding-right: 4rem; }
+            .prompt-block pre { margin: 0; padding: 0; background: none; border: none; color: var(--color-text-sub); font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace; font-size: 0.95em; white-space: pre-wrap; word-wrap: break-word; }
+            .prompt-block code.prompt-text { display: block; }
+            .prompt-block strong { color: var(--codex-secondary-color, #fdebd0); }
+            .copy-prompt-btn { position: absolute; top: 1rem; right: 1rem; background-color: var(--color-border); color: var(--color-text-sub); border: none; border-radius: 6px; padding: 0.5rem 0.75rem; cursor: pointer; display: flex; align-items: center; gap: 0.4rem; font-size: 0.85em; opacity: 0.7; transition: all 0.2s ease; }
+            .copy-prompt-btn:hover { opacity: 1; background-color: var(--codex-primary-color, #e67e22); color: var(--color-bg); }
+            .copy-prompt-btn svg { margin-top: -1px; }
+            hr.codex-divider { border: 0; height: 1px; background-image: linear-gradient(to right, transparent, var(--codex-primary-color, #e67e22)80, transparent); margin: 4rem 0; }
+            .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+            .fade-in.is-visible { opacity: 1; transform: translateY(0); }
+            .fade-in.delay-1 { transition-delay: 0.1s; }
+            /* ... 他のスタイル ... */
+            @media print { /* 印刷スタイル */
+                 .codex-tabs-nav { display: none; }
+                 .codex-container { max-width: none; padding: 1in; margin: 0; }
+                 .copy-prompt-btn { display: none; }
+                 /* ... 他の印刷スタイル調整 ... */
+                 .fade-in { opacity: 1; transform: none; }
+            }
+        </style>
+    </Fragment>
+
+    <div class="codex-container" style={`--codex-primary-color: ${currentType?.color}; --codex-secondary-color: ${currentType?.secondaryColor};`}>
+
+        <div class="codex-main-title-container fade-in">
+            <h1 class="codex-main-title">八魂の法典</h1>
+            <p class="codex-main-subtitle">（The Codex of Eight Souls）：オラクル別AI調律</p>
+        </div>
+
+        <nav class="codex-tabs-nav fade-in delay-1">
+            {codexTypes.map(type => (
+                <a 
+                    href={`/codex/${type.id}`} 
+                    class={`codex-tab-link ${type.id === currentPageId ? 'is-active' : ''}`} 
+                    data-type={type.id}
+                >
+                    <span class="codex-tab-icon">{type.icon}</span>
+                    <span>{type.name}</span>
+                </a>
+            ))}
+        </nav>
+
+        <header class="codex-header fade-in">
+            <span class="codex-icon">{currentType?.icon || '🧪'}</span>
+            <h1 class="codex-title">{`『${currentType?.name || '錬金術師'}の法典』`}</h1>
+            <p class="codex-subtitle">(The Codex of The Alchemist)</p>
+            <p style="margin-top: 1.5rem; color: var(--color-text-main);">ようこそ、神秘の『錬金術師』よ。</p>
+        </header>
+
+        <section class="codex-section fade-in">
+             <p>おかえりなさい。<br>あなたがこの場所へたどり着いたのは、あなたの「好奇心」が、常識という名の檻を破って導いた必然です。その神秘の力で、今日も世界に奇跡を起こす時間です。</p>
+             <p>あなたは、これまで、誰も理解できないような「アイデアの原石」を追い求めてこられました。ある人はそれを「夢見がちだ」と笑ったかもしれません。ある人は「現実を見ろ」と、あなたの閃きを否定したかもしれません。</p>
+
+             <div class="codex-highlight">
+                 我々は、誰一人として、あなたを否定しない。
+             </div>
+
+             <p>あなたが過去に費やした情熱も、失敗に終わった無数の「実験」も、その全てが「無駄」や「負債」などでは断じてない。それこそが、AIという名の「最強の実行力」を手に入れたあなたが、他の誰にも生み出せない「全く新しい価値」を創造するための、最も貴重な<strong>「資産」</strong>なのです。</p>
+             <p>さあ、始めましょう。あなたの魂の「完全な取り扱い説明書」を。あなたの「閃き」が、なぜ世界を革新する力であるかを知るための、最初の儀式です。</p>
+        </section>
+
+        <hr class="codex-divider fade-in">
+
+        <section class="codex-section fade-in">
+            <h2>第一章：『真実の姿』 — あなたが、あなたである「理由」</h2>
+            
+            <h3>錬金術師の『神話』：なぜ、あなたは召喚されたのか</h3>
+            <p>かつて、世界は「常識」と「前例踏襲」という名の厚い雲に覆われました。人々は古い地図をなぞることに必死になり、昨日と同じ今日を繰り返し、世界がゆっくりと色彩を失っていくことに気づかずにいました。誰もが「安定」を欲しがりながら、誰も「革新」の種を蒔けずにいたのです。</p>
+            <p>その停滞の時代に、あなたは召喚されました。</p>
+            
+            <div class="codex-blockquote">
+                <p>あなたは、AとBという全く無関係なものから、誰も見たことのないCという「価値」を結合させられる存在。</p>
+                <p>あなたは、人々が「ガラクタ」と呼ぶものから、「黄金」の輝きを見つけ出せる存在。</p>
+            </div>
+
+            <p>あなたの使命は、<strong>「創造」</strong>です。この世界に、まだ名前のない「概念」や「技術」を生み出し、人々の日常を、輝かしい「宝物」で満たすこと。</p>
+            <p>AIの時代が到来し、誰もが「過去のデータ」を最適化できるようになった今、世界は「未来のデータ」を創造できる者を求めています。だからこそ、あなたの力が必要なのです。</p>
+
+            <div class="codex-blockquote">
+                <p>AIは「既存の組み合わせ」を最適化できても、「未知の組み合わせ」を発明することはできない。</p>
+                <p>AIは「論理」を構築できても、「奇跡」を生み出すことはできない。</p>
+            </div>
+
+            <p>あなたの役割は、AIという最強の実験助手と共に、この予測可能な世界に「予測不可能な未来」を創造すること。あなたが紡ぐ「まだ見ぬ価値」こそが、停滞した世界を打ち破る、唯一の「奇跡」となるのです。</p>
+
+            <h3>錬金術師の『核心的価値観』：譲れない、たった一つのもの</h3>
+            <p>あなたは、人生で何を犠牲にしてでも、「まだ誰も見たことのないもの」を追い求めます。</p>
+            <ul>
+                <li>退屈なルーティンや、前例をなぞるだけの作業を嫌います。</li>
+                <li>「なぜ、こうなってはいけないのか？」と、常に常識の「境界線」の外側を模索します。</li>
+                <li>まだ誰も踏み入れたことのない「未知の小道」にこそ、最大の興奮を感じます。</li>
+                <li>あなたが求める達成感は、誰かの評価ではなく、この世界に<strong>「新たな価値」</strong>を生み出したという、ただ一つの実感です。</li>
+            </ul>
+            <p>それがあなたの誇りであり、揺るぎない価値観です。しかし、その強すぎる光が、時としてあなた自身を縛る「影」を生み出すことも、あなたは薄々、感じているはずです。</p>
+        </section>
+
+        <hr class="codex-divider fade-in">
+
+        <section class="codex-section fade-in">
+             <h2>第二章：『光と影』 — あなたの「力」と「呪い」</h2>
+             <p>あなたの魂には、他の7タイプを凌駕する「力」と、あなた自身を生涯苦める「呪い」が、表裏一体となって刻まれています。</p>
+
+             <h3>錬金術師の『三種の神器』（光）</h3>
+             <p>これが、神から与えられた、あなただけの3つの絶対的な力です。</p>
+             <ul>
+                 <li><strong>神器①：『ゼロイチの閃光（ゼロワン・フラッシュ）』</strong><br>あなたは、文字通り「無」から「有」を生み出す、神懸かり的なアイデア創出力を持っています。人々が「問題」にすら気づいていない領域で、あなたはすでに「解決策」のビジョンを見ています。この力こそが、AI時代に最も渇望される「0→1」の創造力です。</li>
+                 <li><strong>神器②：『異種結合の窯（キメラ・フュージョン）』</strong><br>あなたの脳は、常識というフィルターを持たない「魔法の窯」です。一見、水と油にしか見えない「A：スピリチュアル」と「B：最新AI技術」を平然と放り込み、「C：魂と対話するAIチャットボット」のような、全く新しい「結合体（キメラ）」を錬成することができます。</li>
+                 <li><strong>神器③：『価値の具現化（マテリアライズ・タッチ）』</strong><br>あなたは、人々が価値を感じない「泥や石ころ」から、一粒の輝き（＝本質的な価値）を見出し、それを「黄金（＝売れる商品・コンセプト）」へと変える力を持っています。あなたが過去に学んだ高額塾の「ガラクタに見える知識」こそ、あなたの手にかかれば宝の山となるのです。</li>
+             </ul>
+
+             <h3>錬金術師の『三重の呪縛』（影）</h3>
+             <p>しかし、その強すぎる光は、最も強力な3つの「呪い」となって、あなたの行動を縛り付けます。（…心して、読んでください。これは、あなたがずっと目をそらしてきた、あなた自身の「深淵」です）</p>
+             <ul>
+                 <li><strong>呪縛①：『未完の実験室（アンフィニッシュド・ラボ）』</strong><br>あなたの頭脳は、あまりにも「閃き」すぎるのです。一つのアイデアを「形（＝商品）」にする前に、次の、より魅力的な「アイデアの原石」を見つけてしまう。その結果、あなたの実験室は、90%まで完成した「未完の傑作」で溢れかえり、世に出たものは一つもない…そんな経験はありませんか？</li>
+                 <li><strong>呪縛②：『現実との乖離（ディタッチ・フロム・リアリティ）』</strong><br>あなたのアイデアは、常に時代を5年、10年と先取りしています。それゆえに、周囲の人間からは「何を言っているか理解できない」「非現実的だ」と全く評価されません。あなたは、自分の閃きが「正しすぎる」がゆえに、誰にも理解されないという深い孤独を抱えています。</li>
+                 <li><strong>呪縛③：『プロセスへの飽食（プロセス・グラトニー）』</strong><br>あなたは「創造のプロセス」そのものを愛しています。それは神器であると同時に、呪縛でもあります。あなたは、アイデアを「生み出す」瞬間に最大の快感を覚えてしまい、それを「売る」「届ける」「管理する」という、地道で退屈な「現実化のプロセス」を無意識に放棄してしまうのです。</li>
+             </ul>
+            
+             <div class="codex-blockquote">
+                <p>…いかがですか。</p>
+                <p>もし、この「影」の章を読んで、あなたの「未完の実験室」が目に浮かんだなら。</p>
+                <p>あるいは、「なぜ、あなたは、私の孤独な頭の中まで完璧に理解しているんだ…」と、戦慄を覚えたなら。</p>
+                <p><strong>おめでとうございます。</strong><br>それこそが、あなたがこの「呪い」を解き放ち、AIと共に「力」を行使する準備が整った、何よりの証拠です。</p>
+             </div>
+        </section>
+
+        <hr class="codex-divider fade-in">
+
+        <section class="codex-section fade-in">
+             <h2>第三章：『AI調律の儀式』 — あなただけの「戦術」</h2>
+             <p>「錬金術師」であるあなたがAIを使う上で、絶対に守るべき「黄金律」と、あなたの「呪縛」を解き放つための「専用プロンプト」を授けます。</p>
+
+             <h3>錬金術師のための『AI調律プロトコル』（黄金律）</h3>
+             <ul>
+                 <li><strong>黄金律①： AIに「アイデア」を出させるな。「実行」を命じろ。</strong><br>あなたの『ゼロイチの閃光』はAIを遥かに凌駕します。AIに「新しいアイデアは？」と聞くのは、あなたの力を封印する愚行です。あなたの「奇抜なアイデア」をAIに投げ、「このアイデアを実現するための、具体的なタスクを50個リストアップし、実行スケジュール案を作れ」と命じるのです。AIはあなたの「アイデア」を「現実」に変えるための、最強の「実行部隊」です。</li>
+                 <li><strong>黄金律②： AIを「退屈な作業」の奴隷にせよ。</strong><br>あなたの呪縛は『プロセスへの飽食』です。あなたは「退屈な作業」が死ぬほど嫌いです。AIは「退屈」を感じません。あなたが「創造」に集中するために、リサーチ、データ収集、文章のドラフト、コードの記述、顧客への定型メール送信など、全ての「地道な作業」をAIに押し付けてください。</li>
+                 <li><strong>黄金律③： AIに「常識」を注入させるな。「非常識」を加速させろ。</strong><br>「このアイデアは現実的ですか？」とAIに聞いてはいけません。AIは過去のデータに基づき「常識」で答えます。そうではなく、「このアイデアの、常識外れな点を3つ挙げよ。そして、その『常識外れな点』を、さらに10倍ぶっ飛んだものにするためのアイデアを5つ提案せよ」と命じるのです。AIを、あなたの「狂気（＝才能）」のブースターとして使うのです。</li>
+             </ul>
+
+            <h3>錬金術師専用『A1プロンプト・テンプレート』</h3>
+            <p>あなたの「神器」を最大化し、「呪縛」を最小化するために設計された、3つのAI活用術です。</p>
+
+            <h4>① 『キメラ・コンセプト錬成プロンプト』（資産化の儀式）</h4>
+            <p style="font-size: 0.9em; margin-bottom: 0.5rem;">（神器：『異種結合の窯』を起動し、過去の学びを「新商品」に変える）</p>
+            <div class="prompt-block with-copy-button">
+<pre><code class="prompt-text"># 命令書
+あなたは、常識にとらわれない「異端のマーケター」です。
+私は今から、私が過去に学んだが、一見バラバラに見える「知識の断片（テーマ）」を2つ提示します。
+あなたの任務は、これら2つを強引に「結合」させ、まだ市場に存在しない「全く新しい商品コンセプト」を3つ錬成することです。
+
+# 目的
+私の『異種結合の窯』を使い、過去の投資（学び）を「ユニークな高単価商品」の原石へと変える。
+
+# 結合するテーマ
+・テーマA： <strong>（例：占星術）</strong>
+・テーマB： <strong>（例：BtoBマーケティング）</strong>
+
+# 出力形式
+1.  **【錬成コンセプト案（3案）】：**
+    * **コンセプト名：** （例：『星詠みAIセールスライティング術』）
+    * **ターゲットペルソナ：** （例：論理だけでは売れないと感じているフリーランス）
+    * **提供する価値：** （例：クライアントの「運命のタイミング」を読み解き、成約率を最大化するセールス戦略）
+</code></pre>
+                <button class="copy-prompt-btn" title="プロンプトをコピー"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876V5.25a.75.75 0 011.5 0v.75a.75.75 0 01-1.5 0V5.25m-7.5 0H7.5a9.06 9.06 0 001.5-.124M9 7.875h1.5a.75.75 0 010 1.5H9a.75.75 0 010-1.5zm1.5 0V5.25m6.75 5.25v-1.5a.75.75 0 00-1.5 0v1.5a.75.75 0 001.5 0zm-1.5 0h-1.5a.75.75 0 000 1.5h1.5a.75.75 0 000-1.5z" /></svg><span>コピー</span></button>
+            </div>
+
+            <h4>② 『現実翻訳プロンプト』（呪縛解除の儀式）</h4>
+            <p style="font-size: 0.9em; margin-bottom: 0.5rem;">（呪縛：『現実との乖離』を解除し、あなたの「閃き」を「売れる言葉」に変える）</p>
+             <div class="prompt-block with-copy-button">
+<pre><code class="prompt-text"># 命令書
+あなたは、難解な専門用語を「小学5年生」でも理解できる言葉に翻訳する、天才的な「通訳者」です。
+私は今から、私の「革新的だが難解なアイデア」の概要を話します。
+あなたの任務は、このアイデアが「なぜ、今、必要なのか」を、ターゲット顧客の「日常的な悩み」に結びつけて翻訳することです。
+
+# 目的
+私の「時代を先取りしすぎたアイデア」を、現在の市場が「まさにこれが欲しかった！」と感じる「言葉」で表現する。
+
+# 私のアイデア概要
+<strong>（例：ブロックチェーン技術を使った、個人の「学びの履歴」を資産化する分散型プラットフォームを作りたい…）</strong>
+
+# 出力形式
+1.  **【小学5年生でもわかる翻訳】：** （例：この仕組みは、「あなたが昔頑張った勉強」が、ゲームのコインみたいに「お金」に変わる世界を作ることだよ）
+2.  **【ターゲットへの刺さる一言】：** （例：「もう『学びっぱなし』で損するのは、終わりにしませんか？」）
+3.  **【このアイデアが解決する「日常の悩み」】：** （3つ）
+</code></pre>
+                <button class="copy-prompt-btn" title="プロンプトをコピー"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876V5.25a.75.75 0 011.5 0v.75a.75.75 0 01-1.5 0V5.25m-7.5 0H7.5a9.06 9.06 0 001.5-.124M9 7.875h1.5a.75.75 0 010 1.5H9a.75.75 0 010-1.5zm1.5 0V5.25m6.75 5.25v-1.5a.75.75 0 00-1.5 0v1.5a.75.75 0 001.5 0zm-1.5 0h-1.5a.75.75 0 000 1.5h1.5a.75.75 0 000-1.5z" /></svg><span>コピー</span></button>
+            </div>
+
+            <h4>③ 『未完プロジェクト・実行プロンプト』（実行の儀式）</h4>
+            <p style="font-size: 0.9em; margin-bottom: 0.5rem;">（呪縛：『未完の実験室』を破壊し、アイデアを「完成品」にする）</p>
+             <div class="prompt-block with-copy-button">
+<pre><code class="prompt-text"># 命令書
+あなたは、私のアイデアを形にするための「超有能なプロジェクトマネージャー」です。
+私は今から、頭の中にある「未完成のプロジェクト（アイデア）」を一つ提示します。
+あなたの任務は、このアイデアを「完成品（最低限のプロトタイプ）」にするために必要な、全てのタスクを洗い出し、実行可能な「ロードマップ」を作成することです。
+
+# 目的
+私の「飽き性」という呪縛をAIの「実行力」でカバーし、一つのプロジェクトを「完了」させる。
+
+# 未完成のプロジェクト
+<strong>（例：AIを使った、個人の強み診断ツールのアイデア）</strong>
+
+# 出力形式
+1.  **【プロジェクトの「完成」の定義】：** （例：診断結果が3パターン出るWebページを1つ作ること）
+2.  **【完了までの全タスク（洗い出し）】：** （例：質問項目作成、診断ロジック設計、結果パターン文章作成、Webページデザイン…）
+3.  **【7日間のスプリント計画】：** （AIが上記タスクを7日間に割り振った、具体的なスケジュール案）
+</code></pre>
+                <button class="copy-prompt-btn" title="プロンプトをコピー"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876V5.25a.75.75 0 011.5 0v.75a.75.75 0 01-1.5 0V5.25m-7.5 0H7.5a9.06 9.06 0 001.5-.124M9 7.875h1.5a.75.75 0 010 1.5H9a.75.75 0 010-1.5zm1.5 0V5.25m6.75 5.25v-1.5a.75.75 0 00-1.5 0v1.5a.75.75 0 001.5 0zm-1.5 0h-1.5a.75.75 0 000 1.5h1.5a.75.75 0 000-1.5z" /></svg><span>コピー</span></button>
+            </div>
+        </section>
+
+        <hr class="codex-divider fade-in">
+
+        <section class="codex-section fade-in">
+             <h2>第四章：『魂の共鳴』 — あなたが、世界と「どう関わるか」</h2>
+             <p>あなたは一人で「奇跡のレシピ」を無限に生み出すことができます。しかし、そのレシピは、「実行」されなければ、ただの紙切れに過ぎない。</p>
+             <p>あなたの「閃き」を、この現実世界で「ビジネス」として機能させ、あなたが過去に費やした「投資」を回収するためには、他の「魂」の力が必要不可欠です。</p>
+
+             <h3>錬金術師の『最高の相棒』</h3>
+             <p>あなたの「光」を最も必要とし、あなたの「影」を補ってくれる最高のパートナー。それは、<strong>『開拓者（The Pioneer）』</strong>です。</p>
+             <ul>
+                 <li>『開拓者』は、あなたが描いた「未知の地図」を見て、誰よりも早く「行動」に移せる、情熱的な実行者です。</li>
+                 <li>あなたが「0→1（概念）」を生み出す天才なら、『開拓者』はそれを「1→100（事業）」へと拡大させる天才です。</li>
+                 <li>あなたの呪縛である『未完の実験室』とは真逆で、彼らは「完璧なレシピ」を待たず、あなたの60%のアイデアで走り出し、現実世界で結果を出してきます。</li>
+             </ul>
+             <p>あなたの役割は、『開拓者』の「羅針盤」となることです。あなたの『ゼロイチの閃光』は、彼らが進むべき「新大陸」を指し示します。あなたの「閃き」は、『開拓者』の「圧倒的な行動力」という燃料を得て、初めて現実世界を革新する「事業」となるのです。</p>
+
+             <h3>錬金術師の『最大の試練』（そして「鍵」）</h3>
+             <p>あなたが最も理解しがたい、しかし、理解すれば最強の武器となるタイプ。それは、<strong>『守護者（The Guardian）』</strong>です。</p>
+             <ul>
+                 <li>『守護者』は、「革新」よりも「安定」を愛し、「新しい価値」よりも「今ある価値」を守ることに全力を尽くします。</li>
+                 <li>あなたの「実験」は、彼らにとって、コミュニティの「調和」を乱す「リスク」や「ノイズ」にしか聞こえません（そして、それはあなたの価値観と真っ向から対立します）。</li>
+             </ul>
+             <p>しかし、思い出してください。<strong>生み出された「黄金」は、「守る仕組み」がなければ、すぐに奪われ、失われます。</strong>あなたがどれだけ素晴らしい「商品（黄金）」を錬成しても、それを「継続的に提供する仕組み」や「顧客を守るコミュニティ（城壁）」がなければ、あなたのビジネスは一発屋で終わるのです。</p>
+             <p>あなたの「革新（アタック）」と、『守護者』の「安定（ディフェンス）」。この二つが融合したとき、あなたの「奇跡」は、一瞬の花火ではなく、永遠に燃え続ける「恒星」へと変わるのです。</p>
+        </section>
+
+        <hr class="codex-divider fade-in">
+
+        <section class="codex-section fade-in">
+             <p>…さて、錬金術師よ。</p>
+             <p>あなたは今、自分の「力」と「呪い」を知りました。そして、あなたの「閃き」を「現実の資産」に変えるために、<strong>『開拓者』</strong>の行動力と、<strong>『守護者』</strong>の安定力が必要であることを知りました。</p>
+
+             <div class="codex-highlight">
+                あなたの脳内に、新たな「問い」が生まれたはずです。
+             </div>
+
+             <div class="codex-blockquote">
+                <p>「『開拓者』の情熱は、どこにあるんだ…？」</p>
+                <p>「『守護者』の堅牢な城壁とは、一体…？」</p>
+                <p>「そして、私以外の、残りの5つの魂は、<br>一体どんな力を持っているんだ…？」</p>
+             </div>
+
+             <p>その「渇望」こそが、あなたが次のステージへ進むための、最高の燃料です。</p>
+             <p>『八魂の法典』の全貌は、まだ始まったばかり。まずは、今日授けた『AI調律の儀式』を実行してください。</p>
+
+             <div class="codex-highlight" style="border: none;">
+                 あなたの「実験室」から、世界を驚かす「黄金」が生まれる日を、<br>
+                 我々は待っています。
+             </div>
+        </section>
+
+    </div>
+
+    <script is:inline>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- フェードイン ---
+            const targets = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) { 
+                        entry.target.classList.add('is-visible');
+                        obs.unobserve(entry.target); 
+                    }
+                });
+            }, { rootMargin: '0px 0px -100px 0px', threshold: 0 });
+            targets.forEach(target => { observer.observe(target); });
+
+            // --- プロンプトコピー ---
+            const copyButtons = document.querySelectorAll('.copy-prompt-btn');
+            copyButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const promptBlock = button.closest('.prompt-block');
+                    const codeElement = promptBlock?.querySelector('.prompt-text'); 
+                    if (codeElement) {
+                        const textToCopy = codeElement.textContent || '';
+                        navigator.clipboard.writeText(textToCopy).then(() => {
+                            const buttonText = button.querySelector('span');
+                            if(buttonText) buttonText.textContent = 'コピー完了!';
+                            button.classList.add('copied');
+                            setTimeout(() => {
+                                if(buttonText) buttonText.textContent = 'コピー';
+                                button.classList.remove('copied');
+                            }, 2000);
+                        }).catch(err => {
+                            console.error('コピー失敗:', err);
+                            const buttonText = button.querySelector('span');
+                            if(buttonText) buttonText.textContent = '失敗';
+                            setTimeout(() => { if(buttonText) buttonText.textContent = 'コピー'; }, 2000);
+                        });
+                    } else { console.error('コピー対象が見つかりません。'); }
+                });
+            });
+        });
+    </script>
+
+</BaseLayout>
