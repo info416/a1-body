@@ -971,3 +971,18 @@ a.card-link {
 .reading-modal-overlay.visible .reading-modal-container {
     transform: translateY(0);
 }
+
+/* ==========================================================================
+   Site Footer Copyright
+   ========================================================================== */
+.site-footer {
+    padding: 2rem 1rem;
+    text-align: center;
+    font-size: 0.85em;
+    color: var(--color-text-sub);
+    border-top: 1px solid var(--color-border);
+    margin-top: 4rem; /* フッターの上のコンテンツとの間に余白を確保 */
+}
+.site-footer p {
+    margin: 0;
+}
