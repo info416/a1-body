@@ -25,7 +25,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
                 <div class="program-content">
                     <h1>序章：『調律師マインド』の覚醒</h1>
-                    <p class="text-xl text-gray-400 mb-8 placeholder-text">【WP: テキスト_序章_導入】新しい時代のパラダイムを提示する、唯一無二のセミナーへようこそ。</p>
+                    <p class="text-xl text-gray-400 mb-8 placeholder-text">新しい時代のパラダイムを提示する、「AI調律」へようこそ。</p>
 
                     <nav class="program-tabs">
                         <a href="chapter-00" class="tab-link active">序章</a>
@@ -48,7 +48,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                     </div>
                     </div>
 
-                    <div class="accordion-container">
+                    <!-- <div class="accordion-container">
                         <button class="accordion-toggle">
                             <span>別フォーマットで学習する</span>
                             <span class="icon">+</span>
@@ -61,7 +61,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                                 <span class="icon">🖨️</span> <a href="#" download>印刷用マニュアル（PDF）</a>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
 
                     <div class="flex justify-end mt-8">
                         <a href="chapter-zero" class="btn btn-primary">第零章へ進む &rarr;</a>
@@ -72,7 +72,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         // Accordion Script
         document.querySelectorAll('.accordion-toggle').forEach(button => {
             button.addEventListener('click', () => {
-                const panel = button.nextElementSibling;
+                const panel = button.nextElementSibling as HTMLElement;
                 button.classList.toggle('active');
                 if (panel.style.maxHeight) {
                     panel.style.maxHeight = null;

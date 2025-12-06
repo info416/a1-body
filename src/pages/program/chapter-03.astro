@@ -25,7 +25,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 </style>
                 <div class="program-content">
                     <h1>第三章：商品の調律</h1>
-                    <p class="text-xl text-gray-400 mb-8 placeholder-text">【WP: テキスト_第三章_導入】あなたの内に眠る「金脈」を掘り起こし、換金可能な「商品」という形を与える。</p>
+                    <p class="text-xl text-gray-400 mb-8 placeholder-text">あなたの内に眠る「金脈」を掘り起こし、換金可能な「商品」という形を与える。</p>
                     
                     <nav class="program-tabs">
                         <a href="chapter-00" class="tab-link">序章</a>
@@ -67,10 +67,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                         </iframe>
                     </div>
 
-                    <div class="accordion-container">
+                    <!--<div class="accordion-container">
                         <button class="accordion-toggle"><span>別フォーマットで学習する</span><span class="icon">+</span></button>
                         <div class="accordion-panel"><div class="download-link-item"><span class="icon">🎧</span> <a href="#" download>音声ファイル（MP3）</a></div><div class="download-link-item"><span class="icon">🖨️</span> <a href="#" download>印刷用マニュアル（PDF）</a></div></div>
-                    </div>
+                    </div>-->
 
                     <div class="flex justify-between mt-8">
                         <a href="chapter-02" class="btn">&larr; 第二章へ戻る</a>
@@ -86,7 +86,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         // Accordion Script
         document.querySelectorAll('.accordion-toggle').forEach(button => {
             button.addEventListener('click', () => {
-                const panel = button.nextElementSibling;
+                const panel = button.nextElementSibling as HTMLElement;
                 button.classList.toggle('active');
                 if (panel.style.maxHeight) {
                     panel.style.maxHeight = null;
@@ -105,7 +105,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             readMoreBtn.addEventListener('click', () => {
                 readingModalOverlay.style.opacity = '1';
                 readingModalOverlay.style.visibility = 'visible';
-                const container = readingModalOverlay.querySelector('.reading-modal-container');
+                const container = readingModalOverlay.querySelector('.reading-modal-container') as HTMLElement;
                 if(container) container.style.transform = 'translateY(0)';
             });
         }
@@ -113,7 +113,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         function closeReadingModal() {
             readingModalOverlay.style.opacity = '0';
             readingModalOverlay.style.visibility = 'hidden';
-            const container = readingModalOverlay.querySelector('.reading-modal-container');
+            const container = readingModalOverlay.querySelector('.reading-modal-container') as HTMLElement;
             if(container) container.style.transform = 'translateY(20px)';
         }
 

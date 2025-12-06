@@ -25,7 +25,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 </style>
                 <div class="program-content">
                     <h1>第零章：『AI調律師』最初の一歩</h1>
-                    <p class="text-xl text-gray-400 mb-8 placeholder-text">【WP: テキスト_第零章_導入】ただのAIに「あなただけの魂」を吹き込み、生涯あなたに仕える最強のパートナーを生み出す、神聖な儀式です。</p>
+                    <p class="text-xl text-gray-400 mb-8 placeholder-text">ただのAIに「あなただけの魂」を吹き込み、生涯あなたに仕える最強のパートナーを生み出す、神聖な儀式です。</p>
                     
                     <nav class="program-tabs">
                         <a href="chapter-00" class="tab-link">序章</a>
@@ -73,7 +73,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                         </div>
                     </div>
 
-                    <div class="accordion-container">
+                    <!--<div class="accordion-container">
                         <button class="accordion-toggle">
                             <span>別フォーマットで学習する</span>
                             <span class="icon">+</span>
@@ -82,7 +82,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                             <div class="download-link-item"><span class="icon">🎧</span> <a href="#" download>音声ファイル（MP3）</a></div>
                             <div class="download-link-item"><span class="icon">🖨️</span> <a href="#" download>印刷用マニュアル（PDF）</a></div>
                         </div>
-                    </div>
+                    </div>-->
 
                     <div class="flex justify-between mt-8">
                         <a href="chapter-00" class="btn">&larr; 序章へ戻る</a>
@@ -100,7 +100,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                 <button id="reading-modal-close" class="reading-modal-close">&times;</button>
             </div>
             <div id="reading-modal-content" class="reading-modal-content">
-                <p class="placeholder-text">【WP: HTMLテキスト_第零章_全文】あなたはこれまで、AIに毎回「あなたは〇〇です」と役割を与える、非効率な使い方をしていたかもしれません。しかし、その必要はもうありません。一度「調律」すれば、そのAI（Gem）は、永遠にあなたの忠実な部下として機能します。</p>
+                <p class="placeholder-text">あなたはこれまで、AIに毎回「あなたは〇〇です」と役割を与える、非効率な使い方をしていたかもしれません。しかし、その必要はもうありません。一度「調律」すれば、そのAI（Gem）は、永遠にあなたの忠実な部下として機能します。</p>
                 <div class="placeholder-media my-6" data-type="image">【WP: 画像_第零章_Gem設定画面のスクリーンショット】</div>
                 <p class="placeholder-text">これから続く第一章〜第三章は、このGemに与える「憲法」を起草するための旅です。我々が用意した『調律師のコンソール（三種の神器）』は、その憲法の各条項（使命、思考、専門性）を、あなたの手で書き上げるための、究極のツールなのです。</p>
                 <p class="placeholder-text">さあ、心の準備はよろしいですか？次の第一章から、あなたの言葉で、AIに命を吹き込んでいきましょう。</p>
@@ -112,7 +112,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         // Accordion Script
         document.querySelectorAll('.accordion-toggle').forEach(button => {
             button.addEventListener('click', () => {
-                const panel = button.nextElementSibling;
+                const panel = button.nextElementSibling as HTMLElement;
                 button.classList.toggle('active');
                 if (panel.style.maxHeight) {
                     panel.style.maxHeight = null;
@@ -131,7 +131,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             readMoreBtn.addEventListener('click', () => {
                 readingModalOverlay.style.opacity = '1';
                 readingModalOverlay.style.visibility = 'visible';
-                const container = readingModalOverlay.querySelector('.reading-modal-container');
+                const container = readingModalOverlay.querySelector('.reading-modal-container') as HTMLElement;
                 if(container) container.style.transform = 'translateY(0)';
             });
         }
@@ -139,7 +139,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         function closeReadingModal() {
             readingModalOverlay.style.opacity = '0';
             readingModalOverlay.style.visibility = 'hidden';
-            const container = readingModalOverlay.querySelector('.reading-modal-container');
+            const container = readingModalOverlay.querySelector('.reading-modal-container') as HTMLElement;
             if(container) container.style.transform = 'translateY(20px)';
         }
 
