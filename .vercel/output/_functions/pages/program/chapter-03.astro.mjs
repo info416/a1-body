@@ -1,0 +1,46 @@
+import { e as createComponent, l as renderComponent, r as renderTemplate, m as maybeRenderHead, o as renderScript } from '../../chunks/astro/server_bBGIRxX7.mjs';
+import 'kleur/colors';
+import { $ as $$BaseLayout } from '../../chunks/BaseLayout_BZFEmLUr.mjs';
+export { renderers } from '../../renderers.mjs';
+
+const $$Chapter03 = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`${renderComponent($$result, "BaseLayout", $$BaseLayout, { "title": "\u7B2C\u4E09\u7AE0 - \u81EA\u5DF1\u9032\u5316\u30D7\u30ED\u30B0\u30E9\u30E0" }, { "default": ($$result2) => renderTemplate` <style>
+    .sacred-iframe-container {
+        position: relative;
+        width: 100%;
+        height: 70vh; /* 画面の高さの70%。ここは調整可能 */
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 3rem;
+    }
+    .sacred-iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+</style> ${maybeRenderHead()}<div class="program-content"> <h1>第三章：商品の調律</h1> <p class="text-xl text-gray-400 mb-8 placeholder-text">あなたの内に眠る「金脈」を掘り起こし、換金可能な「商品」という形を与える。</p> <nav class="program-tabs"> <a href="chapter-00" class="tab-link">序章</a> <a href="chapter-zero" class="tab-link">第零章</a> <a href="chapter-01" class="tab-link">第一章</a> <a href="chapter-02" class="tab-link">第二章</a> <a href="chapter-03" class="tab-link active">第三章</a> <a href="chapter-04" class="tab-link">第四章</a> <a href="cockpit" class="tab-link">次のステージへ</a> </nav> <div class="default-view"> <div class="part-a mb-12"> <h2 class="text-2xl font-bold mb-4">パートA：物語コンテンツ</h2> <div class="sacred-iframe-container"> <iframe src="https://ai-verve.net/first/prog/03/a.html" class="sacred-iframe" title="聖典：第一章Aパート">
+                        </iframe> </div></div> <div class="part-b"><h2 class="text-2xl font-bold mb-4">パートB：実践コンテンツ</h2> <div class="sacred-iframe-container"> <iframe src="https://ai-verve.net/first/prog/03/b.html" class="sacred-iframe" title="聖典：第一章Aパート">
+                        </iframe> </div> <div class="html-manual"> <h3 class="text-xl font-bold mb-4">実践の手引き：商品コンセプトの言語化</h3> <div class="sacred-iframe-container"> <iframe src="https://ai-verve.net/first/prog/03/c.html" class="sacred-iframe" title="聖典：第一章Aパート">
+                        </iframe> </div> <!--<div class="accordion-container">
+                        <button class="accordion-toggle"><span>別フォーマットで学習する</span><span class="icon">+</span></button>
+                        <div class="accordion-panel"><div class="download-link-item"><span class="icon">🎧</span> <a href="#" download>音声ファイル（MP3）</a></div><div class="download-link-item"><span class="icon">🖨️</span> <a href="#" download>印刷用マニュアル（PDF）</a></div></div>
+                    </div>--> <div class="flex justify-between mt-8"> <a href="chapter-02" class="btn">&larr; 第二章へ戻る</a> <a href="chapter-04" class="btn btn-primary">最終章へ進む &rarr;</a> </div> </div> <div id="reading-modal-overlay" class="reading-modal-overlay"> <div class="reading-modal-container"><div class="reading-modal-header"><h2 id="reading-modal-title" class="reading-modal-title">実践の手引き：商品コンセプトの言語化</h2><button id="reading-modal-close" class="reading-modal-close">&times;</button></div><div id="reading-modal-content" class="reading-modal-content"><p class="placeholder-text">【WP: HTMLテキスト_第三章_全文】あなたの頭の中に眠る、過去の経験や知識という名の巨大な「金脈」。 それを掘り起こし、人々に価値として届けるための企画・コンセプト設計のフレームワークを伝授します。 そして、『調律師のコンソール』で「高単価商品コンセプトAI」を使い、あなたの価値を具体的な商品へと昇華させましょう。 あなただけのユニークな価値提案（UVP）を定義し、顧客が思わず手に取りたくなるような魅力的な商品コンセプトを創造します。</p><br><a href="../console.html" target="_blank" class="btn btn-primary mt-4">コンソールで「商品」を起草する</a></div></div> </div> ${renderScript($$result2, "C:/Users/USER/a1-body/src/pages/program/chapter-03.astro?astro&type=script&index=0&lang.ts")} </div></div></div>` })}`;
+}, "C:/Users/USER/a1-body/src/pages/program/chapter-03.astro", void 0);
+
+const $$file = "C:/Users/USER/a1-body/src/pages/program/chapter-03.astro";
+const $$url = "/program/chapter-03";
+
+const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    __proto__: null,
+    default: $$Chapter03,
+    file: $$file,
+    url: $$url
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const page = () => _page;
+
+export { page };

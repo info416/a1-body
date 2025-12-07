@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="自動化レシピの間３">
+    <div class="content-wrapper">
+        <div id="protected-content" style="display: none;">
+            <h1 class="page-title">自動化レシピの間３</h1>
+            <p>（ここに、レシピ１の、叡智に満ちたコンテンツを記述する）</p>
+            <br>
+            <a href="/recipes/recipe-03" class="btn btn-primary">次の間へ進む</a>
+        </div>
+
+        <div id="password-gate">
+            <h2 class="text-2xl font-bold text-center">入室許可を求めよ</h2>
+            <p class="text-center mt-2 text-gray-400">この聖域に入るための、合言葉を告げよ。</p>
+            <form id="password-form" class="mt-8 max-w-sm mx-auto">
+                <input id="password-input" type="password" class="form-input" required>
+                <button type="submit" class="btn btn-primary w-full mt-4">入室する</button>
+                <p id="password-error" class="text-red-400 text-center mt-4" style="display: none;"></p>
+            </form>
+        </div>
+    </div>
+
+    <script is:inline>
+    // この部屋の番号
+    const pageNumber = 3;
+    // 魂の記憶装置に使う、この部屋専用の「鍵」の名前
+    const storageKey = 'recipe_access_' + pageNumber;
+
+    const form = document.getElementById('password-form');
+    const passwordInput = document.getElementById('password-input');
+    const errorDisplay = document.getElementById('password-error');
+    const gate = document.getElementById('password-gate');
+    const content = document.getElementById('protected-content');
+    
+    // --- 記憶の確認 ---
+    // ページ訪問時、魂の記憶装置に「許可証」が刻まれているか確認する
+    if (localStorage.getItem(storageKey) === 'granted') {
+        gate.style.display = 'none';
+        content.style.display = 'block';
+    }
+
+    // --- 認証の儀式 ---
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorDisplay.style.display = 'none';
+        
+        const response = await fetch('/api/check-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: passwordInput.value, page: pageNumber })
+        });
+
+        if (response.ok) {
+            // 認証成功。魂の記憶装置に「許可」を刻み込む
+            localStorage.setItem(storageKey, 'granted');
+            gate.style.display = 'none';
+            content.style.display = 'block';
+        } else {
+            errorDisplay.textContent = '合言葉が違うようだ。';
+            errorDisplay.style.display = 'block';
+        }
+    });
+</script>
+</BaseLayout>

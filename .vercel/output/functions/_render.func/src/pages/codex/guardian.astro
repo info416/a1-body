@@ -1,0 +1,380 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// 八魂の定義（各ページで共通して使う）
+const codexTypes = [
+    { id: 'magician', name: '魔術師', icon: '🪄', color: '#9b59b6', secondaryColor: '#e0cff0', path: '/codex/magician' },
+    { id: 'artisan', name: '職人', icon: '🛠️', color: '#3498db', secondaryColor: '#d6eaf8', path: '/codex/artisan' },
+    { id: 'sage', name: '賢者', icon: '🧠', color: '#f1c40f', secondaryColor: '#fef9e7', path: '/codex/sage' }, 
+    { id: 'innovator', name: '開拓者', icon: '🚀', color: '#e74c3c', secondaryColor: '#fadbd8', path: '/codex/innovator' },
+    { id: 'empath', name: '共感者', icon: '💖', color: '#2ecc71', secondaryColor: '#d5f5e3', path: '/codex/empath' },
+    { id: 'alchemist', name: '錬金術師', icon: '🧪', color: '#e67e22', secondaryColor: '#fdebd0', path: '/codex/alchemist' },
+    { id: 'guardian', name: '守護者', icon: '🛡️', color: '#1abc9c', secondaryColor: '#d1f2eb', path: '/codex/guardian' }, // 守護者の色を設定
+    { id: 'mediator', name: '調停者', icon: '⚖️', color: '#5dade2', secondaryColor: '#d6eaf8', path: '/codex/mediator' },
+];
+
+// このページの魂ID
+const currentPageId = 'guardian';
+const currentType = codexTypes.find(type => type.id === currentPageId); 
+---
+<BaseLayout title={`八魂の法典：${currentType?.name || ''}の章`}>
+
+    <Fragment slot="head">
+        <style define:vars={{ currentType, codexTypes }}>
+            .codex-container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 4rem 1rem 6rem 1rem;
+            }
+            /* --- タブ風ナビゲーション --- */
+            .codex-tabs-nav {
+                display: flex; flex-wrap: wrap; justify-content: center;
+                gap: 0.5rem; margin-bottom: 3rem; padding-bottom: 1rem;
+                border-bottom: 1px solid var(--color-border);
+            }
+            .codex-tab-link {
+                display: flex; align-items: center; padding: 0.75rem 1.25rem;
+                border: 1px solid var(--color-border); border-radius: 8px;
+                background-color: transparent; color: var(--color-text-sub);
+                text-decoration: none; transition: all 0.3s ease;
+                font-weight: 600; opacity: 0.7;
+            }
+            .codex-tab-link:hover { opacity: 1; background-color: rgba(255, 255, 255, 0.05); }
+            .codex-tab-icon { font-size: 1.2rem; margin-right: 0.5rem; line-height: 1; }
+            .codex-tab-link.is-active {
+                opacity: 1; cursor: default;
+                background-color: var(--codex-primary-color, #1abc9c)20; /* 守護者の色をデフォルトに */
+                color: var(--codex-secondary-color, #d1f2eb);
+                border-color: var(--codex-primary-color, #1abc9c);
+                box-shadow: 0 0 10px var(--codex-primary-color, #1abc9c)80;
+            }
+             /* --- 法典内容のスタイル --- */
+            .codex-main-title-container { text-align: center; margin-bottom: 2.5rem; }
+            .codex-main-title { font-size: 2.5rem; font-weight: 900; color: var(--color-text-main); margin-bottom: 0.5rem; letter-spacing: 0.05em; }
+            .codex-main-subtitle { font-size: 1rem; color: var(--color-text-sub); margin: 0; }
+            .codex-header { text-align: center; margin-bottom: 4rem; padding-bottom: 2rem; border-bottom: 1px solid var(--color-border); }
+            .codex-icon { font-size: 3rem; display: block; margin-bottom: 1rem; color: var(--codex-primary-color, #1abc9c); text-shadow: 0 0 15px var(--codex-primary-color, #1abc9c); }
+            .codex-title { font-size: 2.2rem; font-weight: 900; color: var(--codex-secondary-color, #d1f2eb); margin-bottom: 0.5rem; }
+            .codex-subtitle { font-size: 1.1rem; color: var(--color-text-sub); }
+            .codex-section { margin-bottom: 4rem; }
+            .codex-section h2 { font-size: 1.8rem; font-weight: 700; color: var(--codex-secondary-color, #d1f2eb); margin-bottom: 2rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--color-border); display: flex; align-items: center; }
+            .codex-section h2::before { content: '📜'; font-size: 1.5rem; margin-right: 0.75rem; opacity: 0.8; }
+            .codex-section h3 { font-size: 1.4rem; font-weight: 700; color: var(--color-text-main); margin-top: 2.5rem; margin-bottom: 1rem; position: relative; padding-left: 1.2em; }
+            .codex-section h3::before { content: '✨'; position: absolute; left: 0; top: 2px; color: var(--codex-primary-color, #1abc9c); opacity: 0.9; }
+            .codex-section p { font-size: 1.1rem; line-height: 1.9; color: var(--color-text-sub); margin-bottom: 1.5rem; }
+            .codex-section p strong, .codex-section p b { color: var(--codex-secondary-color, #d1f2eb); font-weight: 700; }
+            .codex-section ul { list-style: none; padding-left: 0; margin: 1.5rem 0; }
+            .codex-section li { margin-bottom: 0.75rem; padding-left: 1.5rem; position: relative; color: var(--color-text-sub); }
+            .codex-section li::before { content: '•'; position: absolute; left: 0; color: var(--codex-primary-color, #1abc9c); font-weight: bold; }
+            .codex-section li strong { color: var(--color-text-main); }
+            .codex-blockquote { background-color: var(--codex-primary-color, #1abc9c)1A; border-left: 4px solid var(--codex-primary-color, #1abc9c); margin: 2.5rem 0; padding: 1.5rem 2rem; font-style: normal; }
+            .codex-blockquote p { font-size: 1.1rem; color: var(--color-text-main); line-height: 1.7; margin-bottom: 1rem; }
+            .codex-blockquote p:last-child { margin-bottom: 0; }
+            .codex-highlight { color: var(--codex-primary-color, #1abc9c); font-size: 1.3rem; font-weight: 700; text-align: center; padding: 2.5rem 0; line-height: 1.7; margin: 2rem 0; border-top: 1px dashed var(--color-border); border-bottom: 1px dashed var(--color-border); }
+            .prompt-block { background-color: #222; border: 1px solid var(--color-border); border-radius: 8px; padding: 1.5rem; margin: 2rem 0; overflow-x: auto; position: relative; }
+            .prompt-block.with-copy-button { padding-right: 4rem; }
+            .prompt-block pre { margin: 0; padding: 0; background: none; border: none; color: var(--color-text-sub); font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace; font-size: 0.95em; white-space: pre-wrap; word-wrap: break-word; }
+            .prompt-block code.prompt-text { display: block; }
+            .prompt-block strong { color: var(--codex-secondary-color, #d1f2eb); }
+            .copy-prompt-btn { position: absolute; top: 1rem; right: 1rem; background-color: var(--color-border); color: var(--color-text-sub); border: none; border-radius: 6px; padding: 0.5rem 0.75rem; cursor: pointer; display: flex; align-items: center; gap: 0.4rem; font-size: 0.85em; opacity: 0.7; transition: all 0.2s ease; }
+            .copy-prompt-btn:hover { opacity: 1; background-color: var(--codex-primary-color, #1abc9c); color: var(--color-bg); }
+            .copy-prompt-btn svg { margin-top: -1px; }
+            hr.codex-divider { border: 0; height: 1px; background-image: linear-gradient(to right, transparent, var(--codex-primary-color, #1abc9c)80, transparent); margin: 4rem 0; }
+            .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+            .fade-in.is-visible { opacity: 1; transform: translateY(0); }
+            .fade-in.delay-1 { transition-delay: 0.1s; }
+            /* ... 他のスタイル ... */
+            @media print { /* 印刷スタイル */
+                 .codex-tabs-nav { display: none; }
+                 .codex-container { max-width: none; padding: 1in; margin: 0; }
+                 .copy-prompt-btn { display: none; }
+                 /* ... 他の印刷スタイル調整 ... */
+                 .fade-in { opacity: 1; transform: none; }
+            }
+        </style>
+    </Fragment>
+
+    <div class="codex-container" style={`--codex-primary-color: ${currentType?.color}; --codex-secondary-color: ${currentType?.secondaryColor};`}>
+
+        <div class="codex-main-title-container fade-in">
+            <h1 class="codex-main-title">八魂の法典</h1>
+            <p class="codex-main-subtitle">（The Codex of Eight Souls）：オラクル別AI調律</p>
+        </div>
+
+        <nav class="codex-tabs-nav fade-in delay-1">
+            {codexTypes.map(type => (
+                <a 
+                    href={`/codex/${type.id}`} 
+                    class={`codex-tab-link ${type.id === currentPageId ? 'is-active' : ''}`} 
+                    data-type={type.id}
+                >
+                    <span class="codex-tab-icon">{type.icon}</span>
+                    <span>{type.name}</span>
+                </a>
+            ))}
+        </nav>
+
+        <header class="codex-header fade-in">
+            <span class="codex-icon">{currentType?.icon || '🛡️'}</span>
+            <h1 class="codex-title">{`『${currentType?.name || '守護者'}の法典』`}</h1>
+            <p class="codex-subtitle">(The Codex of The Guardian)</p>
+            <p style="margin-top: 1.5rem; color: var(--color-text-main);">おかえりなさい、慈悲深き『守護者』よ。</p>
+        </header>
+
+        <section class="codex-section fade-in">
+             <p>おかえりなさい。<br>ここは、あなたの「揺るぎない誠実さ」が、ようやく報われるための聖域（サンクチュアリ）です。あなたの任務は、ここから始まります。</p>
+             <p>あなたは、これまで、嵐の中で「灯火」を守り、大切な人々が安らげる「揺りかご」を創造するために戦ってこられました。ある人はそれを「保守的だ」と笑ったかもしれません。ある人は「もっとリスクを取れ」と、あなたの堅実さを軽んじたかもしれません。</p>
+
+             <div class="codex-highlight">
+                 我々は、誰一人として、あなたを否定しない。
+             </div>
+
+             <p>あなたが過去に学んだコミュニティ運営のノウハウも、万が一に備えてきた緻密な計画も、その全てが「臆病」や「負債」などでは断じてない。それこそが、AIという名の「最強の監視塔」を手に入れたあなたが、他の誰にも築けない「崩れない帝国（コミュニティ）」を築き上げるための、最も貴重な<strong>「資産」</strong>なのです。</p>
+             <p>さあ、始めましょう。あなたの魂の「完全な取り扱い説明書」を。あなたの「守る力」が、なぜこの混沌の時代に最も必要とされるかを知るための、最初の儀式です。</p>
+        </section>
+
+        <hr class="codex-divider fade-in">
+
+        <section class="codex-section fade-in">
+            <h2>第一章：『真実の姿』 — あなたが、あなたである「理由」</h2>
+            
+            <h3>守護者の『神話』：なぜ、あなたは召喚されたのか</h3>
+            <p>かつて、世界は「革新」と「破壊」という名の嵐に飲み込まれました。人々は「新しいもの」に熱狂し、次々と荒野を切り拓きましたが、その足元で、築き上げたはずの「居場所」が崩れ去っていくことに気づかずにいました。誰もが「理想の未来」を欲しがりながら、誰も「今日という一日」を守れずにいたのです。</p>
+            <p>その熱狂の時代に、あなたは召喚されました。</p>
+            
+            <div class="codex-blockquote">
+                <p>あなたは、熱狂の中でただ一人、嵐の兆候を読み、来るべき「最悪の現実」に備えられる存在。</p>
+                <p>あなたは、人々が安心して「ただいま」と帰ってこられる、最後の「砦」を築くことができる存在。</p>
+            </div>
+
+            <p>あなたの使命は、<strong>「守護」</strong>です。人々が調和し、協力しあう「共同体」を創造し、AI時代という予測不能な嵐の中で、その「灯火」が消えないように守り抜くこと。</p>
+            <p>AIの時代が到来し、誰もが「新しいアイデア」を瞬時に生み出せるようになった今、人々は「安心して挑戦できる居場所」を求めています。だからこそ、あなたの力が必要なのです。</p>
+
+            <div class="codex-blockquote">
+                <p>AIは「革新的なプラン」を提示できても、「安心できるコミュニティ」は運営できない。</p>
+                <p>AIは「リスク」を計算できても、「仲間」を守るという「覚悟」は持てない。</p>
+            </div>
+
+            <p>あなたの役割は、AIという最強の城壁デザイナーと共に、この変化の激しい世界に「揺るぎない秩序」と「安らぎの聖域」を創造すること。あなたが築く「揺りかご」こそが、人々が絶望の嵐から逃れる、唯一の「砦」となるのです。</p>
+
+            <h3>守護者の『核心的価値観』：譲れない、たった一つのもの</h3>
+            <p>あなたは、人生で何を犠牲にしてでも、「共同体の調和」と「仲間との穏やかな時間」を守ろうとします。</p>
+            <ul>
+                <li>夢物語のビジョンよりも、「避けるべき最悪の現実」を回避する具体的な戦略に心を動かされます。</li>
+                <li>任務を遂行するためには、感情論ではなく、最短で「目標を達成する」ための合理性を優先します。（これは『共感者』との明確な違いです）</li>
+                <li>一人のカリスマが導く物語より、無数の人々が協力し合う「調和の物語」を信じます。</li>
+                <li>あなたが求める達成感は、誰かの賞賛ではなく、困難な目標を<strong>「達成した」</strong>という、ただ一つの「客観的な事実」です。</li>
+            </ul>
+            <p>それがあなたの誇りであり、揺るぎない価値観です。しかし、その強すぎる光が、時としてあなた自身を縛る「影」を生み出すことも、あなたは薄々、感じているはずです。</p>
+        </section>
+
+        <hr class="codex-divider fade-in">
+
+        <section class="codex-section fade-in">
+             <h2>第二章：『光と影』 — あなたの「力」と「呪い」</h2>
+             <p>あなたの魂には、他の7タイプを凌駕する「力」と、あなた自身を生涯苦める「呪い」が、表裏一体となって刻まれています。</p>
+
+             <h3>守護者の『三種の神器』（光）</h3>
+             <p>これが、神から与えられた、あなただけの3つの絶対的な力です。</p>
+             <ul>
+                 <li><strong>神器①：『リスクの予見者（カサンドラ・アイ）』</strong><br>あなたは、輝かしい未来（ビジョン）を聞いた瞬間に、その計画に潜む「10の穴（リスク）」を瞬時に見抜くことができます。この「最悪を想定する力」こそ、AI時代に「安全な航路」を選び、投資を確実に回収するための、最強の「危機管理能力」です。</li>
+                 <li><strong>神器②：『秩序の調律者（オーダー・チューナー）』</strong><br>あなたは、カオスな状況や、バラバラな人々の集まりに、「ルール」「仕組み」「マニュアル」という名の「秩序」をもたらす天才です。あなたが過去に学んだプロジェクトマネジメントやコミュニティ運営の知識こそ、この神器を起動させるための「資産」です。</li>
+                 <li><strong>神器③：『堅牢なる城壁（ウォール・オブ・トラスト）』</strong><br>あなたは、一度「守る」と決めた約束やルールを、何があっても守り抜く「一貫性」と「誠実さ」を持っています。この力こそ、人々があなたに「絶対的な安心感」を抱き、あなたの「聖域（コミュニティ）」に集い、離れられなくなる「信頼」の源泉です。</li>
+             </ul>
+
+             <h3>守護者の『三重の呪縛』（影）</h3>
+             <p>しかし、その強すぎる光は、最も強力な3つの「呪い」となって、あなたの行動を縛り付けます。（…心して、読んでください。これは、あなたがずっと目をそらしてきた、あなた自身の「深淵」です）</p>
+             <ul>
+                 <li><strong>呪縛①：『変化への拒絶（イノベーション・フォビア）』</strong><br>あなたの『リスクの予見者』は、時に「変化そのもの」を「悪」として拒絶します。新しい技術（AIなど）や、常識外れのアイデア（『錬金術師』の閃き）を、「予測不能なリスク」としか見なせず、あなたの城壁を強化する「最大のチャンス」を目前で逃し続けるのです。</li>
+                 <li><strong>呪縛②：『過剰なる抱擁（オーバー・プロテクション）』</strong><br>あなたの「慈悲深さ」は、時にあなたの聖域を内部から破壊します。「全てを守ろう」とするあまり、「ルールを破る者」や「調和を乱す者」さえも守ろうとしてしまうのです。「何を『守らない』かを決断する覚悟」がなければ、あなたの城壁は、内側から食い荒らされ、崩壊します。</li>
+                 <li><strong>呪縛③：『マニュアルへの隷属（ルール・スレイブ）』</strong><br>あなたは「秩序」を愛するあまり、時に「ルールを守ること」そのものが「目的」になってしまいます。時代が変わり、守るべき「目的（＝仲間）」のために「手段（＝ルール）」を変えるべき時が来ても、古いマニュアルに固執し、聖域全体を「時代遅れの牢獄」に変えてしまう危険性を孕んでいます。</li>
+             </ul>
+            
+             <div class="codex-blockquote">
+                <p>…いかがですか。</p>
+                <p>もし、この「影」の章を読んで、「変化」への言い知れぬ「恐怖」を感じたなら。</p>
+                <p>あるいは、「なぜ、あなたは、私の『決断できない優しさ』と『頑固さ』を完璧に理解しているんだ…」と、心臓が掴まれたなら。</p>
+                <p><strong>おめでとうございます。</strong><br>それこそが、あなたがこの「呪い」を解放し、AIと共に「力」を行使する準備が整った、何よりの証拠です。</p>
+             </div>
+        </section>
+
+        <hr class="codex-divider fade-in">
+
+        <section class="codex-section fade-in">
+             <h2>第三章：『AI調律の儀式』 — あなただけの「戦術」</h2>
+             <p>「守護者」であるあなたがAIを使う上で、絶対に守るべき「黄金律」と、あなたの「呪縛」を解き放つための「専用プロンプト」を授けます。</p>
+
+             <h3>守護者のための『AI調律プロトコル』（黄金律）</h3>
+             <ul>
+                 <li><strong>黄金律①： AIを「監視塔」として使い、全ての「リスク」を洗い出させろ。</strong><br>あなたの『リスクの予見者』は最強です。AIは、あなたの「懸念」を「データ」で裏付ける最強の「分析官」です。「この新しいアイデアの、考えうる失敗パターンを100個リストアップし、それぞれへの対策案を提示しろ」と命じるのです。AIに「リスク」を可視化させることで、あなたは「安全な革新」への第一歩を踏み出せます。</li>
+                 <li><strong>黄金律②： AIに「マニュアル」を作らせろ。そしてAIに「自動化」させろ。</strong><br>あなたの『秩序の調律者』としての才能を、AIで最大化します。コミュニティ運営、顧客サポート、コンテンツ配信… あなたが守るべき「秩序」の「マニュアル」をAIに作らせ、その「退屈な作業」をAIに実行させるのです。あなたは「作業」から解放され、聖域全体の「戦略」を考える「領主」としての仕事に集中してください。</li>
+                 <li><strong>黄金律③： AIに「古いルール」を「破壊」させろ。</strong><br>呪縛『マニュアルへの隷属』を解くための儀式です。「私たちが今、当たり前にやっているこのルール（例：毎日の日報）は、本当に『共同体を守る』という目的に貢献しているか？ もし、このルールを『廃止』した場合のメリットとデメリットを論理的に提示しろ」とAIに命じるのです。AIという「感情のない第三者」に、あなたの「古い常識」を破壊させるのです。</li>
+             </ul>
+
+            <h3>守護者専用『A1プロンプト・テンプレート』</h3>
+            <p>あなたの「神器」を最大化し、「呪縛」を最小化するために設計された、3つのAI活用術です。</p>
+
+            <h4>① 『リスク・ヘッジ要塞化プロンプト』（資産化の儀式）</h4>
+            <p style="font-size: 0.9em; margin-bottom: 0.5rem;">（神器：『リスクの予見者』を起動し、過去の学びを「最強の防御策」に変える）</p>
+            <div class="prompt-block with-copy-button">
+<pre><code class="prompt-text"># 命令書
+あなたは、世界で最も優秀な「危機管理コンサルタント」です。
+私は今から、私が過去に学んだ「資産（知識）」と、これから実行しようとする「新しいプロジェクト」を提示します。
+あなたの任務は、私の「資産」を活用して、このプロジェクトに潜む「あらゆるリスク」を予見し、それを「完璧に回避・軽減」するための「防御マニュアル」を作成することです。
+
+# 目的
+私の『リスクの予見者』としての能力をAIで増幅させ、過去の投資（学び）を「失敗しない事業計画」を設計するための資産に変える。
+
+# 私の資産（過去の学び）
+<strong>（例：Webマーケティング、コミュニティ運営、顧客心理学）</strong>
+# 新しいプロジェクト
+<strong>（例：月額制のオンラインコミュニティを立ち上げる）</strong>
+
+# 出力形式
+1.  **【予見されるリスク TOP10】：** （例：初期メンバーが集まらない、既存メンバーの熱量が下がる、炎上…）
+2.  **【「私の資産」を使った防御策】：** （例：『顧客心理学』を応用し、メンバーの「離脱兆候」を早期に発見するチェックリストを作成する）
+3.  **【最悪の事態（コンティンジェンシー・プラン）】：** もしリスクが現実化した場合の、具体的な「対処手順書」
+</code></pre>
+                <button class="copy-prompt-btn" title="プロンプトをコピー"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876V5.25a.75.75 0 011.5 0v.75a.75.75 0 01-1.5 0V5.25m-7.5 0H7.5a9.06 9.06 0 001.5-.124M9 7.875h1.5a.75.75 0 010 1.5H9a.75.75 0 010-1.5zm1.5 0V5.25m6.75 5.25v-1.5a.75.75 0 00-1.5 0v1.5a.75.75 0 001.5 0zm-1.5 0h-1.5a.75.75 0 000 1.5h1.5a.75.75 0 000-1.5z" /></svg><span>コピー</span></button>
+            </div>
+
+            <h4>② 『コミュニティ自動化プロンプト』（秩序の儀式）</h4>
+            <p style="font-size: 0.9em; margin-bottom: 0.5rem;">（神器：『秩序の調律者』を起動し、あなたの「時間」を守る）</p>
+             <div class="prompt-block with-copy-button">
+<pre><code class="prompt-text"># 命令書
+あなたは、私のコミュニティを24時間365日守護する、有能な「運営ボット」の設計者です。
+私は今から、私のコミュニティの「理念」と「ルール」を提示します。
+あなたの任務は、このコミュニティの「秩序」と「活気」を守るために、AI（あなた）が「自動で実行すべきタスク」をリストアップし、そのための「具体的な指示書」を作成することです。
+
+# 目的
+私の『秩序の調律者』としての才能を「仕組み化」し、私自身が「作業」に追われることなく、コミュニティの「聖域」を守り続ける。
+
+# 私のコミュニティ理念とルール
+<strong>（例：理念「誰も否定されない学びの場」、ルール「他者への批判禁止」「質問は具体的に」…）</strong>
+
+# 出力形式
+1.  **【自動化タスクリスト】：** （例：新メンバーへの歓迎メッセージ自動送信、ルール違反投稿の一次検知、よくある質問への自動回答…）
+2.  **【タスク実行プロンプト（AI用）】：** （例：「[新メンバーの名前]さんを歓迎し、ルールの要約と最初の行動を促す、温かいメッセージを作成して」）
+</code></pre>
+                <button class="copy-prompt-btn" title="プロンプトをコピー"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876V5.25a.75.75 0 011.5 0v.75a.75.75 0 01-1.5 0V5.25m-7.5 0H7.5a9.06 9.06 0 001.5-.124M9 7.875h1.5a.75.75 0 010 1.5H9a.75.75 0 010-1.5zm1.5 0V5.25m6.75 5.25v-1.5a.75.75 0 00-1.5 0v1.5a.75.75 0 001.5 0zm-1.5 0h-1.5a.75.75 0 000 1.5h1.5a.75.75 0 000-1.5z" /></svg><span>コピー</span></button>
+            </div>
+
+            <h4>③ 『愛ある決断（パージ）プロンプト』（呪縛解除の儀式）</h4>
+            <p style="font-size: 0.9em; margin-bottom: 0.5rem;">（呪縛：『過剰なる抱擁』を解き、本当に「守るべきもの」を決断する）</p>
+             <div class="prompt-block with-copy-button">
+<pre><code class="prompt-text"># 命令書
+あなたは、私の聖域を守るための、冷徹な「門番」です。
+私は今、コミュニティの「調和」を乱す可能性のある「人物」や「事象」に直面し、決断に迷っています。
+あなたの任務は、『過剰なる抱擁』という私の呪縛を理解した上で、コミュニティ全体（＝他の大多数の仲間）を守るために、私が下すべき「非情だが、愛のある決断」を論理的に助言することです。
+
+# 目的
+「全てを守ろうとして全てを失う」という最悪の未来を回避し、私が「守らない」ことを決断する勇気を得る。
+
+# 迷っている事象
+<strong>（例：ルールは破るが、とても熱心なメンバーAさんをどう扱うべきか？ 彼を注意すると、彼が傷つき、辞めてしまうかもしれない…）</strong>
+
+# 出力形式
+1.  **【現状の放置リスク】：** Aさんを「守り（放置し）」続けた場合、コミュニティ全体に及ぶ「最悪の影響」を3つ挙げてください。
+2.  **【決断の選択肢（3案）】：** （例：A：公開警告、B：個別対話、C：退会勧告）
+3.  **【守護者の「愛ある伝え方」】：** もしC（退会勧告）を選ぶ場合、Aさんの「尊厳」を守りつつ、コミュニティの「秩序」を優先したことを伝えるための、誠実な「通告文」のドラフトを作成してください。
+</code></pre>
+                <button class="copy-prompt-btn" title="プロンプトをコピー"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876V5.25a.75.75 0 011.5 0v.75a.75.75 0 01-1.5 0V5.25m-7.5 0H7.5a9.06 9.06 0 001.5-.124M9 7.875h1.5a.75.75 0 010 1.5H9a.75.75 0 010-1.5zm1.5 0V5.25m6.75 5.25v-1.5a.75.75 0 00-1.5 0v1.5a.75.75 0 001.5 0zm-1.5 0h-1.5a.75.75 0 000 1.5h1.5a.75.75 0 000-1.5z" /></svg><span>コピー</span></button>
+            </div>
+        </section>
+
+        <hr class="codex-divider fade-in">
+
+        <section class="codex-section fade-in">
+             <h2>第四章：『魂の共鳴』 — あなたが、世界と「どう関わるか」</h2>
+             <p>あなたは一人で「堅牢な城壁」を築き、「秩序ある街」を運営することができます。しかし、その街が「新しい富（価値）」を生み出さなければ、いずれ衰退し、守るべき「仲間」も離れていってしまう。</p>
+             <p>あなたの「守る力」を、この現実世界で「継続的な繁栄」へと繋げ、あなたが過去に費やした「投資」を回収するためには、他の「魂」の力が必要不可欠です。</p>
+
+             <h3>守護者の『最高の相棒』</h3>
+             <p>あなたの「光」を最も必要とし、あなたの「影」を補ってくれる最高のパートナー。それは、<strong>『開拓者（The Pioneer）』</strong>です。</p>
+             <ul>
+                 <li>『開拓者』は、あなたの「城壁」の外にある「未知の新大陸」を切り拓く、情熱的な冒険家です。</li>
+                 <li>あなたの呪縛である『変化への拒絶』とは真逆で、彼らは「リスク」を恐れず、常に「革新」を求めます。</li>
+                 <li>しかし、彼らは「地図」を持たずに遭難し（『見切り発車の遭難』）、切り拓いた領土を「統治」する力を持っていません。</li>
+             </ul>
+             <p>あなたの役割は、『開拓者』が持ち帰る「富」を守る「金庫番」であり、彼らが安心して「次の冒険」に出るための「本拠地（ホーム）」となることです。あなたの『リスクの予見者』は、彼らの「遭難」を防ぐ最強の「参謀」となります。あなたの「守る力」は、『開拓者』の「攻める力」という「富の源泉」を得て、初めて「永続する帝国」を築くことができるのです。</p>
+
+             <h3>守護者の『最大の試練』（そして「鍵」）</h3>
+             <p>あなたが最も理解しがたい、しかし、理解すれば最強の武器となるタイプ。それは、<strong>『錬金術師（The Alchemist）』</strong>です。</p>
+             <ul>
+                 <li>『錬金術師』は、「常識」や「ルール」を嫌い、あなたの『秩序』を破壊するような「実験」を繰り返す、予測不能な存在です。</li>
+                 <li>あなたの『堅牢なる城壁』の内側で、彼らが「よく分からない実験」を始めることは、あなたにとって「最大の脅威」であり、真っ先に排除したい「リスク」に映るでしょう（そして、それはあなたの価値観と真っ向から対立します）。</li>
+             </ul>
+             <p>しかし、思い出してください。<strong>どれほど堅牢な「城壁」も、時代遅れの「兵器」では守り切れません。</strong>あなたの「古いルール（マニュアル）」が通用しない、「新しい脅威（例：AIの進化）」が城壁を破りに来た時…あなたの「共同体」を守る唯一の希望は、『錬金術師』が生み出す「常識外れの新しい兵器（＝革新的なアイデア）」だけなのです。</p>
+             <p>あなたの「秩序（スタビリティ）」と、『錬金術師』の「混沌（カオス）」。この二つが融合したとき、あなたの「聖域」は、ただ守るだけの「砦」ではなく、常に進化し続ける「生きた都市」へと変わるのです。</p>
+        </section>
+
+        <hr class="codex-divider fade-in">
+
+        <section class="codex-section fade-in">
+             <p>…さて、守護者よ。</p>
+             <p>あなたは今、自分の「力」と「呪い」を知りました。そして、あなたの「城壁」を「繁栄する帝国」とするために、<strong>『開拓者』</strong>の富と、<strong>『錬金術師』</strong>の革新が必要であることを知りました。</p>
+
+             <div class="codex-highlight">
+                あなたの脳内に、新たな「問い」が生まれたはずです。
+             </div>
+
+             <div class="codex-blockquote">
+                <p>「『開拓者』の情熱は、どこから来るんだ…？」</p>
+                <p>「『錬金術師』の理解不能な閃きとは、一体…？」</p>
+                <p>「そして、私以外の、残りの4つの魂は、<br>一体どんな力を持っているんだ…？」</p>
+             </div>
+
+             <p>その「渇望」こそが、あなたが次のステージへ進むための、最高の燃料です。</p>
+             <p>『八魂の法典』の全貌は、まだ始まったばかり。まずは、今日授けた『AI調律の儀式』を実行してください。</p>
+
+             <div class="codex-highlight" style="border: none;">
+                 あなたの「聖域」が、仲間たちにとっての「永遠の理想郷」となる日を、<br>
+                 我々は待っています。
+             </div>
+        </section>
+
+    </div>
+
+    <script is:inline>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- フェードイン ---
+            const targets = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) { 
+                        entry.target.classList.add('is-visible');
+                        obs.unobserve(entry.target); 
+                    }
+                });
+            }, { rootMargin: '0px 0px -100px 0px', threshold: 0 });
+            targets.forEach(target => { observer.observe(target); });
+
+            // --- プロンプトコピー ---
+            const copyButtons = document.querySelectorAll('.copy-prompt-btn');
+            copyButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const promptBlock = button.closest('.prompt-block');
+                    const codeElement = promptBlock?.querySelector('.prompt-text'); 
+                    if (codeElement) {
+                        const textToCopy = codeElement.textContent || '';
+                        navigator.clipboard.writeText(textToCopy).then(() => {
+                            const buttonText = button.querySelector('span');
+                            if(buttonText) buttonText.textContent = 'コピー完了!';
+                            button.classList.add('copied');
+                            setTimeout(() => {
+                                if(buttonText) buttonText.textContent = 'コピー';
+                                button.classList.remove('copied');
+                            }, 2000);
+                        }).catch(err => {
+                            console.error('コピー失敗:', err);
+                            const buttonText = button.querySelector('span');
+                            if(buttonText) buttonText.textContent = '失敗';
+                            setTimeout(() => { if(buttonText) buttonText.textContent = 'コピー'; }, 2000);
+                        });
+                    } else { console.error('コピー対象が見つかりません。'); }
+                });
+            });
+        });
+    </script>
+
+</BaseLayout>

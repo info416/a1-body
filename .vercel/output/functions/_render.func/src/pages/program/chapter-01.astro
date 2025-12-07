@@ -1,0 +1,262 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="第一章 - 自己進化プログラム">
+
+    <style is:inline>
+    .sacred-iframe-container {
+        position: relative;
+        width: 100%;
+        height: 70vh; /* 画面の高さの70%。ここは調整可能 */
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 3rem;
+    }
+    .sacred-iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+</style>
+
+    <div class="program-content">
+        <h1>第一章：魂の調律</h1>
+        <p class="text-xl text-gray-400 mb-8 placeholder-text">【WP: テキスト_第一章_導入】あなたのビジネスの「魂」を言語化し、AIにインストールする儀式を執り行う。</p>
+        
+        <nav class="program-tabs">
+            <a href="chapter-00" class="tab-link">序章</a>
+            <a href="chapter-zero" class="tab-link">第零章</a>
+            <a href="chapter-01" class="tab-link active">第一章</a>
+            <a href="chapter-02" class="tab-link">第二章</a>
+            <a href="chapter-03" class="tab-link">第三章</a>
+            <a href="chapter-04" class="tab-link">第四章</a>
+            <a href="cockpit" class="tab-link">次のステージへ</a>
+        </nav>
+        
+        <div class="default-view">
+            
+            <div class="part-b">
+                <h2 class="text-2xl font-bold mb-4">第一章コンテンツ</h2>
+
+                <div class="html-manual">
+                    <h3 class="text-xl font-bold mb-4">パートA：物語コンテンツ</h3>
+                    <div class="sacred-iframe-container">
+    <iframe 
+        src="https://ai-verve.net/first/prog/01/a.html" 
+        class="sacred-iframe"
+        title="聖典：第一章Aパート">
+    </iframe>
+</div>
+
+                    <h3 class="text-xl font-bold mb-4">パートB：知識コンテンツ</h3>
+                    <div class="sacred-iframe-container">
+    <iframe 
+        src="https://ai-verve.net/first/prog/01/b.html" 
+        class="sacred-iframe"
+        title="聖典：第一章Aパート">
+    </iframe>
+</div>
+
+                    <h3 class="text-xl font-bold mb-4">パートC：実践の手引き・使命の言語化</h3>
+                    <div class="sacred-iframe-container">
+    <iframe 
+        src="https://ai-verve.net/first/prog/01/c.html" 
+        class="sacred-iframe"
+        title="聖典：第一章Aパート">
+    </iframe>
+</div>
+                </div>
+            </div>
+        </div>
+
+        <!--<div class="accordion-container">
+            <button class="accordion-toggle">
+                <span>別フォーマットで学習する</span>
+                <span class="icon">+</span>
+            </button>
+            <div class="accordion-panel">
+                <div class="download-link-item">
+                    <span class="icon">📄</span> <a href="#" download>講義スライド（PDF）</a>
+                </div>
+                <div class="download-link-item">
+                    <span class="icon">🎧</span> <a href="#" download>音声ファイル（MP3）</a>
+                </div>
+                <div class="download-link-item">
+                    <span class="icon">🖨️</span> <a href="#" download>印刷用マニュアル（PDF）</a>
+                </div>
+            </div>
+        </div>-->
+
+        <div class="flex justify-between mt-8">
+            <a href="chapter-zero" class="btn">&larr; 第零章へ戻る</a>
+            <a href="chapter-02" class="btn btn-primary">第二章へ進む &rarr;</a>
+        </div>
+    </div>
+
+    <div id="reading-modal-overlay" class="reading-modal-overlay">
+        <div class="reading-modal-container">
+            <div class="reading-modal-header">
+                <h2 id="reading-modal-title" class="reading-modal-title"></h2>
+                <button id="reading-modal-close" class="reading-modal-close">&times;</button>
+            </div>
+            <div id="reading-modal-content" class="reading-modal-content">
+                </div>
+        </div>
+    </div>
+
+    <style is:inline>
+    /* ============================================================= */
+    /* --- モーダル用のスタイル定義を追加 --- */
+    /* ============================================================= */
+    .reading-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .reading-modal-container {
+        background-color: #262626; /* ダークな背景色 */
+        color: #E5E7EB; /* 明るいテキスト色 */
+        padding: 2rem;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 800px;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        transform: translateY(20px);
+        transition: transform 0.3s ease;
+    }
+    .reading-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #4B5563; /* 境界線 */
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+    }
+    .reading-modal-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    .reading-modal-close {
+        background: none;
+        border: none;
+        font-size: 2rem;
+        color: #E5E7EB;
+        cursor: pointer;
+    }
+    .reading-modal-content {
+        line-height: 1.8;
+    }
+    .reading-modal-content a {
+        color: #000000; /* リンク色 */
+        text-decoration: none;
+        margin-top: 1em;
+    }
+    .reading-modal-content a:hover {
+        color: #ffffff;
+    }
+    </style>
+    <script is:inline>
+    // =============================================================
+    // --- 【最終確定版】A1-Project Core Script ---
+    // テックプリーストによる最終調律
+    // =============================================================
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- 魂の保管庫（コンテンツデータ） ---
+        const fullContents = {
+            part_a_full: "かつて、一人の旅人（…そう、あなたのことです）が、『混沌の森』に迷い込んでいました。<br><br>森には無数の道があり、どの道にも『成功はこちら』『最新の正解』と書かれた看板が立っています。<br>しかし、進めども進めども、景色は変わらず、ただ疲労と焦りだけが募っていくのでした。<br><br>旅人の背負う袋には、たくさんの高価な道具（…そう、あなたが学んできた知識です）が入っていましたが、どれをどう使えばこの森を抜けられるのか、皆目見当もつきません。<br>途方に暮れ、座り込んでしまった旅人の前に、一人の老人が現れます。<br><br>老人は言いました。<br>『森を抜けたいかね？ならば、道を教えてくれる看板を探すのをやめなさい。あなたが進むべき道は、まだこの森のどこにも存在しないのだから』<br><br>旅人は尋ねます。<br>『では、どうすれば…？』<br><br>老人は、一つの古びた『羅針盤』を渡しました。<br><br>『これは、ただ北を指すだけの羅針盤ではない。お主の心の奥底にある、たった一つの「北極星」…すなわち、お主が本当に世界に届けたいと願う「価値」の方向を指し示す、賢者の羅針盤じゃ』<br><br>そして、こう付け加えます。<br>『この羅針盤を動かすエネルギー源は、お主が背負っているその道具たちと、お主自身の問いかけじゃ。「私は、誰を、どこへ連れていきたいのか？」と。その問いこそが、AIという名の羅針盤を起動させる、最初の呪文となる』<br><br>さあ、第一章では、あなただけの『北極星』を見つけ、この混沌の森を抜けるための、最初の地図を描き始めましょう。<br>あなたの物語の、本当の始まりです。",
+            part_b_full: "ここに、パートBの、実践的な**知識の全文**が記述されます。",
+            part_c_full: "そして、ここが、パートCの、**具体的な実践の手引き**です。<br><a href='/console' target='_blank' class='btn btn-primary mt-4'>コンソールで「使命」を起草する</a>　<a href='/console' target='_blank' class='btn btn-primary mt-4'>音声で聞く</a>"
+        };
+
+        // --- 魂の器（DOM要素）の召喚 ---
+        const accordionToggles = document.querySelectorAll('.accordion-toggle');
+        const readMoreButtons = document.querySelectorAll('.read-more-btn');
+        const readingModalOverlay = document.getElementById('reading-modal-overlay');
+        const readingModalClose = document.getElementById('reading-modal-close');
+        const readingModalTitle = document.getElementById('reading-modal-title');
+        const readingModalContent = document.getElementById('reading-modal-content');
+
+        // --- 書斎（モーダル）を開く儀式 ---
+        function openReadingModal(contentKey, title) {
+            if (!readingModalOverlay) return;
+            const content = fullContents[contentKey];
+            if (!content) return;
+
+            if (readingModalTitle) readingModalTitle.textContent = title;
+            if (readingModalContent) readingModalContent.innerHTML = content;
+            
+            readingModalOverlay.style.opacity = '1';
+            readingModalOverlay.style.visibility = 'visible';
+            
+            const container = readingModalOverlay.querySelector('.reading-modal-container');
+            if (container) container.style.transform = 'translateY(0)';
+        }
+
+        // --- 書斎（モーダル）を閉じる儀式 ---
+        function closeReadingModal() {
+            if (readingModalOverlay) {
+                readingModalOverlay.style.opacity = '0';
+                readingModalOverlay.style.visibility = 'hidden';
+                const container = readingModalOverlay.querySelector('.reading-modal-container');
+                if(container) container.style.transform = 'translateY(20px)';
+            }
+        }
+
+        // --- 複数のボタンに、魂を宿す ---
+        if (readMoreButtons.length > 0) {
+            readMoreButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const contentKey = button.dataset.targetKey;
+                    const title = button.dataset.title;
+                    openReadingModal(contentKey, title);
+                });
+            });
+        }
+
+        // --- 閉じるボタンの神経接続 ---
+        if (readingModalClose) {
+            readingModalClose.addEventListener('click', closeReadingModal);
+        }
+        if (readingModalOverlay) {
+            readingModalOverlay.addEventListener('click', (e) => {
+                if (e.target === readingModalOverlay) {
+                    closeReadingModal();
+                }
+            });
+        }
+        
+        // --- アコーディオンの儀式 ---
+        if (accordionToggles.length > 0) {
+            accordionToggles.forEach(button => {
+                button.addEventListener('click', () => {
+                    const panel = button.nextElementSibling;
+                    button.classList.toggle('active');
+                    if (panel && panel.style.maxHeight) {
+                        panel.style.maxHeight = null;
+                    } else if (panel) {
+                        panel.style.maxHeight = panel.scrollHeight + "px";
+                    }
+                });
+            });
+        }
+    });
+    </script>
+</BaseLayout>

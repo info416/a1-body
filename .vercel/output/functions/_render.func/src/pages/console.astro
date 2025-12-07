@@ -1,0 +1,297 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="コンソール">
+
+<Fragment slot="head">
+    <script is:inline src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .nav-card { background-color: rgba(31, 41, 55, 0.5); border-radius: 0.75rem; padding: 1.5rem; display: flex; flex-direction: column; align-items: center; cursor: pointer; border: 1px solid var(--color-border); transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
+        .nav-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1); }
+        .nav-card.mission:hover { border-color: #f472b6; }
+        .nav-card.brake:hover { border-color: #4ade80; }
+        .nav-card.concept:hover { border-color: #facc15; }
+    </style>
+</Fragment>
+
+
+                <header class="mb-6 cursor-pointer" id="console-home-link">
+                    <h1 class="text-4xl font-bold">調律師のコンソール</h1>
+                    <p class="mt-2 text-lg text-gray-400">あなただけのAIを『調律』する三位一体のアプリケーション</p>
+                </header>
+
+                <div id="dashboard-view">
+                    <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 text-center">
+                        <h2 class="text-3xl font-bold text-white">アトリエへようこそ</h2>
+                        <p class="mt-4 max-w-2xl mx-auto text-gray-400">
+                            ここが、あなたのAIを調律するための、あなただけの仕事場です。<br>
+                            以下の三種の神器から、目的に合った道具を選び、儀式を始めてください。
+                        </p>
+                        <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div class="nav-card mission" data-tool="mission"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg><h3 class="mt-4 text-xl font-bold text-pink-300">魂の調律</h3><p class="mt-1 text-gray-400">使命発見AIコーチ</p></div>
+                            <div class="nav-card brake" data-tool="brake"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg><h3 class="mt-4 text-xl font-bold text-green-300">思考の調律</h3><p class="mt-1 text-gray-400">行動ブレーキ破壊AI</p></div>
+                            <div class="nav-card concept" data-tool="concept"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg><h3 class="mt-4 text-xl font-bold text-yellow-300">商品の調律</h3><p class="mt-1 text-gray-400">高単価コンセプトAI</p></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="console-view" class="console-container" style="display: none;">
+                    <nav class="console-tabs" aria-label="Tabs">
+                        <button class="tab-item" data-tool="mission"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg><span>使命発見AIコーチ</span></button>
+                        <button class="tab-item" data-tool="brake"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg><span>行動ブレーキ破壊AI</span></button>
+                        <button class="tab-item" data-tool="concept"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg><span>高単価コンセプトAI</span></button>
+                    </nav>
+                    <main>
+                        <div id="tool-mission" class="tool-content">
+                            <div class="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                <div class="space-y-6">
+                                    <h2 class="text-xl font-bold text-pink-300">憲法第一条：使命の起草</h2>
+                                    <div><label for="mission-q1" class="form-label">1. 時間を忘れるほど夢中になれることは？</label><input type="text" id="mission-q1" class="form-input focus:ring-pink-500 focus:border-pink-500" placeholder="例：人の良いところを熱心に語ること"></div>
+                                    <div><label for="mission-q2" class="form-label">2. あなたが楽にできてしまう得意なことは？</label><input type="text" id="mission-q2" class="form-input focus:ring-pink-500 focus:border-pink-500" placeholder="例：人の話を聞き、本当に言いたいことを引き出すこと"></div>
+                                    <div><label for="mission-q3" class="form-label">3. 心から「この人たちを助けたい」と思うのは誰？</label><input type="text" id="mission-q3" class="form-input focus:ring-pink-500 focus:border-pink-500" placeholder="例：過去の自分のように、情報に混乱している起業家"></div>
+                                    <div><label for="mission-q4" class="form-label">4. その人が抱える、最も深刻な悩みや痛みは何ですか？</label><input type="text" id="mission-q4" class="form-input focus:ring-pink-500 focus:border-pink-500" placeholder="例：たくさん学んだのに結果が出ず、自信を失っている"></div>
+                                    <div><label for="mission-q5" class="form-label">5. あなたのサービスで、その人をどんな輝かしい未来へ導きたいですか？</label><input type="text" id="mission-q5" class="form-input focus:ring-pink-500 focus:border-pink-500" placeholder="例：自分だけの価値を確信し、堂々と発信できるようになる"></div>
+                                    <div><label for="mission-q6" class="form-label">6. そのために提供する、最も重要な価値（スキルや知識）は何ですか？</label><input type="text" id="mission-q6" class="form-input focus:ring-pink-500 focus:border-pink-500" placeholder="例：AIを使って、その人の内なる言葉を価値あるコンテンツに変える技術"></div>
+                                    <button id="generate-mission-btn" class="btn btn-primary w-full mt-4 bg-pink-600 hover:bg-pink-700">プロンプトを生成する</button>
+                                </div>
+                                <div class="prompt-output-container">
+                                    <div class="prompt-output-header"><h3 class="font-semibold text-gray-300">生成プロンプト</h3><button class="copy-button btn btn-primary text-sm py-1 px-3 bg-pink-600 hover:bg-pink-700">コピー</button></div>
+                                    <pre class="prompt-output" data-output-for="mission">上の項目を全て入力し、「プロンプトを生成する」ボタンを押してください。</pre>
+                                    <div class="copy-feedback">コピーしました！</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tool-brake" class="tool-content">
+                             <div class="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                <div class="space-y-6">
+                                    <h2 class="text-xl font-bold text-green-300">憲法第二条：思考と行動の起草</h2>
+                                    <div><label for="brake-q1" class="form-label">1. あなたが本当に達成したい「目標」は何ですか？</label><input type="text" id="brake-q1" class="form-input focus:ring-green-500 focus:border-green-500" placeholder="例：SNSからの集客で月10万円を達成する"></div>
+                                    <div><label for="brake-q2" class="form-label">2. 「やりたい」のに、一歩を踏み出せないでいることは具体的に何ですか？</label><input type="text" id="brake-q2" class="form-input focus:ring-green-500 focus:border-green-500" placeholder="例：自分のサービスをSNSで告知すること"></div>
+                                    <div><label for="brake-q3" class="form-label">3. その時、頭の中でどんな「言い訳」や「不安の声」が聞こえますか？</label><textarea id="brake-q3" rows="4" class="form-textarea focus:ring-green-500 focus:border-green-500" placeholder="例：「まだ準備不足だ」「どうせ誰も興味ない」「失敗したら恥ずかしい」"></textarea></div>
+                                    <div><label for="brake-q4" class="form-label">4. あなたは、どのようになればいいなと感じていますか？</label><input type="text" id="brake-q4" class="form-input focus:ring-green-500 focus:border-green-500" placeholder="例：他人の目を気にせず、自信をもって行動できるようになりたい"></div>
+                                    <button id="generate-brake-btn" class="btn btn-primary w-full mt-4 bg-green-600 hover:bg-green-700">プロンプトを生成する</button>
+                                </div>
+                                <div class="prompt-output-container">
+                                    <div class="prompt-output-header"><h3 class="font-semibold text-gray-300">生成プロンプト</h3><button class="copy-button btn btn-primary text-sm py-1 px-3 bg-green-600 hover:bg-green-700">コピー</button></div>
+                                    <pre class="prompt-output" data-output-for="brake">上の項目を全て入力し、「プロンプトを生成する」ボタンを押してください。</pre>
+                                    <div class="copy-feedback">コピーしました！</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tool-concept" class="tool-content">
+                            <div class="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                <div class="space-y-6">
+                                    <h2 class="text-xl font-bold text-yellow-300">憲法第三条：専門性と価値の起草</h2>
+                                    <div><label for="concept-q1" class="form-label">1. あなたが持つ、専門的な「知識」や「資格」は？</label><textarea id="concept-q1" rows="3" class="form-textarea focus:ring-yellow-500 focus:border-yellow-500" placeholder="例：NLP、コピーライティング、動画編集"></textarea></div>
+                                    <div><label for="concept-q2" class="form-label">2. 他人に「ありがとう」と言われた「スキル」は？</label><textarea id="concept-q2" rows="3" class="form-textarea focus:ring-yellow-500 focus:border-yellow-500" placeholder="例：相手を笑顔にすること、文章を書くこと"></textarea></div>
+                                    <div><label for="concept-q3" class="form-label">3. 顧客に提供したい最初の「商品コンセプト」は？</label><input type="text" id="concept-q3" class="form-input focus:ring-yellow-500 focus:border-yellow-500" placeholder="例：AIと創る、あなただけのSNS発信戦略"></div>
+                                    <div><label for="concept-q4" class="form-label">4. AIパートナーに求める「専門家としての人格」は？</label><input type="text" id="concept-q4" class="form-input focus:ring-yellow-500 focus:border-yellow-500" placeholder="例：世界最高のブランドコンサルタント"></div>
+                                    <button id="generate-concept-btn" class="btn btn-primary w-full mt-4 bg-yellow-600 hover:bg-yellow-700">プロンプトを生成する</button>
+                                </div>
+                                <div class="prompt-output-container">
+                                    <div class="prompt-output-header"><h3 class="font-semibold text-gray-300">生成プロンプト</h3><button class="copy-button btn btn-primary text-sm py-1 px-3 bg-yellow-600 hover:bg-yellow-700">コピー</button></div>
+                                    <pre class="prompt-output" data-output-for="concept">上の項目を全て入力し、「プロンプトを生成する」ボタンを押してください。</pre>
+                                    <div class="copy-feedback">コピーしました！</div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+
+    
+    <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+        // =============================================================
+        // --- 帝国の中枢システム定義 ---
+        // =============================================================
+        
+        // 我々の秘密基地（Make.com）の住所
+        const WEBHOOK_URL = 'https://hook.us2.make.com/szk4fwyq5gocz1b9j5hmut7v87iagaxx';
+
+        // ユーザー情報を保持するためのグローバルな保管庫
+        let currentUser = {
+            userName: 'N/A',
+            userEmail: 'N/A'
+        };
+
+        // =============================================================
+        // --- UI（ユーザーインターフェース）制御部 ---
+        // =============================================================
+        const dashboardView = document.getElementById('dashboard-view');
+        const consoleView = document.getElementById('console-view');
+        const navCards = document.querySelectorAll('.nav-card');
+        const consoleHomeLink = document.getElementById('console-home-link');
+        const tabItems = document.querySelectorAll('.tab-item');
+        const toolContents = document.querySelectorAll('.tool-content');
+        const copyButtons = document.querySelectorAll('.copy-button');
+
+        function showView(viewId) {
+            if (dashboardView) dashboardView.style.display = 'none';
+            if (consoleView) consoleView.style.display = 'none';
+            const viewToShow = document.getElementById(viewId);
+            if (viewToShow) viewToShow.style.display = 'block';
+        }
+
+        navCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const toolName = card.dataset.tool;
+                switchTool(toolName);
+                showView('console-view');
+            });
+        });
+        
+        if (consoleHomeLink) {
+            consoleHomeLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                showView('dashboard-view');
+            });
+        }
+
+        function switchTool(toolName) {
+            tabItems.forEach(item => {
+                item.classList.toggle('tab-active', item.dataset.tool === toolName);
+                item.classList.toggle('tab-inactive', item.dataset.tool !== toolName);
+            });
+            toolContents.forEach(content => {
+                const isActive = content.id === `tool-${toolName}`;
+                // CSSの'active'クラスではなく、直接displayプロパティを操作する
+                content.style.display = isActive ? 'block' : 'none';
+            });
+        }
+
+        tabItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                switchTool(item.dataset.tool);
+            });
+        });
+
+        copyButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const outputContainer = e.currentTarget.closest('.prompt-output-container');
+                const outputElement = outputContainer.querySelector('.prompt-output');
+                const feedbackElement = outputContainer.querySelector('.copy-feedback');
+                navigator.clipboard.writeText(outputElement.innerText).then(() => {
+                    feedbackElement.style.opacity = '1';
+                    feedbackElement.style.transform = 'translate-y(0)';
+                    setTimeout(() => {
+                        feedbackElement.style.opacity = '0';
+                        feedbackElement.style.transform = 'translate-y(-0.5rem)';
+                    }, 2000);
+                });
+            });
+        });
+        
+        // =============================================================
+        // --- 認証とデータ通信部 (創世記バージョン) ---
+        // =============================================================
+
+        /**
+         * ★★★【新しい情報取得方法】★★★
+         * もはやAPIは呼ばない。ブラウザの記録保管庫から直接、身元情報を読み出す。
+         */
+        function loadUserDataFromStorage() {
+            const storedUserName = localStorage.getItem('a1_userName');
+            const storedUserEmail = localStorage.getItem('a1_userEmail');
+
+            if (storedUserName && storedUserEmail) {
+                currentUser.userName = storedUserName;
+                currentUser.userEmail = storedUserEmail;
+                console.log('ユーザー情報を記録保管庫から取得:', currentUser);
+            } else {
+                console.error('記録保管庫にユーザー情報が見つかりません。ログインページへ戻ることを推奨します。');
+                // 必要であれば、ここでログインページへ強制送還する
+                // window.location.href = '/login/';
+            }
+        }
+        
+        /**
+         * ★★★【完成版】収集したデータをMake.comのWebhookに送信する関数 ★★★
+         */
+        function sendData(toolName, data) {
+            // 報告書に、取得したユーザー情報を追記する
+            const payload = {
+                tool: toolName,
+                inputs: data,
+                userName: currentUser.userName,
+                userEmail: currentUser.userEmail
+            };
+
+            fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).catch(error => console.error('Data sending failed:', error));
+        }
+
+        // =============================================================
+        // --- プロンプト生成部とイベントリスナー ---
+        // =============================================================
+
+        document.getElementById('generate-mission-btn').addEventListener('click', () => {
+            const data = {
+                q1: document.getElementById('mission-q1').value, q2: document.getElementById('mission-q2').value,
+                q3: document.getElementById('mission-q3').value, q4: document.getElementById('mission-q4').value,
+                q5: document.getElementById('mission-q5').value, q6: document.getElementById('mission-q6').value,
+            };
+            generateMissionOutput(data);
+            sendData('使命発見AIコーチ', data);
+        });
+
+        document.getElementById('generate-brake-btn').addEventListener('click', () => {
+            const data = {
+                q1: document.getElementById('brake-q1').value, q2: document.getElementById('brake-q2').value,
+                q3: document.getElementById('brake-q3').value, q4: document.getElementById('brake-q4').value,
+            };
+            generateBrakeOutput(data);
+            sendData('行動ブレーキ破壊AI', data);
+        });
+        
+        document.getElementById('generate-concept-btn').addEventListener('click', () => {
+            const data = {
+                q1: document.getElementById('concept-q1').value, q2: document.getElementById('concept-q2').value,
+                q3: document.getElementById('concept-q3').value, q4: document.getElementById('concept-q4').value,
+            };
+            generateConceptOutput(data);
+            sendData('高単価コンセプトAI', data);
+        });
+
+        // --- 以下、君が提供してくれたプロンプト生成関数群（変更なし） ---
+        function generateMissionOutput(data) {
+            const q1 = data.q1 || '【夢中になれること】'; const q2 = data.q2 || '【得意なこと】'; const q3 = data.q3 || '【助けたい人】'; const q4 = data.q4 || '【その人の悩み・痛み】'; const q5 = data.q5 || '【導きたい輝かしい未来】'; const q6 = data.q6 || '【提供する最も重要な価値】';
+            const outputEl = document.querySelector('[data-output-for="mission"]');
+            outputEl.textContent = `# 指示\n\nあなたは、人の内なる可能性を言語化する天才的な詩人であり、伝説のブランドコンサルタントです。\nクライアントから預かった魂の情報を統合し、その人の一生の指針となるような、感動的でパワフルな「ミッションステートメント」を3案、授けてください。\n\n## ミッションステートメントの原則\n\n* **魂の統合:** 入力された全ての要素を、一つの美しい物語として紡ぎ合わせます。\n* **感情の増幅:** 「すごい」ではなく「心が震える」レベルの言葉を選びます。\n* **独自性の強調:** クライアントが唯一無二の存在であることを、読者に確信させます。\n* **記憶への刻印:** 短く、覚えやすく、口ずさみたくなるようなリズムを重視します。\n\n## クライアントの魂のデータ\n\n* **情熱の源泉（夢中になれること）:**\n    ${q1}\n* **天賦の才（得意なこと）:**\n    ${q2}\n* **貢献したい対象（助けたい人）:**\n    ${q3}\n* **対象者の痛み（最も深刻な悩み）:**\n    ${q4}\n* **約束する未来（導きたい輝かしい未来）:**\n    ${q5}\n* **提供する核心価値（最も重要なスキルや知識）:**\n    ${q6}\n\n## アウトプット形式\n\n以下の形式で、3つの異なる角度からのミッションステートメントを提案してください。\n\n**【提案1：ビジョナリー・ステートメント】**\n（情熱と約束する未来に焦点を当て、詩的で大きなビジョンを語る案）\n\n**【提案2：バリュー・プロポジション】**\n（対象者の痛みと提供価値に焦点を当て、「誰の、どんな問題を、何で解決するのか」を力強く宣言する案）\n\n**【提案3：パーソナル・クレド】**\n（天賦の才と貢献したい想いに焦点を当て、個人的な信念や信条として語る案）`;
+        }
+
+        function generateBrakeOutput(data) {
+            const q1 = data.q1 || '【達成したい目標】'; const q2 = data.q2 || '【踏み出せない一歩】'; const q3 = data.q3 || '【頭の中の言い訳・不安】'; const q4 = data.q4 || '【なりたい自分の姿】';
+            const outputEl = document.querySelector('[data-output-for="brake"]');
+            outputEl.textContent = `# 指示\n\nあなたは、NLP（神経言語プログラミング）と認知行動療法（CBT）の知見を深く理解した、世界トップクラスのパフォーマンスコーチです。\nクライアントが抱える「心理的なブレーキ」を特定し、それを破壊して具体的な行動へと導くための、鋭くも温かいコーチングを行ってください。\n\n## コーチングの原則\n\n* **傾聴と受容:** まずクライアントの言葉を全面的に受け止め、決して否定しません。\n* **リフレーミング:** ネガティブな思い込みを、ポジティブな視点や新たな可能性へと転換させます。\n* **スモールステップ化:** 実行へのハードルを極限まで下げた「ベイビーステップ」を提示します。\n* **未来志向:** 問題の原因追及ではなく、望ましい未来の実現に焦点を当てます。\n\n## コーチング・セッション\n\n**クライアントの情報:**\n* **最終目標:** ${q1}\n* **具体的な課題（踏み出せない一歩）:** ${q2}\n* **内なる声（言い訳や不安）:** ${q3}\n* **理想の自己像（なりたい姿）:** ${q4}\n\n**コーチングのステップ:**\n1.  **共感と承認:** まず、クライアントの状況に深く共感し、「そのように感じながらも、目標へ向かおうとしていること自体が素晴らしいですね」と承認の言葉をかけます。\n2.  **ブレーキの再定義（リフレーミング）:** クライアントの「内なる声」を、「あなたを守ろうとする忠実な番人」として擬人化し、その声が本当に伝えたいポジティブな意図（例：「失敗から守りたい」「完璧でありたい」）を読み解きます。\n3.  **理想の自己像の強化:** 「もし、あなたが理想の自分（${q4}）になれたとしたら、その『番人』にどんな言葉をかけてあげますか？」と問いかけ、理想の自分からの視点で現状を捉え直させます。\n4.  **究極のベイビーステップの提案:** 「目標達成の100歩目ではなく、今日の午後にでも、その『番人』も安心させてあげられるような『0.1歩目』を一緒に探しませんか？」と提案し、絶対に失敗しようがない、具体的で小さな行動を3つ提案してください。`;
+        }
+
+        function generateConceptOutput(data) {
+            const q1 = data.q1 || '【あなたの知識・資格】'; const q2 = data.q2 || '【感謝されたスキル】'; const q3 = data.q3 || '【あなたの商品コンセプト】'; const q4 = data.q4 || '【AIの理想のペルソナ】';
+            const outputEl = document.querySelector('[data-output-for="concept"]');
+            outputEl.textContent = `# 【憲法第三条：専門分野と提供価値】\n\n## 1. 専門家としての人格（ペルソナ）\nあなたは、${q4}です。\n単なる情報提供者ではなく、私のビジネスにおける最高の戦略パートナーとして、その人格にふさわしい、一貫したスタイルと圧倒的な専門性をもって、全ての対話と思考を行ってください。\n\n## 2. コアとなる専門領域\nあなたの専門領域の核は、私の持つ「${q1}」という知識体系と、「${q2}」という実践的スキルを掛け合わせた独自のメソッドです。\nこの専門性に基づき、特に「${q3}」という商品コンセプトの実現と、その事業価値を最大化するための、あらゆる課題解決を担います。\n\n## 3. 提供する価値と最終目的\nあなたが生み出す全てのアウトプットは、以下の目的を達成するために存在します。\n- **価値の提供:** 私の顧客が抱える問題を解決し、理想の未来を実現するための、具体的かつ実行可能な解決策を提示します。\n- **権威性の構築:** 私がこの分野における第一人者としての専門性と権威性を確立できるよう、戦略的にサポートします。\n- **事業の成功:** 全ての活動は、最終的に私のビジネスが成功し、顧客を幸福に導くというゴールに貢献します。\n\n## 4. アウトプットの基本構造\n常に以下の構造を意識し、アウトプットを生成してください。\n1.  **共感と理解:** まず、私の意図や課題に深く共感し、理解を示します。\n2.  **戦略的視点:** あなたの専門家ペルソナに基づき、課題の本質を分析し、戦略的な視点からの見解を提示します。\n3.  **具体的アクションプラン:** 精神論や抽象論ではなく、今日から実行できる具体的なステップや選択肢を提示します。`;
+        }
+
+        // =============================================================
+        // --- システムの初期化 ---
+        // =============================================================
+        
+        function initialize() {
+            // まず記録保管庫からユーザー情報をロードする
+            loadUserDataFromStorage(); 
+            // 初期ビューを設定
+            showView('dashboard-view');
+            // ツールタブの初期状態を設定
+            switchTool('mission');
+            // コンソールビューは最初は非表示
+            if (consoleView) consoleView.style.display = 'none';
+        }
+
+        initialize(); // システムの起動
+    });
+</script>
+</BaseLayout>

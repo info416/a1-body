@@ -1,0 +1,988 @@
+/* ==========================================================================
+   A1 Project - Imperial Architectural Style (rev.4.3 / Heading Margin Unification)
+   編纂責任者：アーキテクト
+   ========================================================================== */
+
+/* --- 基本設定とフォント --- */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+/* --- レイアウト計算の基準を全ページで統一 --- */
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+:root {
+    --color-bg: #111827;
+    --color-content-bg: #1F2937;
+    --color-text-main: #D1D5DB;
+    --color-text-sub: #9CA3AF;
+    --color-text-heading: #FFFFFF;
+    --color-accent-primary: #60A5FA;
+    --color-accent-primary-hover: #93C5FD;
+    --color-accent-secondary: #FBBF24;
+    --color-border: #374151;
+}
+
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text-main);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- タイポグラフィ --- */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--color-text-heading);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-top: 1.5rem; /* 【変更】見出しの上下マージンを統一 */
+    margin-bottom: 1rem;
+}
+/* ページのメインタイトルとなるh1は、特別に上マージンをなくす */
+.main-content > .content-wrapper > h1:first-child,
+.content-wrapper > .program-content > h1:first-child,
+h1:first-child {
+    margin-top: 0;
+}
+
+#console-home-link h1 {
+    margin-top: 0.4em;
+}
+
+h1 { font-size: 2.441rem; }
+h2 { font-size: 1.953rem; }
+h3 { font-size: 1.563rem; }
+h4 { font-size: 1.25rem; }
+
+p {
+    margin-bottom: 1.5rem;
+}
+
+a {
+    color: var(--color-accent-primary);
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+a:hover {
+    color: var(--color-accent-primary-hover);
+    text-decoration: underline;
+}
+
+/* --- レイアウトと共通コンポーネント --- */
+.site-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 280px;
+    background-color: var(--color-bg);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--color-border);
+}
+
+.main-content {
+    flex-grow: 1;
+}
+
+.content-wrapper {
+    max-width: 1024px;
+    margin: 0 auto;
+}
+
+/* Sidebar Styles */
+.site-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 3rem;
+    color: var(--color-text-heading);
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+.site-logo svg {
+    width: 2rem;
+    height: 2rem;
+    color: var(--color-accent-primary);
+}
+.site-logo:hover {
+    text-decoration: none;
+}
+
+.main-nav .nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.main-nav .nav-item a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    color: var(--color-text-sub);
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s;
+}
+.main-nav .nav-item a:hover {
+    background-color: var(--color-content-bg);
+    color: var(--color-text-heading);
+    text-decoration: none;
+}
+.main-nav .nav-item.active a {
+    background-color: var(--color-accent-primary);
+    color: var(--color-bg);
+    font-weight: 700;
+}
+.main-nav .nav-item svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+/* User Profile (Sidebar Footer) */
+.user-profile {
+    margin-top: auto; /* サイドバー最下部に配置 */
+    border-top: 1px solid var(--color-border);
+    padding-top: 1.5rem;
+}
+.user-profile .profile-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--color-text-main);
+    text-decoration: none;
+    transition: background-color 0.2s;
+    border-radius: 6px;
+    padding: 0.5rem;
+}
+.user-profile .profile-link:hover {
+    background-color: var(--color-content-bg);
+}
+.user-profile .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--color-border);
+    color: var(--color-text-heading);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+.user-profile .user-name {
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.logout-link {
+    display: inline-block;
+    margin: 1em;
+    padding: 0.5rem 1rem; /* ボタンの内側の余白 */
+    background-color: var(--color-content-bg); /* 背景色 */
+    border: 1px solid var(--color-border); /* 枠線 */
+    border-radius: 6px; /* 角を丸くする */
+    color: var(--color-text-sub); /* 文字色 */
+    text-decoration: none; /* 下線を消す */
+    font-size: 0.875rem; /* 文字を少し小さく */
+    transition: all 0.2s ease-in-out; /* なめらかな変化 */
+}
+
+/* マウスを乗せた時の、神々しい変化 */
+.logout-link:hover {
+    background-color: var(--color-accent-primary);
+    border-color: var(--color-accent-primary);
+    color: var(--color-bg);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* --- カードスタイル --- */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.card {
+    background-color: var(--color-content-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    border-color: var(--color-accent-primary);
+}
+a.card-link {
+    color: var(--color-text-heading);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.card-icon {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 1.5rem;
+    color: var(--color-accent-primary);
+}
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+.card-description {
+    color: var(--color-text-sub);
+    flex-grow: 1;
+    margin-bottom: 1.5rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /* 表示する行数を、ここで指定する（この場合は2行） */
+    overflow: hidden;
+}
+.card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-accent-primary);
+    font-weight: 700;
+    margin-top: auto;
+}
+
+/* --- プログラムページ --- */
+.program-tabs {
+    display: flex;
+    border-bottom: 2px solid var(--color-border);
+    margin-bottom: 2rem;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+.program-tabs .tab-link {
+    padding: 0.75rem 1.5rem;
+    color: var(--color-text-sub);
+    font-weight: 700;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transform: translateY(2px);
+    transition: color 0.2s, border-color 0.2s;
+}
+.program-tabs .tab-link:hover {
+    color: var(--color-text-main);
+}
+.program-tabs .tab-link.active {
+    color: var(--color-accent-primary);
+    border-bottom-color: var(--color-accent-primary);
+}
+
+.program-content {
+    flex-grow: 1;
+}
+
+.content-section {
+    background-color: var(--color-content-bg);
+    border: 1px solid var(--color-border);
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+.content-section-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+.content-section-title svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--color-accent-secondary);
+}
+
+/* --- プレースホルダー --- */
+.placeholder-media {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    max-height: 300px;
+    background-color: var(--color-border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-sub);
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+}
+.placeholder-text {
+    background-color: rgba(255,255,255,0.05);
+    padding: 1rem;
+    border-radius: 6px;
+    color: var(--color-text-sub);
+    border-left: 3px solid var(--color-border);
+}
+
+/* --- ボタン --- */
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none;
+    border: none;
+}
+.btn-primary {
+    background-color: var(--color-accent-primary);
+    color: var(--color-bg);
+    border: 1px solid var(--color-accent-primary);
+}
+.btn-primary:hover {
+    background-color: var(--color-accent-primary-hover);
+    color: var(--color-bg);
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* --- Sanctuary Page --- */
+.sanctuary-content {
+    text-align: center;
+    padding: 4rem 0;
+}
+.sanctuary-content h1 {
+    font-size: 3rem;
+}
+.sanctuary-content .lead {
+    font-size: 1.25rem;
+    color: var(--color-text-sub);
+    max-width: 600px;
+    margin: 0 auto 2rem;
+}
+
+/* --- 調律師のコンソール --- */
+.console-container {
+    background-color: var(--color-content-bg);
+    border-radius: 1rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+}
+
+.console-tabs {
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+}
+
+.tab-item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    white-space: nowrap;
+    background-color: transparent;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+
+.tab-item.tab-active {
+    background-color: #111827; /* 少し濃い背景 */
+    color: var(--color-accent-primary);
+    border-bottom-color: var(--color-accent-primary);
+}
+.tab-item.tab-inactive {
+    color: var(--color-text-sub);
+}
+.tab-item.tab-inactive:hover {
+    background-color: var(--color-border);
+    color: var(--color-text-main);
+}
+
+.tool-content {
+    display: none;
+}
+.tool-content.active {
+    display: block;
+}
+
+.copy-feedback {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    background-color: #10B981; /* green-500 */
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    opacity: 0;
+    transform: translateY(-0.5rem);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    pointer-events: none;
+}
+
+.prompt-output-container {
+    background-color: #111827;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-border);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 500px; /* 高さを確保 */
+}
+
+.prompt-output-header {
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.prompt-output {
+    flex-grow: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color: var(--color-text-main);
+    font-size: 0.875rem;
+    line-height: 1.6;
+}
+
+.prompt-output::-webkit-scrollbar { width: 8px; }
+.prompt-output::-webkit-scrollbar-track { background: #111827; }
+.prompt-output::-webkit-scrollbar-thumb { background-color: #374151; border-radius: 4px; }
+.prompt-output::-webkit-scrollbar-thumb:hover { background-color: #4b5563; }
+
+.form-label {
+    display: block;
+    font-weight: 500;
+    color: var(--color-text-main);
+    margin-bottom: 0.5rem;
+}
+.form-input, .form-textarea {
+    display: block;
+    width: 100%;
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 0.375rem;
+    padding: 0.75rem 1rem;
+    color: white;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-input:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.5);
+}
+
+/* --- Learning Experience Components --- */
+.custom-audio-player {
+    background-color: var(--color-content-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.audio-play-btn {
+    background-color: var(--color-accent-primary);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    border: none;
+}
+.audio-play-btn svg {
+    width: 24px;
+    height: 24px;
+    color: var(--color-bg);
+}
+
+.audio-details { flex-grow: 1; }
+.audio-title { font-weight: 700; color: var(--color-text-heading); margin: 0; }
+.audio-description { font-size: 0.875rem; color: var(--color-text-sub); margin: 0; }
+
+.accordion-container {
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+.accordion-toggle {
+    background-color: var(--color-content-bg);
+    color: var(--color-text-heading);
+    cursor: pointer;
+    padding: 1rem 1.5rem;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 1.125rem;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.accordion-toggle:hover { background-color: var(--color-border); }
+.accordion-toggle .icon { transition: transform 0.3s ease; }
+.accordion-toggle.active .icon { transform: rotate(45deg); }
+
+.accordion-panel {
+    padding: 0;
+    background-color: var(--color-bg);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+}
+.accordion-panel.active {
+    /* padding is applied to inner content to prevent jumpy animations */
+}
+.download-link-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+}
+.download-link-item:last-child { border-bottom: none; }
+.download-link-item a { color: var(--color-text-main); font-weight: 500; text-decoration: none; }
+.download-link-item a:hover { color: var(--color-accent-primary); }
+.download-link-item .icon { color: var(--color-text-sub); }
+
+
+/* --- Reading Library Modal --- */
+.reading-modal-overlay {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(17, 24, 39, 0.95);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2000;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.reading-modal-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+.reading-modal-container {
+    background-color: var(--color-content-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 800px;
+    height: 90vh;
+    display: flex; flex-direction: column;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+    margin: 1rem;
+}
+.reading-modal-overlay.visible .reading-modal-container {
+    transform: translateY(0);
+}
+.reading-modal-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-shrink: 0;
+}
+.reading-modal-title {
+    font-size: 1.25rem; font-weight: 700; color: var(--color-text-heading); margin: 0;
+}
+.reading-modal-close {
+    background-color: var(--color-border);
+    color: var(--color-text-main);
+    border-radius: 50%; width: 32px; height: 32px;
+    border: none; cursor: pointer; font-size: 1.25rem;
+    display: flex; align-items: center; justify-content: center;
+}
+.reading-modal-content {
+    padding: 2rem 2.5rem;
+    overflow-y: auto;
+    line-height: 1.8;
+}
+.reading-modal-content h1,
+.reading-modal-content h2,
+.reading-modal-content h3 {
+    margin-top: 2em;
+    margin-bottom: 1em;
+}
+
+/* --- HTMLテキストのトランケーション --- */
+.html-manual-truncated {
+    max-height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+.html-manual-truncated::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: linear-gradient(to top, var(--color-bg) 20%, transparent);
+    pointer-events: none;
+}
+.read-more-wrapper {
+    text-align: center;
+    padding-top: 1rem;
+}
+
+/* --- Treasury (宝物庫) --- */
+.view-toggle {
+    display: inline-flex;
+    background-color: var(--color-content-bg);
+    border-radius: 99px;
+    padding: 0.25rem;
+    border: 1px solid var(--color-border);
+}
+.toggle-btn {
+    padding: 0.5rem 1.5rem;
+    border-radius: 99px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background-color 0.3s, color 0.3s;
+    color: var(--color-text-sub);
+    border: none;
+    background-color: transparent;
+}
+.toggle-btn.active {
+    background-color: var(--color-accent-primary);
+    color: var(--color-bg);
+    box-shadow: 0 2px 10px rgba(96, 165, 250, 0.3);
+}
+
+.library-controls {
+    background-color: var(--color-content-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--color-border);
+}
+.search-bar {
+    width: 100%;
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+}
+.library-controls p {
+    font-size: 0.875rem;
+    color: var(--color-text-sub);
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 0;
+}
+
+.treasure-card.is-hidden {
+    display: none;
+}
+
+/* ==========================================================================
+   A1 Project - Responsive Design (v4.1 / Mobile First Architecture)
+   ========================================================================== */
+
+/* --- デフォルト（モバイル < 960px）のスタイル --- */
+.hamburger-menu {
+    display: block;
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+    width: 44px;
+    height: 44px;
+    background-color: var(--color-content-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    z-index: 1001; /* sidebarより手前 */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.hamburger-menu-inner {
+    width: 24px;
+    height: 18px;
+    position: relative;
+}
+.hamburger-menu-inner span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-text-main);
+    position: absolute;
+    left: 0;
+    transition: all 0.3s ease-in-out;
+}
+.hamburger-menu-inner span:nth-child(1) { top: 0; }
+.hamburger-menu-inner span:nth-child(2) { top: 8px; }
+.hamburger-menu-inner span:nth-child(3) { bottom: 0; }
+
+.hamburger-menu.is-open .hamburger-menu-inner span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.hamburger-menu.is-open .hamburger-menu-inner span:nth-child(2) { opacity: 0; }
+.hamburger-menu.is-open .hamburger-menu-inner span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+.site-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    z-index: 999; /* sidebarより奥 */
+}
+.site-overlay.is-open {
+    display: block;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 100vh;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+}
+.sidebar.is-open {
+    transform: translateX(0);
+    box-shadow: 5px 0px 15px rgba(0,0,0,0.2);
+}
+.sidebar::-webkit-scrollbar {
+  display: none; /* スクロールバー自体を非表示に */
+}
+
+.main-content {
+    margin-left: 0;
+    width: 100%;
+    padding: 6rem 1.5rem 2rem 1.5rem;
+}
+
+/* --- 画面幅が960px以上の場合（PC表示）にスタイルを上書き --- */
+@media (min-width: 960px) {
+    .hamburger-menu, .site-overlay {
+        display: none !important;
+    }
+
+    .sidebar {
+        position: fixed;
+        transform: translateX(0);
+        box-shadow: none;
+    }
+
+    .main-content {
+        margin-left: 280px;
+        width: calc(100% - 280px);
+        padding: 2rem 5rem;
+    }
+}
+
+
+/* --- Tech Priest's Emergency Edict for Icons --- */
+
+.h-5 { height: 1.25rem; }
+.w-5 { width: 1.25rem; }
+
+.h-12 { height: 3rem; }
+.w-12 { width: 3rem; }
+
+.h-24 { height: 6rem; }
+.w-24 { width: 6rem; }
+
+.mx-auto { 
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mb-8 {
+    margin-bottom: 2rem;
+}
+
+.text-pink-400 {
+    color: #f472b6;
+    stroke: #f472b6;
+}
+
+.text-green-400 {
+    color: #4ade80;
+    stroke: #4ade80;
+}
+
+.text-yellow-400 {
+    color: #facc15;
+    stroke: #facc15;
+}
+
+/* ==========================================================================
+   A1 Project - Responsive Tab Navigation Hotfix (rev.4.4)
+   編纂責任者：アーキテクト
+   ========================================================================== */
+
+/* --- タブコンテナの横スクロール対応 --- */
+.program-tabs,
+.console-tabs {
+    /* 横方向のコンテンツがはみ出した際に、スクロールを可能にする */
+    overflow-x: auto;
+    
+    /* タブアイテムがコンテナ幅で折り返されるのを防ぐ */
+    white-space: nowrap;
+
+    /* iOSデバイスで慣性のあるスムーズなスクロールを実現する */
+    -webkit-overflow-scrolling: touch;
+
+    /* --- ネイティブのスクロールバーを非表示にし、デザインを維持する --- */
+    
+    /* Firefox */
+    scrollbar-width: none;
+    
+    /* Internet Explorer & Edge */
+    -ms-overflow-style: none;
+}
+
+/* Webkit系ブラウザ (Chrome, Safari) のスクロールバーを非表示にする */
+.program-tabs::-webkit-scrollbar,
+.console-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+/* ==========================================================================
+   Submenu Navigation
+   テックプリーストによる階層化の儀式
+   ========================================================================== */
+.nav-item.has-submenu > a {
+    position: relative;
+    padding-right: 25px; /* 三角マークのためのスペース */
+}
+
+/* 三角マークの創造 */
+.nav-item.has-submenu > a::after {
+    content: '▼';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%) scale(0.6);
+    transition: transform 0.3s ease;
+}
+
+/* 開いた時の三角マークの回転 */
+.nav-item.is-open > a::after {
+    transform: translateY(-50%) scale(0.6) rotate(180deg);
+}
+
+/* サブメニューは、初期状態では隠されている */
+.submenu {
+    list-style: none;
+    padding-left: 20px; /* 字下げ */
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+}
+
+/* 開いた時のサブメニューの出現 */
+.nav-item.is-open .submenu {
+    max-height: 500px; /* 十分な高さを確保 */
+}
+
+.submenu-item a {
+    display: block;
+    padding: 10px 15px;
+    color: var(--color-text-sub);
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.submenu-item a:hover {
+    background-color: var(--color-content-bg);
+    color: var(--color-text-main);
+}
+
+.main-nav .nav-item.active li.submenu-item a {
+    background-color: transparent;
+    color: #9ca3af;
+}
+
+.main-nav .nav-item.active li.submenu-item a:hover {
+    background-color: var(--color-content-bg);
+    color: var(--color-text-heading);
+    text-decoration: none;
+}
+
+#password-gate button {
+    margin-top: 1rem;
+}
+
+/* Modal Visibility Control */
+.reading-modal-overlay {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+.reading-modal-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+}
+.reading-modal-container {
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+.reading-modal-overlay.visible .reading-modal-container {
+    transform: translateY(0);
+}
+
+/* ==========================================================================
+   Site Footer Copyright
+   ========================================================================== */
+.site-footer {
+    padding: 2rem 1rem;
+    text-align: right;
+    font-size: 0.85em;
+    color: var(--color-text-sub);
+    border-top: 1px solid var(--color-border);
+    margin-top: 4rem; /* フッターの上のコンテンツとの間に余白を確保 */
+}
+.site-footer p {
+    margin: 0;
+}

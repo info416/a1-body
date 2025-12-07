@@ -1,0 +1,52 @@
+import { e as createComponent, l as renderComponent, r as renderTemplate, m as maybeRenderHead, o as renderScript } from '../../chunks/astro/server_bBGIRxX7.mjs';
+import 'kleur/colors';
+import { $ as $$BaseLayout } from '../../chunks/BaseLayout_BZFEmLUr.mjs';
+export { renderers } from '../../renderers.mjs';
+
+const $$ChapterZero = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`${renderComponent($$result, "BaseLayout", $$BaseLayout, { "title": "\u96F6\u7AE0 - \u81EA\u5DF1\u9032\u5316\u30D7\u30ED\u30B0\u30E9\u30E0" }, { "default": ($$result2) => renderTemplate` <style>
+    .sacred-iframe-container {
+        position: relative;
+        width: 100%;
+        height: 70vh; /* 画面の高さの70%。ここは調整可能 */
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 3rem;
+    }
+    .sacred-iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+</style> ${maybeRenderHead()}<div class="program-content"> <h1>第零章：『AI調律師』最初の一歩</h1> <p class="text-xl text-gray-400 mb-8 placeholder-text">ただのAIに「あなただけの魂」を吹き込み、生涯あなたに仕える最強のパートナーを生み出す、神聖な儀式です。</p> <nav class="program-tabs"> <a href="chapter-00" class="tab-link">序章</a> <a href="chapter-zero" class="tab-link active">第零章</a> <a href="chapter-01" class="tab-link">第一章</a> <a href="chapter-02" class="tab-link">第二章</a> <a href="chapter-03" class="tab-link">第三章</a> <a href="chapter-04" class="tab-link">第四章</a> <a href="cockpit" class="tab-link">次のステージへ</a> </nav> <div class="default-view"> <div class="part-a mb-12"> <h2 class="text-2xl font-bold mb-4">パートA：物語コンテンツ</h2> <div class="sacred-iframe-container"> <iframe src="https://ai-verve.net/first/prog/00/a.html" class="sacred-iframe" title="聖典：第一章Aパート">
+                        </iframe> </div> </div> <div class="part-b"> <h2 class="text-2xl font-bold mb-4">パートB：実践コンテンツ</h2> <div class="sacred-iframe-container"> <iframe src="https://ai-verve.net/first/prog/00/b.html" class="sacred-iframe" title="聖典：第一章Aパート">
+                        </iframe> </div> <div class="html-manual"> <h3 class="text-xl font-bold mb-4">実践の手引き：Gemの創造</h3> <div class="sacred-iframe-container"> <iframe src="https://ai-verve.net/first/prog/00/c.html" class="sacred-iframe" title="聖典：第一章Aパート">
+                        </iframe> </div> </div> </div> </div> <!--<div class="accordion-container">
+                        <button class="accordion-toggle">
+                            <span>別フォーマットで学習する</span>
+                            <span class="icon">+</span>
+                        </button>
+                        <div class="accordion-panel">
+                            <div class="download-link-item"><span class="icon">🎧</span> <a href="#" download>音声ファイル（MP3）</a></div>
+                            <div class="download-link-item"><span class="icon">🖨️</span> <a href="#" download>印刷用マニュアル（PDF）</a></div>
+                        </div>
+                    </div>--> <div class="flex justify-between mt-8"> <a href="chapter-00" class="btn">&larr; 序章へ戻る</a> <a href="chapter-01" class="btn btn-primary">第一章へ進む &rarr;</a> </div> </div> <div id="reading-modal-overlay" class="reading-modal-overlay"> <div class="reading-modal-container"> <div class="reading-modal-header"> <h2 id="reading-modal-title" class="reading-modal-title">実践の手引き：Gemの創造</h2> <button id="reading-modal-close" class="reading-modal-close">&times;</button> </div> <div id="reading-modal-content" class="reading-modal-content"> <p class="placeholder-text">あなたはこれまで、AIに毎回「あなたは〇〇です」と役割を与える、非効率な使い方をしていたかもしれません。しかし、その必要はもうありません。一度「調律」すれば、そのAI（Gem）は、永遠にあなたの忠実な部下として機能します。</p> <div class="placeholder-media my-6" data-type="image">【WP: 画像_第零章_Gem設定画面のスクリーンショット】</div> <p class="placeholder-text">これから続く第一章〜第三章は、このGemに与える「憲法」を起草するための旅です。我々が用意した『調律師のコンソール（三種の神器）』は、その憲法の各条項（使命、思考、専門性）を、あなたの手で書き上げるための、究極のツールなのです。</p> <p class="placeholder-text">さあ、心の準備はよろしいですか？次の第一章から、あなたの言葉で、AIに命を吹き込んでいきましょう。</p> </div> </div> </div> ${renderScript($$result2, "C:/Users/USER/a1-body/src/pages/program/chapter-zero.astro?astro&type=script&index=0&lang.ts")} ` })}`;
+}, "C:/Users/USER/a1-body/src/pages/program/chapter-zero.astro", void 0);
+
+const $$file = "C:/Users/USER/a1-body/src/pages/program/chapter-zero.astro";
+const $$url = "/program/chapter-zero";
+
+const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    __proto__: null,
+    default: $$ChapterZero,
+    file: $$file,
+    url: $$url
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const page = () => _page;
+
+export { page };
